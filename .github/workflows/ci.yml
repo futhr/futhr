@@ -1,0 +1,76 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11.24.0
+          run_install: false
+
+      - name: Install Node.js
+        uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Check formatting and lint
+        run: pnpm quality
+
+      - name: Check Svelte and TypeScript
+        run: pnpm check
+
+      - name: Run unit tests
+        run: pnpm test:unit
+
+      - name: Install headless Chromium
+        run: pnpm exec playwright install --with-deps chromium
+
+      - name: Run component tests
+        run: pnpm test:components
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: coverage/unit/lcov.info,coverage/components/lcov.info
+          flags: unit,components
+          fail_ci_if_error: false
+
+      - name: Run Storybook interaction and accessibility tests
+        run: pnpm test:storybook
+
+      - name: Run end-to-end tests
+        run: pnpm test:e2e
+
+      - name: Test the static Storybook artifact
+        run: pnpm test:storybook:e2e
+        env:
+          STORYBOOK_DISABLE_TELEMETRY: '1'
+
+      - name: Validate Storybook deployment package
+        run: pnpm exec wrangler deploy --config wrangler.storybook.toml --dry-run
+        env:
+          WRANGLER_SEND_METRICS: 'false'
