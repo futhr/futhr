@@ -6,7 +6,8 @@
 - The package-manager version and Node.js floor are declared in `package.json`.
 - `pnpm-lock.yaml` is committed and CI installs it with `--frozen-lockfile`.
 - Direct dependencies are reviewed before addition; unused packages are removed.
-- Dependabot proposes dependency and GitHub Actions updates.
+- Dependency updates are made deliberately by the maintainer, not by automated
+  update bots. Dependabot version updates and automated security fixes are off.
 - Newly published packages remain subject to pnpm's release-age policy.
 - The PostCSS override is an explicit temporary compatibility and supply-chain
   decision, not an implicit transitive resolution.

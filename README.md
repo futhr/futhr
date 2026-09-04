@@ -8,7 +8,6 @@
 [![Svelte 5](https://img.shields.io/badge/svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev/)
 [![Node 24](https://img.shields.io/badge/node-%3E%3D24-5fa04e?logo=node.js&logoColor=white)](.nvmrc)
 [![pnpm](https://img.shields.io/badge/pnpm-11-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![Dependabot](https://img.shields.io/badge/dependabot-enabled-025e8c?logo=dependabot&logoColor=white)](.github/dependabot.yml)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-1b1b1b.svg)](LICENSE.md)
 
 Source for [futhr.io](https://futhr.io/): a prerendered editorial showcase of ventures,
