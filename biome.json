@@ -1,0 +1,135 @@
+{
+  "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+  "vcs": {
+    "enabled": true,
+    "clientKind": "git",
+    "useIgnoreFile": true
+  },
+  "formatter": {
+    "enabled": true,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineWidth": 100
+  },
+  "linter": {
+    "enabled": true,
+    "domains": {
+      "svelte": "all"
+    },
+    "rules": {
+      "preset": "none",
+      "a11y": "error",
+      "complexity": "error",
+      "correctness": "error",
+      "performance": {
+        "preset": "all",
+        "noAwaitInLoops": "error",
+        "noBarrelFile": "error",
+        "noReExportAll": "error"
+      },
+      "security": "error",
+      "style": {
+        "preset": "all",
+        "noDefaultExport": "error",
+        "noHexColors": "off",
+        "noMagicNumbers": "off",
+        "noTernary": "off"
+      },
+      "suspicious": "error",
+      "nursery": {
+        "preset": "none",
+        "noFloatingPromises": "error",
+        "noMisusedPromises": "error",
+        "noPlaywrightForceOption": "error",
+        "noPlaywrightMissingAwait": "error",
+        "noPlaywrightNetworkidle": "error",
+        "noPlaywrightPagePause": "error",
+        "noPlaywrightWaitForNavigation": "error",
+        "noPlaywrightWaitForSelector": "error",
+        "noPlaywrightWaitForTimeout": "error",
+        "noSvelteLegacyConst": "error",
+        "noSvelteUnnecessaryStateWrap": "error",
+        "useSvelteRequireEachKey": "error",
+        "useTailwindShorthandClasses": "error",
+        "useTestHooksInOrder": "error",
+        "useTestHooksOnTop": "error"
+      }
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "quoteStyle": "single",
+      "semicolons": "asNeeded",
+      "trailingCommas": "none"
+    }
+  },
+  "css": {
+    "parser": {
+      "tailwindDirectives": true
+    }
+  },
+  "html": {
+    "experimentalFullSupportEnabled": true,
+    "formatter": {
+      "enabled": true,
+      "indentScriptAndStyle": true
+    }
+  },
+  "overrides": [
+    {
+      "includes": ["tests/stories/**/*.stories.svelte"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "noMisplacedAssertion": "off"
+          },
+          "security": {
+            "noSecrets": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["*.config.ts", "svelte.config.ts", ".storybook/**/*.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off",
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["tests/**/*.ts"],
+      "linter": {
+        "rules": {
+          "security": {
+            "noSecrets": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["scripts/**/*.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off",
+            "useQwikValidLexicalScope": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/lib/config/site.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    }
+  ]
+}

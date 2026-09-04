@@ -1,0 +1,9 @@
+minimumReleaseAge: 1440
+saveExact: true
+
+overrides:
+  postcss: 8.5.26
+
+allowBuilds:
+  esbuild: true
+  workerd: true

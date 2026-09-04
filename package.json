@@ -1,0 +1,72 @@
+{
+  "name": "futhr",
+  "version": "0.1.0",
+  "description": "Production source for the Futhr editorial showcase",
+  "private": true,
+  "type": "module",
+  "license": "SEE LICENSE IN LICENSE.md",
+  "homepage": "https://futhr.io/",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/futhr/futhr.git"
+  },
+  "bugs": {
+    "url": "https://github.com/futhr/futhr/issues"
+  },
+  "packageManager": "pnpm@11.24.0",
+  "engines": {
+    "node": ">=24"
+  },
+  "scripts": {
+    "dev": "vite dev",
+    "build": "pnpm build:web",
+    "build:web": "vite build && node scripts/verify-artifact.ts web",
+    "preview": "vite preview",
+    "storybook": "storybook dev --port 6006 --no-open",
+    "storybook:build": "storybook build --output-dir storybook-static && node scripts/verify-artifact.ts storybook",
+    "storybook:deploy": "pnpm storybook:build && wrangler deploy --config wrangler.storybook.toml",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc --noEmit --project ./tsconfig.service-worker.json",
+    "lint": "biome lint --error-on-warnings .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "quality": "biome check --error-on-warnings . && node scripts/check-exports.ts",
+    "test": "pnpm test:all",
+    "test:unit": "vitest run --config vitest.unit.config.ts --coverage",
+    "test:components": "vitest run --config vitest.browser.config.ts --coverage",
+    "test:storybook": "vitest run --project=storybook",
+    "test:storybook:e2e": "playwright test --config playwright.storybook.config.ts",
+    "test:e2e": "playwright test",
+    "test:all": "pnpm quality && pnpm check && pnpm test:unit && pnpm test:components && pnpm test:storybook && pnpm test:e2e && pnpm test:storybook:e2e"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@biomejs/biome": "2.5.12",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@playwright/test": "1.62.1",
+    "@storybook/addon-a11y": "10.6.0",
+    "@storybook/addon-docs": "10.6.0",
+    "@storybook/addon-svelte-csf": "5.1.3",
+    "@storybook/addon-vitest": "10.6.0",
+    "@storybook/svelte": "10.6.0",
+    "@storybook/sveltekit": "10.6.0",
+    "@sveltejs/adapter-static": "3.0.10",
+    "@sveltejs/kit": "2.70.3",
+    "@sveltejs/vite-plugin-svelte": "7.3.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/sanitize-html": "2.16.1",
+    "@vitest/browser-playwright": "4.1.11",
+    "@vitest/coverage-v8": "4.1.11",
+    "gray-matter": "4.0.3",
+    "marked": "18.0.11",
+    "sanitize-html": "2.17.7",
+    "storybook": "10.6.0",
+    "svelte": "5.57.0",
+    "svelte-check": "4.7.6",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "vitest-browser-svelte": "3.0.0",
+    "wrangler": "4.128.0"
+  }
+}

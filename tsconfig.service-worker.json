@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "lib": ["ES2022", "WebWorker"],
+    "types": ["@sveltejs/kit"]
+  },
+  "include": ["src/service-worker.ts"],
+  "exclude": []
+}

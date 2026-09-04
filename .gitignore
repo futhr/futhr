@@ -1,0 +1,15 @@
+node_modules/
+.svelte-kit/
+.vitest-attachments/
+build/
+coverage/
+playwright-report/
+storybook-static/
+test-results/
+.wrangler/
+.DS_Store
+*.local
+.claude/settings.local.json
+.dev.vars
+.dev.vars.*
+tests/components/__screenshots__/
