@@ -1,0 +1,175 @@
+@import "@fontsource-variable/archivo";
+@import "@fontsource-variable/archivo/wght-italic.css";
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #dcdbd6;
+  --color-ink: #1b1b1b;
+  --color-muted: #9a9a94;
+  --color-signal: var(--brand);
+  --font-display: "Archivo Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-system: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --ease-fold: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/*
+ * Measured against the 1440px reference composition. Every horizontal and
+ * vertical rhythm value is relative to the width of the nearest container
+ * (cqw): the viewport on the site, the story frame in Storybook. The
+ * composition therefore keeps its proportions in both.
+ *
+ *   gutter        36px   outer padding for labels and the footer
+ *   column        412px  left column; headlines, ingress and footer nav start here
+ *   fold-height   112px  height of a collapsed row
+ *   fold-inset    39px   distance from a row top to the label and headline cap height
+ *   headline      144px  row headline, line-height 0.75
+ *
+ * The brand colour rotates by weekday. app.html sets `data-day` on <html>
+ * before first paint (JavaScript order, 0 = Sunday). The seven values are
+ * documented in src/lib/config/palette.ts and shown in the Brand/Weekly colours
+ * story. Without the attribute Monday applies.
+ */
+:root {
+  --gutter: clamp(1.25rem, 2.5cqw, 2.5rem);
+  --column: max(200px, 28.6cqw);
+  --fold-height: clamp(6rem, 7.75cqw, 12rem);
+  --fold-inset: clamp(1.25rem, 2.7cqw, 3.5rem);
+  --headline-size: clamp(3.5rem, 10cqw, 15rem);
+  --label-size: clamp(0.75rem, 0.97cqw, 1rem);
+  --lede-size: clamp(1.25rem, 2cqw, 2rem);
+  --body-size: clamp(1rem, 1.15cqw, 1.25rem);
+  --duration-fold: 680ms;
+  --brand-monday: #e4472b;
+  --brand-tuesday: #cf7412;
+  --brand-wednesday: #1f9470;
+  --brand-thursday: #2b7de0;
+  --brand-friday: #8f5cf5;
+  --brand-saturday: #e0409a;
+  --brand-sunday: #1b9a9a;
+  --brand: var(--brand-monday);
+  --mark-contrast: var(--color-ink);
+  color: var(--color-ink);
+  background: var(--color-ink);
+  font-family: var(--font-display);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+html[data-day="0"] {
+  --brand: var(--brand-sunday);
+}
+
+html[data-day="2"] {
+  --brand: var(--brand-tuesday);
+}
+
+html[data-day="3"] {
+  --brand: var(--brand-wednesday);
+}
+
+html[data-day="4"] {
+  --brand: var(--brand-thursday);
+}
+
+html[data-day="5"] {
+  --brand: var(--brand-friday);
+}
+
+html[data-day="6"] {
+  --brand: var(--brand-saturday);
+}
+
+@layer base {
+  html {
+    min-width: 320px;
+    scroll-behavior: smooth;
+    background: var(--color-ink);
+  }
+
+  body {
+    min-width: 320px;
+    min-height: 100dvh;
+    overflow-x: hidden;
+    background: var(--color-ink);
+  }
+
+  :focus-visible {
+    outline: 3px solid var(--color-signal);
+    outline-offset: 4px;
+  }
+}
+
+@layer components {
+  .showcase-copy {
+    display: flex;
+    flex-direction: column;
+    gap: 1.6em;
+    font-size: var(--body-size);
+    line-height: 1.6;
+  }
+
+  .showcase-copy p {
+    margin: 0;
+    text-wrap: pretty;
+  }
+
+  .showcase-copy ul {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    margin: 0;
+    padding-left: 1.2em;
+  }
+
+  .showcase-copy li {
+    padding-left: 0.35em;
+  }
+
+  .showcase-copy strong {
+    font-weight: 700;
+  }
+
+  .showcase-copy em {
+    font-style: italic;
+    font-variation-settings: "wght" 420;
+  }
+
+  .showcase-copy code {
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 0.92em;
+  }
+
+  .showcase-copy a {
+    color: inherit;
+    font-weight: 700;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.22em;
+  }
+
+  .showcase-copy a:hover {
+    color: var(--color-signal);
+  }
+}
+
+/* Narrow containers. Rows and the footer read their tokens from the nearest
+   container, so the overrides sit on the elements inside it. */
+@container (max-width: 48rem) {
+  .fold,
+  .footer-grid {
+    --gutter: 1.25rem;
+    --column: max(92px, 28cqw);
+    --fold-height: clamp(3.75rem, 16.5cqw, 5.5rem);
+    --fold-inset: 1.25rem;
+    --headline-size: clamp(3rem, 15cqw, 5.5rem);
+    --label-size: 0.72rem;
+    --lede-size: 1.375rem;
+    --body-size: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
