@@ -1,111 +1,53 @@
 # futhr
 
-[![CI](https://github.com/futhr/futhr/actions/workflows/ci.yml/badge.svg)](https://github.com/futhr/futhr/actions/workflows/ci.yml)
-[![Coverage](https://codecov.io/gh/futhr/futhr/branch/main/graph/badge.svg)](https://codecov.io/gh/futhr/futhr)
-[![Storybook](https://img.shields.io/badge/storybook-ui.futhr.io-1b1b1b?logo=storybook&logoColor=dcdbd6)](https://ui.futhr.io/)
-[![Website](https://img.shields.io/website?url=https%3A%2F%2Ffuthr.io&label=futhr.io&color=1b1b1b)](https://futhr.io/)
-[![Checked with Biome](https://img.shields.io/badge/checked_with-Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev/)
-[![Svelte 5](https://img.shields.io/badge/svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev/)
-[![Node 24](https://img.shields.io/badge/node-%3E%3D24-5fa04e?logo=node.js&logoColor=white)](.nvmrc)
-[![pnpm](https://img.shields.io/badge/pnpm-11-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
-[![Code license: MIT](https://img.shields.io/badge/code-MIT-1b1b1b.svg)](LICENSE.md)
+**Trust, interoperability, unit economics.** Platforms and open infrastructure for domains where software decisions carry real consequences.
 
-Source for [futhr.io](https://futhr.io/): a prerendered editorial showcase of ventures,
-open-source libraries, research, and talks. SvelteKit 2, Svelte 5, Tailwind CSS 4,
-TypeScript, deployed to Cloudflare. Application code is MIT; editorial copy and marks
-are excluded, see [LICENSE.md](LICENSE.md).
+A capital-efficient portfolio of platforms and open infrastructure for domains where software decisions carry operational, financial, or legal consequences.
 
-## Quick start
+**The thesis:** trust, interoperability, and unit economics are architectural constraints, not features added after scale. Across the portfolio, probabilistic intelligence sits above a deterministic foundation of durable state, explicit contracts, verification, and recovery. The full loop is designed as one: domain model, runtime, product, distribution, and operating model. Shared open-source cores compound engineering leverage and preserve customer control; commercial platforms monetize operation, assurance, and domain outcomes.
 
-```sh
-pnpm install --frozen-lockfile
-pnpm exec playwright install chromium   # once, for browser tests
-pnpm dev                                # http://127.0.0.1:5173
-pnpm storybook                          # http://127.0.0.1:6006
-```
+*Bootstrapped by default, built for durable ownership.*
 
-Requires Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager`).
+## Ventures
 
-## Commands
+- [Refpath](https://refpath.io) — Open execution infrastructure for autonomous software that has to finish real work.
+- [Rivure](https://rivure.com) — Embedded billing infrastructure that keeps product state and financial state in one transaction.
+- [Reloved](https://reloved.eco) — Decentralized resale infrastructure that turns every household into an independent second-hand storefront.
+- [Orvane](https://orvane.io) — Independent research on the failure boundaries of standards-based connected systems.
+- [Diggymon](https://diggymon.com) — A local-first business platform for CGI creators, projects, and professional growth.
+- **Bytly** — The coordination platform for Sweden's multi-party apartment exchange market.
+- **Äger** — Shareholder coordination infrastructure that turns fragmented retail owners into an organized, verifiable voice at Swedish general meetings.
 
-| Command | Does |
-| --- | --- |
-| `pnpm quality` | Biome lint and format check, one-export-per-module rule |
-| `pnpm check` | svelte-check and the service-worker TypeScript project |
-| `pnpm test:unit` | Content loader, agent documents, palette, site config; coverage gated |
-| `pnpm test:components` | Components in headless Chromium; coverage gated |
-| `pnpm test:storybook` | Story rendering, interactions, axe |
-| `pnpm test:e2e` | Builds, then Playwright on desktop and mobile Chromium |
-| `pnpm test:storybook:e2e` | Builds Storybook, then tests the static artifact |
-| `pnpm test:all` | Everything above in CI order |
-| `pnpm build` | Prerenders to `build/` and verifies the artifact |
-| `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
-| `pnpm storybook:build` | Static Storybook to `storybook-static/` |
-| `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
+All ventures are private and pre-release unless their site says otherwise.
 
-CI runs the same sequence on pull requests and pushes to `main`, uploads coverage to
-Codecov, and dry-runs the Storybook deployment.
+## Elixir & OTP
 
-## How it works
+- [SigilGuard](https://github.com/refpath/sigil_guard) — The in-process security runtime for autonomous agents touching production tools and data ([hexdocs](https://hexdocs.pm/sigil_guard/)).
+- [ExBooking](https://github.com/futhr/ex_booking) — Deterministic booking infrastructure that embeds without taking over the application ([hexdocs](https://hexdocs.pm/ex_booking)).
+- [DocShell](https://github.com/futhr/doc_shell) — One versioned documentation artifact for every site, product surface, search index, and AI system ([hexdocs](https://hexdocs.pm/doc_shell/)).
+- [Letterpress](https://github.com/futhr/letterpress) — A compile-time trust boundary for notification templates on the BEAM ([hexdocs](https://hexdocs.pm/letterpress)).
+- [AshOaskit](https://github.com/futhr/ash_oaskit) — OpenAPI 3.0 and 3.1 generated directly from the Ash domain model ([hexdocs](https://hexdocs.pm/ash_oaskit)).
+- [ExkPasswd](https://github.com/futhr/exk_passwd) — Human-readable passphrases with measurable, generator-aware entropy ([hexdocs](https://hexdocs.pm/exk_passwd)).
+- [Phoenix Assets](https://github.com/futhr/phoenix-assets) — A first-class SvelteKit frontend inside Phoenix, supervised and typed as one application ([hexdocs](https://hexdocs.pm/phoenix_assets)).
+- [WoTEx](https://github.com/wotex-project) — OTP-native Elixir libraries that bring the W3C Web of Things to the BEAM.
 
-```text
-src/lib/content/*.md ─▶ src/lib/server/content.ts ─▶ showcase.svelte ─▶ build/
-   frontmatter + Markdown     validate, order, render,     rows, footer,     prerendered
-                              sanitise                     agent documents  HTML + assets
-```
+## Ruby & Solidus
 
-- Every entry is a Markdown file with `order`, `group`, `title`, `lede`, `repositories`,
-  `links`. Consecutive entries with the same `group` form a section; the group name is
-  the divider label on its first row. The build rejects gaps, duplicates, missing
-  fields, unsafe link protocols, and non-kebab filenames.
-- Rendered Markdown passes an HTML allowlist (`p`, `strong`, `em`, `code`, lists,
-  links) before it reaches a component.
-- `src/lib/config/site.ts` holds every string, link, and metadata value; it also feeds
-  the manifest, JSON-LD, robots, and sitemap.
-- Layout tokens are container-relative, measured against a 1440px reference, so the
-  same composition holds on the site and inside Storybook frames.
-- The brand colour rotates by weekday (`src/lib/config/palette.ts`), applied before
-  first paint.
-- A service worker keeps the site available offline: network-first for HTML, cache-first
-  for hashed assets.
+- [Weighted Shipping](https://github.com/futhr/solidus-weighted-shipping) — Instant, exact weight-based shipping from rules the merchant owns.
+- [Nexi](https://github.com/futhr/solidus_nexi) — Verified Nexi payment state for Solidus beyond redirects and webhook guesswork.
+- [nShift](https://github.com/futhr/solidus_nshift) — Recoverable nShift shipping operations for Solidus, from checkout selection through tracking.
 
-## Layout
+## Rust & Research
 
-| Path | Contents |
-| --- | --- |
-| `src/lib/components/` | Production components; `logos/` holds the SVG marks |
-| `src/lib/config/` | `site.ts` identity and strings, `palette.ts` weekly colours |
-| `src/lib/content/` | Ordered Markdown entries |
-| `src/lib/server/` | Content loader, validation, agent document generators |
-| `src/lib/styles/site.css` | Tailwind theme, layout tokens, global rules |
-| `src/routes/` | The page plus generated `llms.txt`, `llms-full.txt`, `agents.md`, `agents/stack.md`, `work/<slug>.md`, manifest, robots, sitemap |
-| `tests/` | `components/` Vitest browser, `stories/` Storybook, `e2e/` and `storybook-e2e/` Playwright, unit tests at the top level |
-| `docs/` | Architecture, legal, and security records; [index](docs/README.md) |
-| `.claude/` | Agent skills and settings; [AGENTS.md](AGENTS.md) is the canonical contract |
-| `static/` | Icons, `_headers`, font licence |
+- [NUIF](https://github.com/refpath/nuif) — A neutral interface format that makes round-trip fidelity measurable ([documentation](https://refpath.github.io/nuif/)).
 
-Conventions: kebab-case filenames, `$lib` imports, no barrel files, at most one public
-symbol per module.
+## Talks
 
-## Deployment
+- [Zero alert storms](https://goatmire.com/talk/zero-alert-storms-formal-verification-for-iot-automation) — Formal verification for IoT automation, presented at Goatmire 2026 in Varberg, Sweden ([repository](https://github.com/futhr/goatmire-2026)).
 
-Two independent artifacts, each with its own Wrangler config and Cloudflare project:
-the site (`wrangler.toml`, `build/`) and Storybook (`wrangler.storybook.toml`,
-`storybook-static/`, `noindex`). The complete guide, including Workers static assets,
-headers and CSP, custom domains and TLS, GitHub Actions deployment, and token scoping,
-is [docs/architecture/cloudflare.md](docs/architecture/cloudflare.md).
+## Site
 
-## For agents
-
-[AGENTS.md](AGENTS.md) is the contract; `CLAUDE.md` imports it. Skills under
-`.claude/skills/` cover editorial voice, prose cleanup, Svelte 5 rules, and commit
-rules. The deployed site serves the same guidance at `/agents.md`, a version matrix at
-`/agents/stack.md`, and the portfolio as Markdown at `/llms.txt`, `/llms-full.txt`, and
-`/work/<slug>.md`.
-
-## Policies
-
-[SECURITY.md](SECURITY.md) · [CONTRIBUTING.md](CONTRIBUTING.md) ·
-[SUPPORT.md](SUPPORT.md) · [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md) ·
-[POLICIES.md](POLICIES.md) · [TRADEMARKS.md](TRADEMARKS.md) ·
-[THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md)
+[futhr.io](https://futhr.io/) is the long-form version of this page, with a
+[Storybook](https://ui.futhr.io/) for its components. Agents can read it as
+[llms.txt](https://futhr.io/llms.txt) or [llms-full.txt](https://futhr.io/llms-full.txt).
+This repository is its source; the technical guide is [docs/development.md](docs/development.md).

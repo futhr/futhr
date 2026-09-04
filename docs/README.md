@@ -30,7 +30,8 @@ served by the site.
 
 | Document | Purpose |
 | --- | --- |
-| [README.md](../README.md) | Technical overview, layout, content model, commands, build and Storybook. |
+| [README.md](../README.md) | GitHub profile page: thesis, ventures, libraries, research, talks. |
+| [docs/development.md](development.md) | Technical overview, layout, content model, commands, build and Storybook. |
 | [AGENTS.md](../AGENTS.md) | Canonical contract for coding agents: what the repo is, commands, structure, conventions, definition of done. |
 | [CLAUDE.md](../CLAUDE.md) | Claude Code entry point; imports AGENTS.md and adds skill selection and hard rules. |
 | [CONTRIBUTING.md](../CONTRIBUTING.md) | Scope of welcome changes, development requirements, verification sequence, contribution terms. |
