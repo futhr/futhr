@@ -1,0 +1,7 @@
+name = "futhr-ui"
+compatibility_date = "2026-09-04"
+preview_urls = true
+
+[assets]
+directory = "./storybook-static"
+not_found_handling = "single-page-application"
