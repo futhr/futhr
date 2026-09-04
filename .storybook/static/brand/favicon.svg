@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-218 -218 436 436" role="img">
+  <title>Futhr</title>
+  <style>
+    path {
+      fill: #1b1b1b;
+    }
+
+    @media (prefers-color-scheme: dark) {
+      path {
+        fill: #dcdbd6;
+      }
+    }
+  </style>
+  <path
+    transform="scale(-1 1)"
+    d="M-22.5 -212.01A45 45 0 0 1 22.5 -212.01L172.36 -125.49A45 45 0 0 1 194.86 -86.52L194.86 86.52A45 45 0 0 1 172.36 125.49L22.5 212.01A45 45 0 0 1 -22.5 212.01L-172.36 125.49A45 45 0 0 1 -194.86 86.52L-194.86 -86.52A45 45 0 0 1 -172.36 -125.49Z M-97.86 -56.5L0 -113L97.86 -56.5L97.86 56.5L0 113L0 0Z"
+    fill-rule="evenodd"
+  />
+</svg>
