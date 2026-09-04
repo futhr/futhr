@@ -91,14 +91,14 @@
       id={`showcase-panel-${item.slug}`}
       aria-hidden={!isOpen}
       inert={!isOpen}
-      class="grid grid-cols-[minmax(0,25.4cqw)_minmax(0,32.4cqw)] items-start pt-[6.7cqw] pr-(--gutter) pb-[7cqw] pl-(--column) opacity-0 transition-opacity duration-300 group-data-[state=open]/row:opacity-100 group-data-[state=open]/row:delay-150 motion-reduce:transition-none @max-3xl:block @max-3xl:px-5 @max-3xl:pt-8 @max-3xl:pb-12"
+      class="grid grid-cols-[minmax(0,25.4cqw)_minmax(0,32.4cqw)] items-start pt-[6.7cqw] pr-(--gutter) pb-[7cqw] pl-(--column) opacity-0 transition-opacity duration-300 group-data-[state=open]/row:opacity-100 group-data-[state=open]/row:delay-150 motion-reduce:transition-none @max-5xl:block @max-3xl:px-5 @max-3xl:pt-8 @max-3xl:pb-12"
     >
       <p
-        class="m-0 max-w-[17.5cqw] text-(length:--lede-size) leading-[1.35] font-medium tracking-[-0.015em] text-balance @max-3xl:max-w-none"
+        class="m-0 max-w-[17.5cqw] text-(length:--lede-size) leading-[1.35] font-medium tracking-[-0.015em] text-balance @max-5xl:max-w-[36rem]"
       >
         {item.lede}
       </p>
-      <div class="flex flex-col gap-6 @max-3xl:mt-6">
+      <div class="flex flex-col gap-6 @max-5xl:mt-8">
         <div class="showcase-copy">{@html item.bodyHtml}</div>
         {#if item.links.length}
           <div class="flex flex-wrap gap-x-6 gap-y-2 text-(length:--body-size)">
