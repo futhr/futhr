@@ -13,8 +13,10 @@ only these exact Custom Domains to the public waitlist Worker:
 - `diggymon.com`
 - `refpath.io`
 - `reloved.eco`
-- `wotex.io`
 - `orvane.io`
+
+WoTEx is not on this list: it is fully open source and has no waiting list, so
+`wotex.io` points at its public repositories and documentation instead.
 
 Each venture domain serves its landing page at `/`. There should be no public
 `/waiting-list` route on `futhr.io`, and the waitlist build must not be copied
@@ -30,7 +32,7 @@ Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-
 ```mermaid
 flowchart LR
   F[futhr.io] --> P[Existing static Pages artifact]
-  V[Six exact venture domains] --> W[waitlist-web Worker]
+  V[Five exact venture domains] --> W[waitlist-web Worker]
   W --> A[Prebuilt host-specific assets]
   W --> D[(EU-jurisdiction D1)]
   W --> Q[Confirmation queue]
@@ -51,7 +53,7 @@ never serves the Futhr showcase.
 | --- | --- | --- | --- |
 | Futhr showcase | `futhr.io` | Read-only editorial site | `build/` |
 | Component workshop | `ui.futhr.io` | Storybook, independently deployed | `storybook-static/` |
-| Venture waitlists | Six venture domains | Branded pages, subscribe, confirm, unsubscribe | `apps/waitlist/dist/` |
+| Venture waitlists | Five venture domains | Branded pages, subscribe, confirm, unsubscribe | `apps/waitlist/dist/` |
 | List administration | `lists.futhr.io` | Authenticated list API | Worker code only |
 
 Use `workers_dev = false` and `preview_urls = false` for both production
@@ -91,7 +93,7 @@ apps/waitlist/
 └── wrangler.toml
 ```
 
-One generic Svelte 5 page should be prerendered six times from a closed, typed
+One generic Svelte 5 page should be prerendered five times from a closed, typed
 brand configuration. Use the existing reusable mark components as the vector
 source, with build-generated SVG/PNG files for metadata that cannot consume a
 Svelte component. The current mapping is:
@@ -102,7 +104,6 @@ Svelte component. The current mapping is:
 | `diggymon.com` | Diggymon | `src/lib/components/logos/diggymon.svelte` |
 | `refpath.io` | Refpath | `src/lib/components/logos/refpath.svelte` |
 | `reloved.eco` | Reloved | `src/lib/components/logos/reloved.svelte` |
-| `wotex.io` | WoTEx | `src/lib/components/logos/wotex.svelte` |
 | `orvane.io` | Orvane | `src/lib/components/logos/orvane.svelte` |
 
 The configuration owns the host, stable brand ID, locale, unique page copy,
@@ -394,7 +395,7 @@ Required tests before any domain is attached:
   concurrent duplicate submissions
 - Worker tests with production-like bindings for Turnstile success/failure,
   rate limiting, generic responses, queue retry/idempotency, and Access JWT validation
-- Playwright tests for all six hosts, unique metadata/manifests/icons, no-JavaScript
+- Playwright tests for all five hosts, unique metadata/manifests/icons, no-JavaScript
   first paint, keyboard/screen-reader form use, reduced motion, confirmation,
   unsubscribe, offline/non-cache behaviour, and cross-brand isolation
 - negative deployment tests proving `futhr.io/waiting-list` and the Futhr-hosted
@@ -402,7 +403,7 @@ Required tests before any domain is attached:
 - restore, key-rotation, deletion, export-expiry, and incident-response exercises
 
 Deploy staging with separate D1, queues, Turnstile widgets, secrets, Access
-credentials, and hostnames. Never bind staging to production data. Attach the six
+credentials, and hostnames. Never bind staging to production data. Attach the five
 production Custom Domains only after the route-isolation and privacy checks pass.
 
 ## Rejected alternatives
@@ -411,7 +412,7 @@ production Custom Domains only after the route-isolation and privacy checks pass
 | --- | --- |
 | Add `/waiting-list` to the Futhr SvelteKit app | Violates the requested host and artifact boundary and makes accidental Futhr exposure easy |
 | Select the brand only in browser JavaScript | Wrong first paint and crawler metadata, spoofable brand input, and visible fallback flashes |
-| Six copied applications | Strong isolation but needless drift across identical security, form, and legal behaviour |
+| Five copied applications | Strong isolation but needless drift across identical security, form, and legal behaviour |
 | One public Worker with hidden admin routes | Larger public capability surface and weaker operational separation |
 | Store plaintext email because D1 is encrypted | Database exports and authorised database access still reveal the list |
 | Use email as a queue-only event before storage | At-least-once delivery is not the authoritative record and complicates acceptance semantics |
@@ -422,7 +423,7 @@ production Custom Domains only after the route-isolation and privacy checks pass
 
 These are product or account choices, not gaps the code should guess:
 
-1. The legal controller name and contact details for all six brands.
+1. The legal controller name and contact details for all five brands.
 2. Final unique landing copy, theme tokens, social images, and launch-update scope.
 3. Exact retention periods and whether any suppression proof remains after withdrawal.
 4. Transactional email provider after DPA, transfer, deliverability, and beta-risk review.
