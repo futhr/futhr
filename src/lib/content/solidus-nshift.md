@@ -1,5 +1,5 @@
 ---
-order: 13
+order: 12
 group: Ruby & Solidus
 title: nShift
 lede: Recoverable nShift shipping operations for Solidus, from checkout selection through tracking.

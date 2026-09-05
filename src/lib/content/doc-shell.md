@@ -1,5 +1,5 @@
 ---
-order: 5
+order: 4
 group: Elixir & OTP
 title: DocShell
 lede: One versioned documentation artifact for every site, product surface, search index, and AI system.

@@ -1,5 +1,5 @@
 ---
-order: 8
+order: 7
 group: Elixir & OTP
 title: ExkPasswd
 lede: Human-readable passphrases with measurable, generator-aware entropy.

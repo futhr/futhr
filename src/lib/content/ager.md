@@ -1,5 +1,5 @@
 ---
-order: 2
+order: 14
 group: Venture
 title: Äger
 lede: Shareholder coordination infrastructure that turns fragmented retail owners into an organized, verifiable voice at Swedish general meetings.

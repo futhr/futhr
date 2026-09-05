@@ -1,5 +1,5 @@
 ---
-order: 12
+order: 11
 group: Ruby & Solidus
 title: Nexi
 lede: Verified Nexi payment state for Solidus beyond redirects and webhook guesswork.

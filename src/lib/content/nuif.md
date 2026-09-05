@@ -1,5 +1,5 @@
 ---
-order: 14
+order: 13
 group: Rust & Research
 title: NUIF
 lede: A neutral interface format that makes round-trip fidelity measurable.

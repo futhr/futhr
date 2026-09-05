@@ -1,5 +1,5 @@
 ---
-order: 3
+order: 2
 group: Elixir & OTP
 title: SigilGuard
 lede: The in-process security runtime for autonomous agents touching production tools and data.

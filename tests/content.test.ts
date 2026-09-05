@@ -61,15 +61,15 @@ describe('valid showcase content', () => {
 
     expect(items).toHaveLength(15)
     expect(items[0]).toMatchObject({ order: 1, slug: 'thesis', group: 'Thesis' })
-    expect(items[1]).toMatchObject({ order: 2, slug: 'ager', group: 'Venture', title: 'Äger' })
+    expect(items[13]).toMatchObject({ order: 14, slug: 'ager', group: 'Venture', title: 'Äger' })
     expect(items.at(-1)).toMatchObject({ order: 15, slug: 'goatmire-2026', group: 'Conf talks' })
     expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 15 }, (_, i) => i + 1))
     expect([...new Set(items.map(({ group }) => group))]).toEqual([
       'Thesis',
-      'Venture',
       'Elixir & OTP',
       'Ruby & Solidus',
       'Rust & Research',
+      'Venture',
       'Conf talks'
     ])
   })

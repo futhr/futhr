@@ -1,5 +1,5 @@
 ---
-order: 11
+order: 10
 group: Ruby & Solidus
 title: Weighted Shipping
 lede: Instant, exact weight-based shipping from rules the merchant owns.

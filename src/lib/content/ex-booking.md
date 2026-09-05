@@ -1,5 +1,5 @@
 ---
-order: 4
+order: 3
 group: Elixir & OTP
 title: ExBooking
 lede: Deterministic booking infrastructure that embeds without taking over the application.

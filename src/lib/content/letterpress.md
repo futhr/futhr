@@ -1,5 +1,5 @@
 ---
-order: 6
+order: 5
 group: Elixir & OTP
 title: Letterpress
 lede: A compile-time trust boundary for notification templates on the BEAM.
