@@ -29,7 +29,7 @@ changing the claim.
 |---|---|
 | `title` | Display name with readable capitalisation. Exact repository names belong in `repositories`, not in the title. Use a soft hyphen (U+00AD) only when a long word must break in the headline. |
 | `lede` | The pitch in one sentence: category, structural advantage, and the commercial or technical outcome. |
-| body | The thesis: the broken status quo, the differentiated model, the expansion path, and the honest release status, in that order. Two paragraphs at most. |
+| body | The broken status quo, the differentiated model, and the expansion path, in that order, in one or two paragraphs. Then a closing line in italics on its own paragraph: a short punchline that lands the idea without repeating the ingress or the body. No release-status sentences; availability is handled by the waiting lists, not the copy. |
 | `group` | One of the existing group names unless a new section is requested. Consecutive entries with the same group form one section. |
 | `links` | See link rules. Label with the destination, for example `Repository`, `HexDocs`, `Visit Refpath`, `Talk`. |
 
@@ -59,7 +59,7 @@ changing the claim.
 ## Final checks
 
 1. Ingress is one sentence and reads as the pitch on its own.
-2. Description ends with the honest release status.
+2. Description ends with a one-line italic punchline that repeats nothing above it.
 3. Links obey the link rules and resolve.
 4. `pnpm test:unit` passes; the content loader validates frontmatter and order.
 5. Reread once for AI tells and cut them.

@@ -11,4 +11,4 @@ A proxy-authorization and coalition platform for Swedish shareholders. Retail ow
 
 A verified discussion forum per listed company gives coalitions a moderated place to organize before the vote, with evidence bundles that keep every authorization traceable. The product path runs from forum and voice toward trading and asset services, each step earning the next.
 
-*Äger is private and pre-launch, with a waiting list ahead of the first public release; identity, market-data, and infrastructure providers remain undisclosed.*
+*Ten percent is only a threshold when someone can prove it.*

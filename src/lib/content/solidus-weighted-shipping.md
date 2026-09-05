@@ -12,4 +12,4 @@ links:
 
 A Solidus shipping calculator for merchants whose delivery economics fit explicit weight rules. Exact-decimal rates cover bands, parcel overflow, handling, free-shipping thresholds, and item constraints without a carrier account or network request. Invalid configuration and missing weights fail visibly instead of generating a plausible but wrong checkout price. The merchant owns a fast, testable pricing model that remains understandable as rates change.
 
-*The 4.0 rewrite is installed from the repository and not yet published as a gem.*
+*Priced locally, exactly, every time.*
