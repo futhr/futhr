@@ -19,7 +19,8 @@ const identity = {
   images: {
     favicon: '/icons/favicon.svg',
     icon: '/icons/logo.svg',
-    touchIcon: '/icons/logo-192.png',
+    touchIcon: '/icons/apple-touch-icon.png',
+    faviconPng: '/icons/favicon-48.png',
     social: `${canonicalUrl}icons/logo-512.png`
   },
   links: {
@@ -101,7 +102,7 @@ const webManifest = {
   prefer_related_applications: false,
   icons: [
     { src: identity.images.icon, sizes: 'any', type: 'image/svg+xml', purpose: 'any' },
-    { src: identity.images.touchIcon, sizes: '192x192', type: 'image/png', purpose: 'any' },
+    { src: '/icons/logo-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
     { src: '/icons/logo-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },
     {
       src: '/icons/logo-maskable-512.png',

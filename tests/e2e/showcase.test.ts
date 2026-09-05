@@ -82,15 +82,15 @@ test('publishes install metadata, loadable icons and the primary font preload', 
 
   const favicon = page.locator('link[rel="icon"][type="image/svg+xml"]')
   await expect(favicon).toHaveAttribute('href', faviconAsset)
-  await expect(page.locator('link[rel="icon"]')).toHaveCount(1)
+  await expect(page.locator('link[rel="icon"]')).toHaveCount(2)
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#1b1b1b')
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(27, 27, 27)')
 
   const faviconResponse = await request.get('/icons/favicon.svg')
   expect(faviconResponse.ok()).toBe(true)
   const faviconSource = await faviconResponse.text()
-  expect(faviconSource).toContain('@media (prefers-color-scheme: dark)')
-  expect(faviconSource).not.toContain('<rect')
+  expect(faviconSource).toContain('<rect')
+  expect(faviconSource).not.toContain('prefers-color-scheme')
 
   const manifestResponse = await request.get('/manifest.webmanifest')
   expect(manifestResponse.ok()).toBe(true)

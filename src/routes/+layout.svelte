@@ -14,6 +14,7 @@
   <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href={archivoLatinItalic} as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="icon" type="image/svg+xml" href={site.images.favicon}>
+  <link rel="icon" type="image/png" sizes="48x48" href={site.images.faviconPng}>
   <link rel="apple-touch-icon" href={site.images.touchIcon}>
   <link rel="manifest" href="/manifest.webmanifest">
 </svelte:head>
