@@ -33,18 +33,15 @@ once, in the open, and every product on top of it inherits the proof.
 - **Contracts over conventions.** Types, schemas, manifests, and conformance
   suites carry the agreement between components, so drift shows up in a build,
   not in production.
-- **Evidence gates.** Formal checks, generator-aware entropy, signed
-  attestations, exact-decimal money. Claims are backed by something that can be
-  run.
+- **Evidence gates.** Formal checks, unbiased sampling, signed attestations,
+  exact-decimal money. Claims are backed by something that can be run.
 - **Documentation as an artifact.** Docs are versioned output of the same build
   that produces the code, portable to any site, search index, or agent.
 
 ## Where the work is
 
-The current libraries, grouped by runtime and linked to their repositories and
-documentation, are on [futhr.io](https://futhr.io/). Pinned repositories on this
-profile follow the same selection. Agents can read the same material as
-[llms.txt](https://futhr.io/llms.txt) or [llms-full.txt](https://futhr.io/llms-full.txt).
-
-This repository is the site's source; development starts at
-[docs/README.md](docs/README.md).
+[futhr.io](https://futhr.io/) lists everything current, grouped by runtime, and
+links each entry to its repository on GitHub and its documentation on HexDocs.
+The pinned repositories below follow the same selection. Agents can read the
+same material as [llms.txt](https://futhr.io/llms.txt) or
+[llms-full.txt](https://futhr.io/llms-full.txt).
