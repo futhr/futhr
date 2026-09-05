@@ -50,4 +50,4 @@ All ventures are private and pre-release unless their site says otherwise.
 [futhr.io](https://futhr.io/) is the long-form version of this page, with a
 [Storybook](https://ui.futhr.io/) for its components. Agents can read it as
 [llms.txt](https://futhr.io/llms.txt) or [llms-full.txt](https://futhr.io/llms-full.txt).
-This repository is its source; the technical guide is [docs/development.md](docs/development.md).
+This repository is its source; development starts at [docs/README.md](docs/README.md).

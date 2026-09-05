@@ -51,6 +51,7 @@ suites that touch what you changed before saying a task is done.
 
 ```
 src/lib/components/        production components; logos/ holds the SVG marks
+src/lib/client/            browser-only integrations (WebMCP tools), feature-detected
 src/lib/config/site.ts     identity, strings, links, and generated documents
 src/lib/content/*.md       ordered showcase entries (frontmatter + Markdown)
 src/lib/server/content.ts  frontmatter validation, ordering, Markdown, sanitising
@@ -104,6 +105,12 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   sync and checks contrast. Preview them in the Brand/Weekly colours story.
 - Marks use `currentColor`; an inverse area uses `var(--mark-contrast)`, which
   defaults to ink. Set it to paper in a paper-coloured context.
+- Favicon and app icons carry their own ink background; never rely on
+  `prefers-color-scheme` inside an icon, browsers cache one render. Regenerate
+  PNGs from the SVG when the mark changes; `/icons/*` is cached for a day, not
+  immutable.
+- WebMCP tools live in `src/lib/client/model-context.ts`, registered only when
+  `document.modelContext` exists. Keep the page fully functional without it.
 - Vitest configs: `vitest.config.ts` (Storybook project, must keep that name so
   the Storybook Vitest addon can find it), `vitest.unit.config.ts`,
   `vitest.browser.config.ts`. `vite.config.ts` holds no test settings.

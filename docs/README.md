@@ -1,61 +1,82 @@
-# Documentation index
+# Development guide
 
-Every Markdown document in this repository, grouped by where it lives and what it
-is for. Editorial copy is not documentation; it lives in `src/lib/content/` and is
-served by the site.
+[![CI](https://github.com/futhr/futhr/actions/workflows/ci.yml/badge.svg)](https://github.com/futhr/futhr/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/futhr/futhr/branch/main/graph/badge.svg)](https://codecov.io/gh/futhr/futhr)
+[![Storybook](https://img.shields.io/badge/storybook-ui.futhr.io-1b1b1b?logo=storybook&logoColor=dcdbd6)](https://ui.futhr.io/)
+[![Website](https://img.shields.io/website?url=https%3A%2F%2Ffuthr.io&label=futhr.io&color=1b1b1b)](https://futhr.io/)
+[![Checked with Biome](https://img.shields.io/badge/checked_with-Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev/)
+[![Svelte 5](https://img.shields.io/badge/svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev/)
+[![Node 24](https://img.shields.io/badge/node-%3E%3D24-5fa04e?logo=node.js&logoColor=white)](../.nvmrc)
+[![pnpm](https://img.shields.io/badge/pnpm-11-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Code license: MIT](https://img.shields.io/badge/code-MIT-1b1b1b.svg)](../LICENSE.md)
 
-## docs/
+Source for [futhr.io](https://futhr.io/): SvelteKit 2, Svelte 5, Tailwind CSS 4,
+TypeScript, prerendered and deployed to Cloudflare. The root `README.md` is the
+GitHub profile page; this file is where development starts. Application code is
+MIT; editorial copy and marks are excluded, see [LICENSE.md](../LICENSE.md).
 
-### architecture/
+## Quick start
 
-| Document | Purpose | Status |
-| --- | --- | --- |
-| [cloudflare.md](architecture/cloudflare.md) | Deployment guide: Workers static assets for the site and Storybook, headers and CSP, custom domains and TLS, deploys from GitHub Actions or Workers Builds, API token scoping, limits, and the migration from Pages. | Current guide |
-| [waitlist-platform.md](architecture/waitlist-platform.md) | Recommended architecture for a multi-brand waitlist platform beside the static site. | Proposal, not implemented |
+```sh
+pnpm install --frozen-lockfile
+pnpm exec playwright install chromium   # once, for browser tests
+pnpm dev                                # http://127.0.0.1:5173
+pnpm storybook                          # http://127.0.0.1:6006
+```
 
-### legal/
+Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager` in `package.json`).
 
-| Document | Purpose | Status |
-| --- | --- | --- |
-| [accessibility.md](legal/accessibility.md) | Accessibility statement: WCAG 2.2 AA target, measures in place, how to report a barrier. | Dated statement |
-| [privacy.md](legal/privacy.md) | Privacy information for a static site with no accounts, forms, analytics, or cookies. | Dated statement, update before adding processors |
+## Commands
 
-### security/
+| Command | Does |
+| --- | --- |
+| `pnpm quality` | Biome lint and format check, one-export-per-module rule |
+| `pnpm check` | svelte-check and the service-worker TypeScript project |
+| `pnpm test:unit` | Content loader, agent documents, palette, site config; coverage gated |
+| `pnpm test:components` | Components in headless Chromium; coverage gated |
+| `pnpm test:storybook` | Story rendering, interactions, axe |
+| `pnpm test:e2e` | Builds, then Playwright on desktop and mobile Chromium |
+| `pnpm test:storybook:e2e` | Builds Storybook, then tests the static artifact |
+| `pnpm test:all` | Everything above in CI order |
+| `pnpm build` | Prerenders to `build/` and verifies the artifact |
+| `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
+| `pnpm storybook:build` | Static Storybook to `storybook-static/` |
+| `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
 
-| Document | Purpose | Status |
-| --- | --- | --- |
-| [supply-chain.md](security/supply-chain.md) | Supply-chain policy: package manager, lockfile, dependency review, verification gates, release evidence. | Policy |
+CI runs the same sequence on pull requests and pushes to `main`, uploads coverage
+to Codecov, and dry-runs the Storybook deployment.
 
-## Repository root
+## Layout
+
+| Path | Contents |
+| --- | --- |
+| `src/lib/components/` | Production components; `logos/` holds the SVG marks |
+| `src/lib/client/` | Browser-only integrations such as the WebMCP tools |
+| `src/lib/config/` | `site.ts` identity and strings, `palette.ts` weekly colours |
+| `src/lib/content/` | Ordered Markdown entries |
+| `src/lib/server/` | Content loader, validation, agent document generators |
+| `src/lib/styles/site.css` | Tailwind theme, layout tokens, global rules |
+| `src/routes/` | The page plus generated `llms.txt`, `llms-full.txt`, `agents.md`, `agents/stack.md`, `work/<slug>.md`, manifest, robots, sitemap |
+| `tests/` | `components/` Vitest browser, `stories/` Storybook, `e2e/` and `storybook-e2e/` Playwright, unit tests at the top level |
+| `static/` | Icons, `_headers`, font licence |
+| `.claude/` | Agent skills and settings; [AGENTS.md](../AGENTS.md) is the canonical contract |
+
+Conventions: kebab-case filenames, `$lib` imports, no barrel files, at most one
+public symbol per module. Entries are Markdown with `order`, `group`, `title`,
+`lede`, `repositories`, and `links` in frontmatter; the build rejects gaps,
+duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
+
+## Documents
 
 | Document | Purpose |
 | --- | --- |
-| [README.md](../README.md) | GitHub profile page: thesis, ventures, libraries, research, talks. |
-| [docs/development.md](development.md) | Technical overview, layout, content model, commands, build and Storybook. |
-| [AGENTS.md](../AGENTS.md) | Canonical contract for coding agents: what the repo is, commands, structure, conventions, definition of done. |
-| [CLAUDE.md](../CLAUDE.md) | Claude Code entry point; imports AGENTS.md and adds skill selection and hard rules. |
-| [CONTRIBUTING.md](../CONTRIBUTING.md) | Scope of welcome changes, development requirements, verification sequence, contribution terms. |
-| [CODE_OF_CONDUCT.md](../CODE_OF_CONDUCT.md) | Participation rules. |
-| [SECURITY.md](../SECURITY.md) | Supported version, private vulnerability reporting, handling. |
-| [SUPPORT.md](../SUPPORT.md) | Where questions and defects go. |
-| [POLICIES.md](../POLICIES.md) | Navigation aid across the community, licensing, and site statements. |
-| [LICENSE.md](../LICENSE.md) | MIT for application code; excluded editorial copy and marks. |
-| [TRADEMARKS.md](../TRADEMARKS.md) | Names and marks. |
-| [THIRD_PARTY_NOTICES.md](../THIRD_PARTY_NOTICES.md) | Third-party licences, including the Archivo font. |
+| [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
+| [architecture/cloudflare.md](architecture/cloudflare.md) | Deployment: Workers static assets, headers and CSP, custom domains and TLS, CI deploys, token scoping, migration from Pages |
+| [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Proposal for a multi-brand waitlist platform; not implemented |
+| [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
+| [legal/privacy.md](legal/privacy.md) | Privacy information for a static site with no processors |
+| [security/supply-chain.md](security/supply-chain.md) | Supply-chain policy and verification gates |
 
-## Agent skills (`.claude/skills/`)
-
-| Skill | Purpose |
-| --- | --- |
-| [showcase-voice](../.claude/skills/showcase-voice/SKILL.md) | Editorial rules for every visible word: voice, entry structure, link rules, disclosure limits, final checks. |
-| [unslop](../.claude/skills/unslop/SKILL.md) | Cuts AI tells from prose while keeping technical precision. |
-| [svelte-kit](../.claude/skills/svelte-kit/SKILL.md) | Svelte 5 and SvelteKit rules for this codebase, with the lint and parser traps that bite here. |
-| [git-commit](../.claude/skills/git-commit/SKILL.md) | One-line commit subjects, no trailers, no attribution, operational rules. |
-| [terse-chat](../.claude/skills/terse-chat/SKILL.md) | Compressed reply register for conversation with the maintainer. |
-
-## Generated for agents at build time
-
-Served by the site, not stored as files: `/agents.md` (AGENTS.md verbatim),
-`/agents/stack.md` (pinned versions from `package.json`), `/llms.txt`,
-`/llms-full.txt`, and `/work/<slug>.md` per entry. The generators are in
-`src/lib/server/agent-documents.ts`.
+Repository policies are indexed in [POLICIES.md](../POLICIES.md). Agent guidance is
+[AGENTS.md](../AGENTS.md) with the skills under `.claude/skills/`; the deployed
+site serves the same guidance at `/agents.md` and `/agents/stack.md`.
