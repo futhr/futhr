@@ -14,4 +14,6 @@ links:
 
 Two automation rules can be reasonable in isolation and dangerous in composition. The talk makes them *fight* inside a simulated AGV warehouse, then stops the same conflict before either rule can run. One rule representation feeds both the Maude verifier and the BEAM runtime, reducing divergence between checked policy and executed behavior.
 
-The gate distinguishes verified safety, discovered conflict, and an unverified result; uncertainty never becomes permission. *Goatmire 2026 is conference material and simulation evidence, not a physical-fleet benchmark or production claim.* Its value is a concrete deployment pattern for automation systems whose individual rules become dangerous in combination.
+The gate distinguishes verified safety, discovered conflict, and an unverified result; uncertainty never becomes permission. Its value is a concrete deployment pattern for automation systems whose individual rules become dangerous in combination.
+
+*Goatmire 2026 is conference material and simulation evidence, not a physical-fleet benchmark or production claim.*
