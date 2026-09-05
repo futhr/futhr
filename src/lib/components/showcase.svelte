@@ -1,5 +1,6 @@
 <script lang="ts">
   import { type Snippet, tick } from 'svelte'
+  import { registerShowcaseTools } from '$lib/client/model-context'
   import Entry from '$lib/components/entry.svelte'
   import MarkerFilter from '$lib/components/marker-filter.svelte'
   import { site } from '$lib/config/site'
@@ -82,6 +83,19 @@
   }
 
   $effect(() => stopTracking)
+
+  // WebMCP: expose the collection to browser agents where the API exists.
+  $effect(() =>
+    registerShowcaseTools({
+      items,
+      open: (slug) => {
+        const item = items.find((entry) => entry.slug === slug)
+        if (item && currentOpenSlug !== slug) {
+          toggle(item).catch(() => undefined)
+        }
+      }
+    })
+  )
 </script>
 
 <section
