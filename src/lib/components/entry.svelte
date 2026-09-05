@@ -1,4 +1,5 @@
 <script lang="ts">
+  import { foldMotion } from '$lib/client/fold-motion'
   import MarkerLink from '$lib/components/marker-link.svelte'
   import { site } from '$lib/config/site'
   import type { ShowcaseEntry } from '$lib/types/showcase-entry'
@@ -8,11 +9,10 @@
     index: number
     isOpen: boolean
     divider: boolean
-    animated?: boolean
     onToggle: () => void
   }
 
-  let { item, index, isOpen, divider, animated = true, onToggle }: Props = $props()
+  let { item, index, isOpen, divider, onToggle }: Props = $props()
 
   const inverse = $derived(index % 2 === 0)
   let article = $state<HTMLElement>()
@@ -40,18 +40,14 @@
     renderedOpen = isOpen
     animation?.cancel()
     const to = element.getBoundingClientRect().height
-    if (
-      !animated ||
-      from === to ||
-      globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches
-    ) {
+    if (from === to || globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
 
     element.style.overflow = 'hidden'
     animation = element.animate([{ height: `${from}px` }, { height: `${to}px` }], {
-      duration: 680,
-      easing: 'cubic-bezier(0.16, 1, 0.3, 1)'
+      duration: foldMotion.duration,
+      easing: foldMotion.easing
     })
     animation.onfinish = () => {
       element.style.overflow = ''
@@ -65,7 +61,7 @@
     id={`showcase-row-${item.slug}`}
     data-state={isOpen ? 'open' : 'closed'}
     class={[
-    'fold group/row relative h-(--fold-height) overflow-hidden data-[state=open]:h-auto data-[state=open]:overflow-visible',
+    'fold group/row relative h-(--fold-height) overflow-hidden data-[state=open]:h-auto data-[state=open]:min-h-dvh data-[state=open]:overflow-visible',
     inverse ? 'bg-ink text-paper' : 'bg-paper text-ink'
   ]}
   >
@@ -91,14 +87,16 @@
       id={`showcase-panel-${item.slug}`}
       aria-hidden={!isOpen}
       inert={!isOpen}
-      class="grid grid-cols-[minmax(0,25.4cqw)_minmax(0,32.4cqw)] items-start pt-[6.7cqw] pr-(--gutter) pb-[7cqw] pl-(--column) opacity-0 transition-opacity duration-300 group-data-[state=open]/row:opacity-100 group-data-[state=open]/row:delay-150 motion-reduce:transition-none @max-5xl:block @max-3xl:px-5 @max-3xl:pt-8 @max-3xl:pb-12"
+      class="grid grid-cols-[minmax(0,25.4cqw)_minmax(0,32.4cqw)] items-start pt-[6.7cqw] pr-(--gutter) pb-[7cqw] pl-(--column) @max-5xl:block @max-3xl:px-5 @max-3xl:pt-8 @max-3xl:pb-12"
     >
       <p
-        class="m-0 max-w-[17.5cqw] text-(length:--lede-size) leading-[1.35] font-medium tracking-[-0.015em] text-balance @max-5xl:max-w-[36rem]"
+        class="m-0 max-w-[17.5cqw] translate-y-4 text-(length:--lede-size) leading-[1.35] font-medium tracking-[-0.015em] text-balance opacity-0 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-data-[state=open]/row:translate-y-0 group-data-[state=open]/row:opacity-100 group-data-[state=open]/row:delay-100 motion-reduce:translate-y-0 motion-reduce:transition-none @max-5xl:max-w-[36rem]"
       >
         {item.lede}
       </p>
-      <div class="flex flex-col gap-6 @max-5xl:mt-8">
+      <div
+        class="flex translate-y-4 flex-col gap-6 opacity-0 transition-[opacity,translate] duration-500 ease-[cubic-bezier(0.2,0,0,1)] group-data-[state=open]/row:translate-y-0 group-data-[state=open]/row:opacity-100 group-data-[state=open]/row:delay-200 motion-reduce:translate-y-0 motion-reduce:transition-none @max-5xl:mt-8"
+      >
         <div class="showcase-copy">{@html item.bodyHtml}</div>
         {#if item.links.length}
           <div class="flex flex-wrap gap-x-6 gap-y-2 text-(length:--body-size)">

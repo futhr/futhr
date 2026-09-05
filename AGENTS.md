@@ -116,6 +116,13 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   `vitest.browser.config.ts`. `vite.config.ts` holds no test settings.
 - Storybook static assets live under `.storybook/static/brand/`; the artifact
   check rejects anything under `icons/` or other web-only paths.
+- Opening a row drives the scroll position on the same 420ms curve as the row
+  height animations (`src/lib/client/fold-motion.ts`), towards a target computed
+  from the collapsed-row height, so the header glides to the top with no
+  per-frame measurement. `body` has `overflow-anchor: none` and there is no
+  `scroll-behavior: smooth`, both on purpose: scroll anchoring and smooth
+  programmatic scrolls each moved the header out of view. Measure before
+  changing any of this.
 - `content-visibility: auto` on rows breaks full-page screenshots and
   measurements. Do not reintroduce it.
 - The dev server 500s when any content file has invalid frontmatter; the error

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { type Snippet, tick } from 'svelte'
+  import { foldMotion } from '$lib/client/fold-motion'
   import { registerShowcaseTools } from '$lib/client/model-context'
   import Entry from '$lib/components/entry.svelte'
   import MarkerFilter from '$lib/components/marker-filter.svelte'
@@ -13,76 +14,91 @@
 
   let { items, footer }: Props = $props()
   let openSlug = $state<string | null>()
-  let instantSlug = $state<string | null>(null)
-  let settleTimer = 0
+  let glideFrame = 0
 
   const initialOpenSlug = $derived(items[0]?.slug ?? null)
   const currentOpenSlug = $derived(openSlug === undefined ? initialOpenSlug : openSlug)
   const interruptEvents = ['wheel', 'touchstart', 'pointerdown', 'keydown'] as const
 
-  const stopTracking = () => {
-    clearTimeout(settleTimer)
+  const stopGlide = () => {
+    cancelAnimationFrame(glideFrame)
     for (const type of interruptEvents) {
-      globalThis.removeEventListener(type, stopTracking)
+      globalThis.removeEventListener(type, stopGlide)
     }
   }
 
-  const pageTop = (row: HTMLElement) => row.getBoundingClientRect().top + globalThis.scrollY
+  // Height of a collapsed row: any closed row that is not mid-animation, or a
+  // probe placed inside a row container so the container tokens apply.
+  const foldHeight = (section: HTMLElement, row: HTMLElement) => {
+    const settled = [...section.querySelectorAll<HTMLElement>('article[data-state="closed"]')].find(
+      (article) => article.getAnimations().length === 0
+    )
+    if (settled) {
+      return settled.getBoundingClientRect().height
+    }
+    const probe = document.createElement('div')
+    probe.className = 'fold'
+    probe.style.height = 'var(--fold-height)'
+    row.parentElement?.append(probe)
+    const { height } = probe.getBoundingClientRect()
+    probe.remove()
+    return height
+  }
 
-  // Expand, position, release. A row that closes above the clicked one
-  // collapses instantly and the scroll position is corrected by the same
-  // height in the same frame, so the clicked row never moves while it expands.
-  // Once the expansion has finished, the row scrolls to the top with the
-  // browser's own smooth scroll and control returns to the reader. Any input
-  // during the expansion releases immediately.
-  const settle = (slug: string) => {
-    stopTracking()
-    const row = document.getElementById(`showcase-row-${slug}`)
-    if (!row) {
+  // The rows animate their heights on one curve. Driving the scroll position on
+  // the same curve towards the row's final position makes the clicked header
+  // travel from where it was to the top of the viewport in one motion, with
+  // every other row moving consistently around it. Nothing is measured per
+  // frame, so nothing lags. Any user input hands control back at once.
+  const glideTo = (row: HTMLElement, index: number) => {
+    stopGlide()
+    const section = row.parentElement?.parentElement
+    if (!section) {
+      return
+    }
+    const sectionTop = section.getBoundingClientRect().top + globalThis.scrollY
+    const target = Math.round(sectionTop + index * foldHeight(section, row))
+    const from = globalThis.scrollY
+    if (from === target) {
       return
     }
     if (globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-      globalThis.scrollTo({ top: pageTop(row), behavior: 'instant' })
+      globalThis.scrollTo({ top: target, behavior: 'instant' })
       return
     }
     for (const type of interruptEvents) {
-      globalThis.addEventListener(type, stopTracking, { passive: true })
+      globalThis.addEventListener(type, stopGlide, { passive: true })
     }
-    settleTimer = setTimeout(() => {
-      stopTracking()
-      globalThis.scrollTo({ top: pageTop(row), behavior: 'smooth' })
-    }, 680)
+    const started = performance.now()
+    const step = (now: number) => {
+      const progress = Math.min(1, (now - started) / foldMotion.duration)
+      globalThis.scrollTo({
+        top: from + (target - from) * foldMotion.ease(progress),
+        behavior: 'instant'
+      })
+      if (progress < 1) {
+        glideFrame = requestAnimationFrame(step)
+      } else {
+        stopGlide()
+      }
+    }
+    glideFrame = requestAnimationFrame(step)
   }
 
   const toggle = async (item: ShowcaseEntry) => {
     const opening = currentOpenSlug !== item.slug
-    const previousSlug = currentOpenSlug
-    const previousRow = previousSlug
-      ? document.getElementById(`showcase-row-${previousSlug}`)
-      : null
-    const previousHeight = previousRow?.getBoundingClientRect().height ?? 0
-    const collapseAbove =
-      opening &&
-      previousRow !== null &&
-      items.findIndex((entry) => entry.slug === previousSlug) < items.indexOf(item)
-
-    instantSlug = collapseAbove ? previousSlug : null
     openSlug = opening ? item.slug : null
     if (!opening) {
       return
     }
-
     await tick()
-    if (collapseAbove && previousRow) {
-      globalThis.scrollBy({
-        top: previousRow.getBoundingClientRect().height - previousHeight,
-        behavior: 'instant'
-      })
+    const row = document.getElementById(`showcase-row-${item.slug}`)
+    if (row) {
+      glideTo(row, items.indexOf(item))
     }
-    settle(item.slug)
   }
 
-  $effect(() => stopTracking)
+  $effect(() => stopGlide)
 
   // WebMCP: expose the collection to browser agents where the API exists.
   $effect(() =>
@@ -90,7 +106,7 @@
       items,
       open: (slug) => {
         const item = items.find((entry) => entry.slug === slug)
-        if (item && currentOpenSlug !== slug) {
+        if (item) {
           toggle(item).catch(() => undefined)
         }
       }
@@ -98,10 +114,7 @@
   )
 </script>
 
-<section
-  aria-label={site.ui.selectedWork}
-  class="relative min-h-dvh bg-paper [overflow-anchor:none]"
->
+<section aria-label={site.ui.selectedWork} class="relative min-h-dvh bg-paper">
   <MarkerFilter />
 
   {#each items as item, index (item.slug)}
@@ -110,7 +123,6 @@
       {index}
       isOpen={currentOpenSlug === item.slug}
       divider={index === 0 || items[index - 1]?.group !== item.group}
-      animated={item.slug !== instantSlug}
       onToggle={() => toggle(item)}
     />
   {/each}

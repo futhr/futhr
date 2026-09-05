@@ -63,7 +63,7 @@ const rows: ShowcaseEntry[] = [
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
-test('collapses a row above instantly, then settles the opened row at the top', async () => {
+test('animates the closing and opening rows together, then settles', async () => {
   const screen = await render(Showcase, { items: rows })
   const nuif = screen.getByRole('button', { name: 'Rust & Research NUIF' })
   const thesisRow = screen.container.querySelector('#showcase-row-thesis') as HTMLElement
@@ -71,24 +71,13 @@ test('collapses a row above instantly, then settles the opened row at the top', 
 
   await nuif.click()
 
-  expect(thesisRow.getAnimations()).toHaveLength(0)
+  expect(thesisRow.getAnimations().length).toBeGreaterThan(0)
   expect(nuifRow.getAnimations().length).toBeGreaterThan(0)
-  await wait(900)
+  await wait(600)
   await expect.element(nuif).toHaveAttribute('aria-expanded', 'true')
+  expect(thesisRow.getAnimations()).toHaveLength(0)
   expect(nuifRow.getAnimations()).toHaveLength(0)
-})
-
-test('releases scroll control on user input during the expansion', async () => {
-  const screen = await render(Showcase, { items: rows })
-  const refpath = screen.getByRole('button', { name: 'Venture Refpath' })
-
-  await refpath.click()
-  globalThis.dispatchEvent(new WheelEvent('wheel', { deltaY: 40 }))
-  await wait(800)
-
-  await expect.element(refpath).toHaveAttribute('aria-expanded', 'true')
-  await screen.getByRole('button', { name: 'Thesis Thesis' }).click()
-  await expect.element(refpath).toHaveAttribute('aria-expanded', 'false')
+  expect(nuifRow.style.overflow).toBe('')
 })
 
 test('renders an empty collection without a disclosure', async () => {

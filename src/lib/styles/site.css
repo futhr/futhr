@@ -83,7 +83,6 @@ html[data-day="6"] {
 @layer base {
   html {
     min-width: 320px;
-    scroll-behavior: smooth;
     background: var(--color-ink);
   }
 
@@ -91,6 +90,9 @@ html[data-day="6"] {
     min-width: 320px;
     min-height: 100dvh;
     overflow-x: hidden;
+    /* Rows position themselves explicitly when they open; the browser must not
+       re-anchor the scroll position while a row is still growing. */
+    overflow-anchor: none;
     background: var(--color-ink);
   }
 
@@ -165,11 +167,5 @@ html[data-day="6"] {
     --label-size: 0.72rem;
     --lede-size: 1.375rem;
     --body-size: 1rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
   }
 }
