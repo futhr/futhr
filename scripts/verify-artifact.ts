@@ -3,8 +3,11 @@ import { join, relative } from 'node:path'
 import process from 'node:process'
 
 const storyFilePattern = /(?:^|\/)iframe\.html$|\.stories\./
+const storyCodePattern = /@storybook|__STORYBOOK__|storybook\/internal/
 const siteOnlyFiles = new Set([
   'llms.txt',
+  'llms-full.txt',
+  'agents.md',
   'manifest.webmanifest',
   'service-worker.js',
   'sw.js',
@@ -38,6 +41,15 @@ const verifyWeb = async () => {
   if (stories.length > 0) {
     throw new Error(`Story files leaked into the web artifact: ${stories.join(', ')}`)
   }
+  const scripts = (await collectFiles(directory)).filter((file) => file.endsWith('.js'))
+  const leaked = await Promise.all(
+    scripts.map(async (file) => (storyCodePattern.test(await readFile(file, 'utf8')) ? file : null))
+  )
+  if (leaked.some(Boolean)) {
+    throw new Error(
+      `Storybook code leaked into the web artifact: ${leaked.filter(Boolean).join(', ')}`
+    )
+  }
 }
 
 /** Storybook: complete, excluded from search, and free of site-only files. */
@@ -57,7 +69,11 @@ const verifyStorybook = async () => {
   }
   const leaked = (await collectFiles(directory))
     .map((file) => relative(directory, file))
-    .filter((file) => siteOnlyFiles.has(file) || file.startsWith('icons/'))
+    .filter(
+      (file) =>
+        siteOnlyFiles.has(file) ||
+        ['icons/', 'agents/', 'work/'].some((prefix) => file.startsWith(prefix))
+    )
   if (leaked.length > 0) {
     throw new Error(`Site-only files leaked into the Storybook artifact: ${leaked.join(', ')}`)
   }

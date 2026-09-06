@@ -204,11 +204,12 @@
       }
     },
     {
-      "includes": ["apps/*/tests/unit/**/*.ts"],
+      "includes": ["tests/artifact.test.ts", "apps/*/tests/unit/**/*.ts"],
       "linter": {
         "rules": {
           "correctness": {
-            "noNodejsModules": "off"
+            "noNodejsModules": "off",
+            "useQwikValidLexicalScope": "off"
           }
         }
       }
