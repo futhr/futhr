@@ -93,7 +93,6 @@ a dependency before adding it and remove packages that stop being used.
 | [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
 | [architecture/cloudflare.md](architecture/cloudflare.md) | Current Pages and Workers configurations, waitlist provisioning, DNS and mail, deployment commands, headers, and the optional Pages migration |
 | [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
-| [audits/2026-09-06.md](audits/2026-09-06.md) | Repository audit, fixes, verification results, and remaining external checks |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
 | [legal/privacy.md](legal/privacy.md) | Privacy information for the static site |
 
