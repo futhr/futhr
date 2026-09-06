@@ -1,17 +1,16 @@
 import { controller } from '$lib/brands/controller'
 import type { Brand } from '$lib/types/brand'
 
-/**
- * The collection notice for one brand: a few plain paragraphs about this
- * domain and nothing else. The wording is an engineering draft pending
- * qualified review.
- */
+/** Collection notice; operating requirements are in docs/legal/waitlist-operations.md. */
 const privacyNotice = (brand: Brand): readonly string[] => [
-  `${controller.name}, ${controller.location}, is the controller for personal data collected on ${brand.host}. Write to ${controller.contact}.`,
-  'The list stores the email address you submit, the submission time, and the version of this notice. Your IP address is used to limit repeated submissions; it is not stored in the list. The site has no analytics, advertising, profiling, or cookies of its own. The hosting provider processes ordinary request metadata under its own log retention terms.',
-  `The address is stored so that ${brand.name} can send ${brand.updates} when there is something to announce, and for nothing else. The legal basis is your consent under Article 6(1)(a) of the GDPR, version ${brand.consentVersion}, given when you press the button. Withdraw it at any time by writing to ${controller.contact}; the address is then deleted.`,
-  `Addresses are encrypted before they are written to a database created under the European Union jurisdiction on ${controller.processor.name}’s platform. ${controller.processor.name} is the processor, under its Data Processing Addendum with the EU standard contractual clauses. Access to the list is restricted to authorised administrators.`,
-  `The address is kept until ${brand.name} ${brand.updates} begin or you withdraw. The list is reviewed at least every ${controller.retention.reviewMonths} months and deleted if the plan it was collected for is dropped. You also have the rights of access, rectification, restriction, portability, and objection, and you can complain to ${controller.authority.name} at ${controller.authority.url}.`,
+  `${controller.name}, ${controller.location}, is the controller for personal data collected on ${brand.host}. Write to ${controller.contact}. Joining is optional; not joining does not affect access to the site.`,
+  `The list stores your email address, submission time, and notice version. The address is used only for ${brand.name} ${brand.updates}. The legal basis is your consent under Article 6(1)(a) of the GDPR, version ${brand.consentVersion}, given when you select Notify me. No account is created. A person decides how withdrawal requests are resolved.`,
+  'You can withdraw at any time through the Withdraw page on this site or by contacting the controller. Requests are handled manually and are free of charge. A request alone cannot delete someone else’s subscription. Where needed, control of the subscribed mailbox is checked before removal. No explanation for leaving is required. Withdrawal does not affect the lawfulness of earlier processing.',
+  'Withdrawal requests record the original subscription reference, receipt time, status, and the operator’s decision. They do not duplicate the email address. Request handling and necessary records support compliance with data-protection duties under Article 6(1)(c). Requests receive a response without undue delay and normally within one calendar month. Any permitted extension and its reason are communicated within that month.',
+  'Your IP address is used to limit repeated submissions and is not stored in either list table. Abuse prevention relies on the legitimate interest in protecting the service under Article 6(1)(f). There are no analytics, advertising, or cookies of the site’s own. The hosting provider processes ordinary request metadata under its log retention terms.',
+  `Addresses are encrypted in an EU-jurisdiction database on ${controller.processor.name}’s platform. Cloudflare provides hosting and database services under its Data Processing Addendum; some service processing can occur outside the EU with the applicable transfer safeguards. Ask the controller for details or a copy of those safeguards. Authorised operators can read addresses; inbox reviewers receive only request metadata. The website does not call AI services or send email automatically.`,
+  `An address is kept until the announced update has been sent, the project is cancelled, consent is withdrawn, or ${controller.retention.subscriptionMonths} months after joining, whichever comes first. Lists are reviewed monthly. Closed withdrawal records and related correspondence are removed within ${controller.retention.requestDays} days; security audit records are kept for up to ${controller.retention.auditMonths} months. A necessary record may be retained for an unresolved complaint or legal obligation, with its reason documented. Deleted data can remain in restricted recovery backups for their expiry period and is not used for contact.`,
+  `You can request access, correction, erasure, restriction, and portability where applicable, and object to processing based on legitimate interests. Contact ${controller.contact}; other valid requests are also accepted. You can complain to ${controller.authority.name} at ${controller.authority.url}.`,
   `${controller.noticeDate}. This notice covers ${brand.host} only.`
 ]
 

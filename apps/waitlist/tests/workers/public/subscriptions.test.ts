@@ -39,7 +39,7 @@ describe('the join form action', () => {
     expect(html).not.toContain('join-form-email')
     const [stored] = await rows()
     expect(stored?.brand_id).toBe('rivure')
-    expect(stored?.consent_version).toBe('2026-09-06')
+    expect(stored?.consent_version).toBe('2026-09-06.1')
     expect(stored?.encryption_key_version).toBe('v1')
     expect(stored?.joined_at).toBeTruthy()
     expect(stored?.email_ciphertext).not.toContain('example.com')

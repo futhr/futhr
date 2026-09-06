@@ -8,8 +8,9 @@ provisioning and deployment are covered in [cloudflare.md](cloudflare.md).
 
 The showcase is static. The waitlists are a separate SvelteKit application
 rendered by `waitlist-web`, with a private module Worker, `waitlist-admin`,
-for administration. Both use one D1 database. The public application exposes
-inserts; the private API exposes reads and deletes. These are application
+for administration. Both use one D1 database. The public application accepts
+subscriptions and queues withdrawal requests; the private API exposes reads,
+deletes, and operator resolution. These are application
 boundaries: both Workers' D1 bindings have database access, not SQL-level
 read-only or write-only grants.
 
@@ -26,7 +27,7 @@ form field or an internal route segment supplied by the visitor.
 
 ## Pages and assets
 
-Each brand serves `/`, `/privacy`, `/icons/*`, and the generated manifest,
+Each brand serves `/`, `/privacy`, `/withdraw`, `/icons/*`, and the generated manifest,
 robots, sitemap, and `llms.txt`. The build writes the Worker and assets to
 `.svelte-kit/cloudflare/`. Hashed assets live under `/_app/immutable/`;
 generated brand assets are also publicly reachable under `/brands/<id>/icons/`.
@@ -34,7 +35,8 @@ They contain public marks, not private brand data.
 
 The landing page reuses the showcase's type, colours, and marks. A page shell
 owns the layout; landing, privacy, and notice components supply the content.
-`join-form.svelte` owns form interaction, with copy passed as props. The form
+`email-form.svelte` owns the shared email interaction, with copy passed as props.
+The join wrapper adds consent links; the withdrawal route uses the same form. The form
 works as a native POST and uses SvelteKit's `enhance` for in-place results.
 There is no client data loader, third-party bot script, or service worker.
 [SvelteKit form actions](https://svelte.dev/docs/kit/form-actions)
@@ -98,28 +100,68 @@ text, subscriber addresses, or authorization headers. `audit_log.actor` can
 contain an administrator's email address; it does not contain subscriber
 addresses. Hosting request logs have separate account retention settings.
 
+## Withdrawal requests and review
+
+`withdrawal_requests` is a separate inbox, introduced by migration 0002. The
+public action normalises the address and computes its keyed digest, then queues
+a request only for an existing same-brand subscription. It stores the original
+subscription ID and receipt time, not a second copy of the address. The pending
+unique index makes repeats idempotent without resetting the receipt time.
+Capacity checking and insertion share a D1 transaction; the ceiling is 1,000
+pending records per brand. Non-members and duplicates get the same conditional
+acknowledgement. If capacity is exhausted, every address gets 503 with an email
+alternative. Invalid input, foreign origins, and rate limits fail explicitly.
+
+A pending request changes neither subscription state nor consent evidence.
+Operators must review pending requests before sending or exporting a list.
+The original subscription ID prevents a stale request deleting a later join.
+The public form does not authenticate the requester, and a match cannot prove
+mailbox ownership. There is no signup secret or automatic verification flow.
+
+The authenticated inbox list joins the two tables and exposes at most 50
+metadata records per page. `ADMIN_REVIEWER_BRAND_GRANTS` allows only these reads
+and brand discovery. Operators in `ADMIN_BRAND_GRANTS` can read address details
+and resolve requests. If an identity has both grants, operator access wins;
+never configure an AI reviewer with operator grants.
+
+An operator attests mailbox evidence or an evidenced dismissal using a bounded
+form body and an opaque case reference. Resolution closes the request, performs
+any original-row deletion, and writes the audit event in one transaction. A
+repeat cannot produce a second delete or audit. `already_absent` completes a
+request only when the original row is absent, even if the address has since
+joined again. No foreign-key cascade removes the evidence of receipt.
+
+Public traffic invokes no email, AI, queue consumer, or paid external service.
+An optional AI reviewer is a separately authenticated caller, invoked deliberately
+by an operator. It gets no addresses and no mutation capability. Its output is
+untrusted advice, never identity evidence or a reason to deny a valid request.
+Metadata remains personal data and any external processor needs assessment.
+
 ## Consent and operations
 
-The draft notice in `src/lib/brands/privacy.ts` names the controller and the
-single contact purpose. Each row records the notice version in force when the
-form was submitted. A new version does not retroactively change earlier consent.
+The notice names the controller, contact purpose, manual request handling,
+rights, and retention limits. Each subscription records the notice version in
+force at submission; a revised notice does not rewrite earlier consent.
+`controller.ts` sets twelve months for subscriptions, ninety days for closed
+requests/correspondence, and twelve months for audit records. Monthly manual
+reviews remove records due before the next review. Pending requests are checked
+every working day and do not expire unanswered.
 
-There is no mail pipeline, confirmation flow, retention job, or self-service
-withdrawal page. Withdrawal requests go to the controller and are executed
-through the admin API. The notice commits to a review every twelve months.
-The future product's mailing and verification flow remains outside this code.
-
-Before production, the maintainer needs to settle the controller and contact
-mailbox, retention procedure, withdrawal process, Access identities, and staging
-bindings. The legal notice needs qualified review against the actual operation;
-this architecture document does not establish consent or marketing compliance.
+The [privacy operating procedure](../legal/waitlist-operations.md) defines
+verification, response deadlines, handling of other rights, retention, restore
+checks, and the account facts to confirm before collection. No retention job,
+mail pipeline, AI integration, or reminder service runs automatically. The
+mailbox, reminder schedule, legal facts, and Cloudflare configuration still
+require the maintainer's setup. The Free-plan cost boundary is described in
+[the deployment guide](cloudflare.md#cost-boundary).
 
 ## Verification
 
 Node unit tests cover brands, generated assets and documents, email syntax,
 crypto, headers, and JWT rejection. Workers tests exercise the built public
 Worker and admin module against local D1, including concurrent duplicates,
-brand authorization, pagination, and transactional rollback. Playwright checks
+brand authorization, pagination, transactional rollback, reviewer permissions,
+inbox capacity, and protection of later re-subscriptions. Playwright checks
 all five brands on desktop and mobile Chromium, native and enhanced forms,
 metadata, and automated accessibility.
 

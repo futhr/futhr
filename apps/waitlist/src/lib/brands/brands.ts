@@ -1,7 +1,7 @@
 import type { Brand } from '$lib/types/brand'
 import type { BrandId } from '$lib/types/brand-id'
 
-const consentVersion = '2026-09-06'
+const consentVersion = '2026-09-06.1'
 
 /**
  * The closed brand map, in local navigation order. Copy is

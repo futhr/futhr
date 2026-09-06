@@ -5,7 +5,7 @@ import { strings } from '../../src/lib/brands/strings.ts'
 import { apexForWww } from '../../src/lib/brands/www.ts'
 
 const all = Object.values(brands)
-const datePattern = /^\d{4}-\d{2}-\d{2}$/
+const datePattern = /^\d{4}-\d{2}-\d{2}(?:\.\d+)?$/
 const twoWordForm = /waiting[ -]list/i
 const availabilityClaim = /available now|buy now|sign up today/i
 const maxDescription = 160

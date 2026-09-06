@@ -1,22 +1,23 @@
 # Waitlist Workers
 
 The venture waitlists: one public Worker that serves five exact hostnames and
-collects addresses, and one private Worker that reads them. The reasoning is in
+collects addresses and withdrawal requests, and one private Worker for
+administration. The reasoning is in
 [docs/architecture/waitlist-platform.md](../../docs/architecture/waitlist-platform.md).
 This file is the operating guide.
 
-Joining is the whole flow: a visitor enters an address and sees a confirmation
-on the page. Nothing is emailed. Each platform launches with its own list
+Joining ends on the page: a visitor enters an address and sees a confirmation.
+Nothing is emailed automatically. Each platform launches with its own list
 handling; until then the list is read through the admin API. The page is one
 centred column on ink: the mark, the brand name, its closing line, and the form
-under a "Get notified" heading, with a Privacy link as the only footer. The form
-is a SvelteKit form action, so it works without JavaScript and stays on the page
+under a "Get notified" heading, with Privacy and Withdraw links in the footer.
+The form is a SvelteKit form action, so it works without JavaScript and stays on the page
 with it. A hidden honeypot and a per-client rate limit reduce automated submissions; there is no third-party script on the page.
 
 | Worker | Config | Hostnames | Capability |
 | --- | --- | --- | --- |
-| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, `orvane.io` | Branded page, privacy notice, join |
-| `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete |
+| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
+| `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete, review and resolve withdrawal requests |
 
 The brand is derived from the request hostname in `src/lib/brands/host.ts`. A `www`
 hostname gets a permanent redirect to its apex; any other hostname gets a
@@ -89,8 +90,11 @@ Paste the id into both Wrangler files and apply migrations with
 One row per brand and address: the address as AES-256-GCM ciphertext under a
 versioned key, a keyed HMAC of brand and canonical address for duplicate
 detection, the consent version, and the time of joining. Nothing about an
-address is logged. There is no retention job; the notice commits to a review
-every twelve months, and erasure is the admin API's `DELETE`.
+address is logged. Migration `0002_withdrawal_requests.sql` adds an inbox tied
+to original subscription IDs, without copying addresses. Subscriptions are kept
+for at most twelve months; manual reviews run monthly. Request handling runs
+every working day. The complete schedule and verification procedure are in
+[privacy operations](../../docs/legal/waitlist-operations.md).
 
 ## Secrets
 
@@ -102,7 +106,8 @@ Set with `wrangler secret put <NAME>` for each Worker. Generate keys with
 | `EMAIL_KEY_VERSION`, `EMAIL_KEY_<VERSION>` | both | AES-256 key for addresses, versioned |
 | `EMAIL_DIGEST_KEY` | both | HMAC key for duplicate detection |
 | `ACCESS_TEAM_DOMAIN`, `ACCESS_AUDIENCE` | admin | Access JWT issuer and application audience |
-| `ADMIN_BRAND_GRANTS` | admin | JSON: identity to brand ids or `["*"]` |
+| `ADMIN_BRAND_GRANTS` | admin | Operator identities: brand ids or `["*"]`; permits address access and deletion |
+| `ADMIN_REVIEWER_BRAND_GRANTS` | admin | Optional reviewer identities: brand ids or `["*"]`; inbox metadata only |
 
 To rotate the address key, add `EMAIL_KEY_V2` and switch `EMAIL_KEY_VERSION`
 to `v2` on both Workers. Each row records the version it was written under, so
@@ -138,8 +143,10 @@ step are in [docs/architecture/cloudflare.md](../../docs/architecture/cloudflare
 3. Set each Worker's secrets. The admin Worker needs every encryption key
    version still referenced by stored rows.
 4. Build, test, and dry-run both configs. Use a separate database for staging.
-5. Deploy when DNS and the collection notice are ready. The declared Custom
-   Domains are attached by the deploy itself. Both configs disable
+5. Confirm the Free Workers/D1 account plan and arrange the monitored inbox and
+   retention reviews in the privacy operating procedure. Deploy when DNS and
+   the collection notice are ready. The declared Custom Domains are attached
+   by the deploy itself. Both configs disable
    `workers.dev` and versioned preview URLs.
 
 The complete sequence and account checks are in
@@ -147,12 +154,18 @@ The complete sequence and account checks are in
 
 ## Admin API
 
-All routes require `Cf-Access-Jwt-Assertion` and a grant for the brand.
+All routes require `Cf-Access-Jwt-Assertion` and a grant for the brand. Operator
+grants permit all listed routes. Reviewer grants permit only `GET /v1/brands`
+and the pending withdrawal list; they never permit address access or deletion.
+Never put an AI reviewer identity in `ADMIN_BRAND_GRANTS`.
 
 ```
 GET    /v1/brands
 GET    /v1/brands/:brand/subscriptions?cursor=&limit=
 DELETE /v1/brands/:brand/subscriptions/:id
+GET    /v1/brands/:brand/withdrawals?cursor=
+GET    /v1/brands/:brand/withdrawals/:id
+POST   /v1/brands/:brand/withdrawals/:id/resolve
 ```
 
 The list returns addresses, decrypted, in join order, with a cursor for the next
@@ -160,3 +173,47 @@ page. Every returned list page and successful delete is written to `audit_log`.
 Deletion and its audit record commit in one transaction; a failed audit leaves
 the subscription intact. Audit actors may be administrator email addresses.
 Subscriber addresses and authorization headers never enter application logs.
+### Withdrawal inbox
+
+The public `/withdraw` form creates one pending request per original subscription.
+It does not delete, suppress, or disable that subscription. Unknown addresses and
+duplicates receive the same conditional acknowledgement. Requests are limited to
+8 KiB, five attempts per client/brand/minute, and 1,000 pending records per brand.
+A full inbox returns 503 for all addresses, including duplicates and non-members.
+No email or model call is triggered. Pending requests must be checked before
+any contact or export; the list API does not automatically suppress them.
+
+The list API returns up to 50 pending records and a `next_cursor` containing the
+last request ID. Pass that ID back as `cursor` until it returns null. Keep the
+first receipt time when assessing deadlines. Items contain `id`, `brand_id`,
+`requested_at`, `status`, `joined_at`, and `subscription_present`; no email,
+digest, ciphertext, or case reference is included. Every page read is audited.
+Operator detail reads return the original email if that subscription still exists.
+
+Resolution accepts a bounded `application/x-www-form-urlencoded` body:
+
+```text
+decision=mailbox_reply&case_reference=case-2026-001
+```
+
+`case_reference` must start with `case-`, followed by 1–64 lower-case letters,
+digits, or hyphens. It names restricted evidence held outside the application.
+Do not put personal data in it. The decisions are:
+
+| Decision | Meaning |
+| --- | --- |
+| `mailbox_reply` | Operator attests sufficient mailbox evidence; delete the original subscription and complete the request. |
+| `already_absent` | Complete only if the original subscription is already gone; never delete a later re-subscription. |
+| `not_requester` | Operator has evidence the request did not come from the person; dismiss without deletion. |
+| `duplicate` | Operator has identified the request already being handled; dismiss without deletion. |
+
+The transaction includes the decision, any deletion, and its audit event. Success
+returns 204; a request that is no longer pending, or an invalid `already_absent`
+claim, returns 409. An audit failure rolls back every change. The API records
+an operator's verification attestation; it does not verify mailbox ownership.
+AI suggestions cannot authorize these operations or extend a response deadline.
+
+The new migration and both Workers must be deployed together. The website footer
+exposes the request page, and the privacy notice and form link to the monitored
+mailbox. [Cost controls](../../docs/architecture/cloudflare.md#cost-boundary)
+are account settings; rate limits in this code are not a paid-plan spending cap.

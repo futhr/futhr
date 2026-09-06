@@ -163,8 +163,13 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   is the plain module `src/admin-worker.ts`, type-checked against the generated
   `worker-configuration.d.ts` by `tsconfig.worker.json`. Biome resolves `$lib`
   only under `src/`, so tests in the package import relatively.
-- Nothing is emailed. Joining ends on the page and the list is read through the
-  admin API. Never log an address or an authorization header.
+- The Workers send no email and invoke no AI. Joining ends on the page; `/withdraw`
+  queues a separate request without deleting or suspending a subscription.
+  Reviewers receive metadata only; operator resolution requires evidence and
+  commits deletion, closure, and audit together. Preserve the original subscription
+  ID so a stale request cannot erase a later join. Manual handling and retention
+  follow `docs/legal/waitlist-operations.md`. Never log an address or an
+  authorization header.
 
 ## Git
 

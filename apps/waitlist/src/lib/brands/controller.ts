@@ -1,6 +1,6 @@
 /**
- * Who answers for the data. One controller for all five brands until the legal
- * entities are settled; see "Still open" in docs/architecture/waitlist-platform.md.
+ * Who answers for the data. One controller for all five waitlists. Confirm the
+ * operational details before launch; see docs/legal/waitlist-operations.md.
  * The contact mailbox is the one already published on futhr.io because the
  * venture mailboxes are not yet provisioned.
  */
@@ -15,7 +15,7 @@ const controller = {
     role: 'hosting and database',
     dpaUrl: 'https://www.cloudflare.com/cloudflare-customer-dpa/'
   },
-  retention: { reviewMonths: 12 },
+  retention: { subscriptionMonths: 12, requestDays: 90, auditMonths: 12 },
   noticeDate: '6 September 2026'
 } as const
 

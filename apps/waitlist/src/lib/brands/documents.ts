@@ -62,6 +62,7 @@ ${brand.name} is pre-launch. ${origin(brand)} collects an email address for one 
 
 - [Waitlist](${origin(brand)}/): ${brand.description}
 - [Privacy](${origin(brand)}/privacy): what is collected, the legal basis, retention, and how to withdraw
+- [Withdraw](${origin(brand)}/withdraw): request removal for manual review
 
 ## Contact
 

@@ -15,7 +15,7 @@ be checked in Cloudflare before a release.
 
 The showcase and Storybook serve static files. The waitlist public Worker
 renders pages and accepts forms; its asset binding serves hashed files and
-brand icons. The admin Worker lists and deletes records. Neither sends email.
+brand icons. The admin Worker lists records and resolves withdrawal requests. Neither sends email.
 
 The waitlist configs contain placeholder D1 identifiers. They declare ten
 public Custom Domains and `lists.futhr.io`, but that does not establish that
@@ -44,7 +44,7 @@ API routes. Provisioning requires these steps:
 
 1. Create a D1 database with `pnpm --filter waitlist exec wrangler d1 create
    waitlist --jurisdiction=eu`. Set its identifier in both waitlist configs,
-   then apply `pnpm --filter waitlist exec wrangler d1 migrations apply
+   then apply both committed migrations with `pnpm --filter waitlist exec wrangler d1 migrations apply
    waitlist --remote`. EU jurisdiction controls database storage location;
    Worker execution is a separate consideration.
    [D1 location](https://developers.cloudflare.com/d1/configuration/data-location/)
@@ -52,7 +52,9 @@ API routes. Provisioning requires these steps:
    hostname. Configure the human identity policy and MFA requirement. Email
    one-time PIN alone does not establish two-factor authentication. Give each
    automation a service token and a Service Auth policy. Set the team domain,
-   application audience, and identity-to-brand grants on the admin Worker.
+   application audience, and identity-to-brand grants on the admin Worker. Keep
+   reviewer identities in `ADMIN_REVIEWER_BRAND_GRANTS`, outside the operator
+   map `ADMIN_BRAND_GRANTS`.
    [Access applications](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/),
    [service tokens](https://developers.cloudflare.com/cloudflare-one/access-controls/service-credentials/service-tokens/)
 3. Generate the encryption and digest keys. Set each Worker's required
@@ -82,6 +84,31 @@ and web resolution after activation.
 [Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/),
 [Namecheap nameservers](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/),
 [Hostinger mail records](https://www.hostinger.com/support/8671319-set-up-a-domain-for-hostinger-email-manually/)
+
+## Cost boundary
+
+The waitlists must use the Workers Free account plan and D1 Free for the intended
+absence of usage overages. Confirm this in the account before deployment: the
+Workers plan is separate from the zone's Free/Pro/Business plan. Do not enable
+Workers Paid, paid AI, an email delivery API, or extra backup services as part of
+this deployment. An account upgrade changes this boundary for the resources it
+covers and needs a new cost review.
+[Workers pricing](https://developers.cloudflare.com/workers/platform/pricing/)
+
+Under the current Free-plan documentation, Workers returns an error after its
+daily request allowance and D1 stops queries after its daily database quotas.
+Use fail-closed routing where applicable. This can cause temporary unavailability;
+it does not guarantee service during abuse. Per-client throttling and the
+1,000-request inbox ceiling limit work but do not cap a bill on a Paid plan.
+There is no automatic upgrade or paid fallback configured by this application.
+[Workers limits](https://developers.cloudflare.com/workers/platform/limits/),
+[D1 quota behaviour](https://developers.cloudflare.com/d1/reference/faq/)
+
+The withdrawal action sends no email and invokes no AI. Optional AI review is
+an operator-initiated API read, limited to 50 metadata records per page. An
+external model can charge for that review; no model credentials or calls are
+configured here. Existing registrar and mailbox charges are outside this
+Workers/D1 usage boundary.
 
 ## Build and deploy commands
 
@@ -161,12 +188,17 @@ Verify actual URLs after deployment:
   rather than requesting the asset directory itself.
 - Storybook returns `X-Robots-Tag: noindex, nofollow` and its disallowing robots
   file. Check its configured custom domain and preview URL behavior.
-- Each venture serves its own page, manifest, icons, and privacy notice.
+- Each venture serves its own page, manifest, icons, privacy notice, and withdrawal form.
   `www` redirects to the matching apex with path and query intact.
 - Native and enhanced form submissions show the same result. Invalid input
   returns 400, a foreign origin 403, and an exhausted rate limit 429.
 - Access challenges an unauthenticated admin request. A valid identity can
-  access only its granted brands. List reads and successful deletes are audited.
+  access only its granted brands. A reviewer can read inbox metadata but cannot
+  read addresses, delete subscriptions, or resolve requests. Test operator
+  resolution, repeat requests, and a failure of the audit insert.
+
+Complete the [privacy operating procedure](../legal/waitlist-operations.md)
+setup and run its receipt-to-resolution test before opening collection.
 
 Dry runs cannot verify DNS, Access policies, secret values, or production D1.
 Monitor actual request and database usage against the account's limits; this

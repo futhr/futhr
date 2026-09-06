@@ -1,10 +1,14 @@
 # Accessibility statement
 
-Status: 5 September 2026
+Status: 6 September 2026
 
 futhr.io targets WCAG 2.2 Level AA: semantic landmarks, keyboard-operable
 disclosure rows, visible focus styles, labelled links, reduced-motion handling,
 and an axe scan in the test suites on every change.
+
+The separate venture waitlists provide labelled signup and withdrawal forms
+that work without JavaScript, announce results, and retain invalid input for
+correction. The withdrawal page also provides an email alternative.
 
 Automated checks do not establish conformance. Zoom, screen-reader announcements,
 focus order, reflow, motion, and contrast should be checked by hand before a

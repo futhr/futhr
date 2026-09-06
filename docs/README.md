@@ -95,6 +95,7 @@ a dependency before adding it and remove packages that stop being used.
 | [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
 | [legal/privacy.md](legal/privacy.md) | Privacy information for the static site |
+| [legal/waitlist-operations.md](legal/waitlist-operations.md) | Manual request verification, response deadlines, retention, reviewer limits, and pre-collection setup |
 
 Licence and excluded material: [LICENSE.md](../LICENSE.md). Names and marks:
 [TRADEMARKS.md](../TRADEMARKS.md). Reporting a vulnerability:
