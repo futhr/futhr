@@ -1,4 +1,4 @@
-const port = 51_825
+const port = 24_175
 
 const hosts = [
   { id: 'rivure', host: 'rivure.com', name: 'Rivure' },

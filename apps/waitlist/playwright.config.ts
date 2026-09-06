@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test'
+import { port } from './tests/e2e/hosts.ts'
 import { localSecrets } from './tests/local-secrets.ts'
 
-const port = 51_825
 const hosts = [
   'rivure.com',
   'www.rivure.com',
