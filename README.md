@@ -45,9 +45,8 @@ should name what was checked and where the evidence stops.
 ## This repository
 
 This is the production source for [futhr.io](https://futhr.io/), a SvelteKit
-showcase, and the separate venture waitlist Workers in
-[apps/waitlist](apps/waitlist/README.md). Development commands and architecture
-are indexed in [docs/README.md](docs/README.md); contributions follow
+showcase. Development commands and architecture are indexed in
+[docs/README.md](docs/README.md); contributions follow
 [CONTRIBUTING.md](CONTRIBUTING.md).
 
 The site links public libraries to their repositories and published
