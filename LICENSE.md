@@ -28,7 +28,7 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
 The MIT License above does not apply to:
 
-- editorial copy and metadata in `src/lib/content/` and `apps/waitlist/src/brands/`;
+- editorial copy and metadata in `src/lib/content/` and `apps/waitlist/src/lib/brands/`;
 - project and social marks in `src/lib/components/logos/` and the generated icons
   under `apps/waitlist/static/brands/`;
 - Futhr icons and visual assets in `static/icons/`; or

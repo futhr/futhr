@@ -9,8 +9,8 @@ behind what a visitor, a browser, or an agent meets on the page.
 
 The page is one column of rows. Each row is an entry: a group label on the left,
 a headline in display type, and, when open, an ingress in the left column and a
-description in the right. Exactly one row is open at a time; the first opens by
-default. Rows alternate ink and paper backgrounds, starting with ink, and the
+description in the right. At most one row is open at a time; the first opens by
+default, and clicking an open row closes it. Rows alternate ink and paper backgrounds, starting with ink, and the
 page background is ink so overscroll never flashes a different colour.
 
 Every measurement comes from a 1440px reference composition and is expressed in
@@ -30,21 +30,16 @@ where the browser guesses.
 
 ## Motion
 
-One curve, one clock, one motion. When a row is clicked, the closing row and the
-opening row animate their heights over 420ms on an ease-out curve through the
-Web Animations API, and the scroll position travels on the same curve towards
-the row's final position, computed from the settled heights of the rows above
-it rather than measured per frame; a row that is still closing reports the
-height its animation is heading for. The result is that the clicked header glides from wherever
-it was to the top of the viewport while the panel grows beneath it and every
-other row moves with it. Nothing is measured mid-flight, so nothing lags. The
-ingress, then the
-description and links, rise and fade in on a short stagger as the row settles.
-An open row is at least one viewport tall, so the destination always exists.
-Any wheel, touch, pointer, or key input during the glide hands control back at
-once, and users who prefer reduced motion get the final state directly.
-Measured on the production build in Chromium at 4x CPU throttling, the motion
-holds a full frame rate with no frame over 17ms.
+When a row opens, the closing and opening rows animate their heights over
+420ms through the Web Animations API. `src/lib/client/row-glide.ts` drives
+scrolling on the same curve, using the settled heights of the preceding rows.
+A closing row reports the last keyframe's height, so the target does not need
+per-frame layout measurements. The component cancels animations on teardown.
+
+The ingress and body fade in with a short stagger. An open row is at least one
+viewport tall. Wheel, touch, pointer, or key input cancels the scroll glide;
+reduced-motion preferences apply the final state directly. Performance results
+are specific to the measured build and device, not a frame-rate guarantee.
 
 ## Content pipeline
 
@@ -57,19 +52,21 @@ label on the first row of the section. Copy follows the editorial rules in
 authored, not generated: bold for the product name at first mention, and an
 italic closing line that lands each entry in one sentence.
 
-`src/lib/config/site.ts` holds every string, link, and metadata value and feeds the
-web manifest, JSON-LD, robots, and sitemap.
+`src/lib/config/site.ts` holds the site identity, navigation, and metadata, and
+feeds the web manifest, JSON-LD, robots, and sitemap. Entry copy stays in Markdown.
 
 ## Typography and colour
 
 Archivo Variable in regular and italic, self-hosted and preloaded, with the
 single stylesheet inlined into the HTML so first paint has no blocking request.
 Two fixed colours, ink and paper, plus one brand colour that changes with the
-weekday: seven mid-luminance hues chosen to pass on both backgrounds, declared in
+weekday: seven decorative hues, declared in
 `src/lib/config/palette.ts` and `site.css`, selected before first paint by an
-inline script that sets `data-day` on the root element. The brand colour drives
-hover, focus, and the hand-drawn marker underline on links. The Brand/Weekly
-colours story shows the seven.
+inline script that sets `data-day` on the root element. The raw colour accents
+the hand-drawn marker underline. Small text on ink uses `signal-light`, a blend
+with 20 percent paper; text on paper keeps its ink colour. Focus outlines follow
+the text colour, with an explicit paper outline around the waitlist button.
+The Brand/Weekly colours story shows the seven hues.
 
 Marks are SVG components drawn in `currentColor`; an inverse area uses a contrast
 token that defaults to ink, so the same file works on either background and in
@@ -104,12 +101,13 @@ Agents that drive the reader's browser get WebMCP tools. When
 | `open-entry` | `slug` | Opens that row on the page and scrolls to it |
 | `get-entry` | `slug` | Returns the entry as Markdown without touching the page |
 
-Registration is feature-detected and tied to an `AbortController`, so browsers
-without the API run identical code paths and nothing else changes. WebMCP is an
-origin trial in Chrome 149 and Edge 150; for real visitors the trial token goes
-in an `origin-trial` meta tag in `src/app.html`, and locally the flag
-`chrome://flags/#enable-webmcp-testing` enables it. The DevTools Application panel
-lists the tools and logs calls.
+Registration is feature-detected and tied to an `AbortController` for cleanup.
+The page works without the API. `open-entry` is idempotent: requesting the
+already-open entry keeps it open. The local types follow the
+[WebMCP draft](https://webmachinelearning.github.io/webmcp/); availability and
+trial requirements are described in the current
+[Chrome guidance](https://developer.chrome.com/docs/ai/webmcp). No origin-trial
+token is committed.
 
 ## Verification
 

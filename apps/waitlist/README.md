@@ -11,15 +11,14 @@ handling; until then the list is read through the admin API. The page is one
 centred column on ink: the mark, the brand name, its closing line, and the form
 under a "Get notified" heading, with a Privacy link as the only footer. The form
 is a SvelteKit form action, so it works without JavaScript and stays on the page
-with it. Bots are kept out by a hidden field they fill and people never see, plus
-the rate limit; there is no third-party script on the page.
+with it. A hidden honeypot and a per-client rate limit reduce automated submissions; there is no third-party script on the page.
 
 | Worker | Config | Hostnames | Capability |
 | --- | --- | --- | --- |
 | `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, `orvane.io` | Branded page, privacy notice, join |
 | `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete |
 
-The brand is derived from the request hostname in `src/brands/host.ts`. A `www`
+The brand is derived from the request hostname in `src/lib/brands/host.ts`. A `www`
 hostname gets a permanent redirect to its apex; any other hostname gets a
 temporary redirect to `https://futhr.io/`. Nothing here is served from `futhr.io`.
 
@@ -108,7 +107,8 @@ Set with `wrangler secret put <NAME>` for each Worker. Generate keys with
 To rotate the address key, add `EMAIL_KEY_V2` and switch `EMAIL_KEY_VERSION`
 to `v2` on both Workers. Each row records the version it was written under, so
 keep `EMAIL_KEY_V1` defined until every row that names it has been re-encrypted
-or deleted.
+or deleted. Keep the digest key stable; rotating it also requires migrating
+the stored duplicate-detection digests.
 
 ## DNS
 
@@ -130,16 +130,20 @@ step are in [docs/architecture/cloudflare.md](../../docs/architecture/cloudflare
 
 ## Deploying
 
-1. Create the D1 database.
-2. Set the secrets above on both Workers.
-3. `pnpm --filter waitlist build`, then `wrangler deploy` for each config.
-   Both files set `workers_dev = false` and `preview_urls = false`.
-4. Put `lists.futhr.io` behind a Cloudflare Access application with MFA for
-   humans and a service token per automation, and copy its AUD tag into
-   `ACCESS_AUDIENCE`.
-5. Attach the ten Custom Domains, apex and `www` for each venture, only after
-   the verification checklist in `docs/architecture/cloudflare.md` passes. The
-   Worker redirects `www` to the apex itself; no redirect rules are needed.
+1. Create the EU-jurisdiction D1 database, set its ID in both configs, and apply
+   the migrations remotely.
+2. Configure Cloudflare Access for `lists.futhr.io`, including MFA for human
+   administrators and a Service Auth policy for automation. Set the audience
+   and brand grants before exposing the admin hostname.
+3. Set each Worker's secrets. The admin Worker needs every encryption key
+   version still referenced by stored rows.
+4. Build, test, and dry-run both configs. Use a separate database for staging.
+5. Deploy when DNS and the collection notice are ready. The declared Custom
+   Domains are attached by the deploy itself. Both configs disable
+   `workers.dev` and versioned preview URLs.
+
+The complete sequence and account checks are in
+[the deployment guide](../../docs/architecture/cloudflare.md).
 
 ## Admin API
 
@@ -152,4 +156,7 @@ DELETE /v1/brands/:brand/subscriptions/:id
 ```
 
 The list returns addresses, decrypted, in join order, with a cursor for the next
-page. Every list read and every delete is written to `audit_log`.
+page. Every returned list page and successful delete is written to `audit_log`.
+Deletion and its audit record commit in one transaction; a failed audit leaves
+the subscription intact. Audit actors may be administrator email addresses.
+Subscriber addresses and authorization headers never enter application logs.

@@ -1,5 +1,5 @@
 # Private list API on lists.futhr.io. The hostname sits behind Cloudflare Access
-# and the Worker validates the Access JWT itself; see src/server/access.ts.
+# and the Worker validates the Access JWT itself; see src/lib/server/admin/access.ts.
 name = "waitlist-admin"
 main = "src/admin-worker.ts"
 tsconfig = "tsconfig.worker.json"

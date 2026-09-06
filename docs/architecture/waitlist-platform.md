@@ -1,218 +1,128 @@
-# Multi-brand waitlist platform
+# Waitlist architecture
 
-Status: implemented in `apps/waitlist/`, not yet deployed. Written 4 September
-2026, revised 5 September 2026. `apps/waitlist/README.md` is the operating guide;
-this page records the design and what is still open.
+Implemented in `apps/waitlist/`. This document describes the code as of
+6 September 2026. The committed production database IDs are placeholders;
+provisioning and deployment are covered in [cloudflare.md](cloudflare.md).
 
-## Decision
+## Boundaries
 
-futhr.io stays a prerendered static site. The waitlists are a separate
-application, deployment, and artifact: one public Worker, `waitlist-web`, serving
-exactly five hostnames and collecting addresses, and one private Worker,
-`waitlist-admin`, on `lists.futhr.io` behind Cloudflare Access, reading them.
+The showcase is static. The waitlists are a separate SvelteKit application
+rendered by `waitlist-web`, with a private module Worker, `waitlist-admin`,
+for administration. Both use one D1 database. The public application exposes
+inserts; the private API exposes reads and deletes. These are application
+boundaries: both Workers' D1 bindings have database access, not SQL-level
+read-only or write-only grants.
 
-The scope is deliberately small. A visitor joins, sees a confirmation on the
-page, and hears nothing more. No email is sent, so there is no mail pipeline,
-no confirmation token, no unsubscribe flow, and no queue. Each platform launches
-in Elixir with its own branded list handling and go-to-market flow; until then
-the list is a passive store read through the admin API.
+The public brand map in `src/lib/brands/brands.ts` names five apexes:
+`rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, and `orvane.io`.
+Their `www` hosts redirect to the matching apex with path and query intact.
+Unknown hosts redirect to `https://futhr.io/`. Local development also accepts
+`<brand>.localhost` and provides a brand index on the loopback hostname.
 
-- `rivure.com`
-- `diggymon.com`
-- `refpath.io`
-- `reloved.eco`
-- `orvane.io`
+The universal hook reroutes public URLs to
+`src/routes/brands/[brand=brand]/`. The server hook sets `locals.brand` from
+the hostname and applies response headers. Brand selection never comes from a
+form field or an internal route segment supplied by the visitor.
 
-WoTEx is not on the list. It is fully open source and has no waitlist.
+## Pages and assets
 
-Each venture domain serves its landing page at `/`. A `www` hostname gets a `308`
-to its apex with path and query intact; any other hostname gets a `302` to
-`https://futhr.io/`. The Worker never serves the Futhr page or a default venture,
-which the Workers tests check, and `futhr.io` has no waitlist route at all.
+Each brand serves `/`, `/privacy`, `/icons/*`, and the generated manifest,
+robots, sitemap, and `llms.txt`. The build writes the Worker and assets to
+`.svelte-kit/cloudflare/`. Hashed assets live under `/_app/immutable/`;
+generated brand assets are also publicly reachable under `/brands/<id>/icons/`.
+They contain public marks, not private brand data.
 
-Custom Domains fit because they make the Worker the origin for every path on an
-exact hostname, several domains can share one Worker, and there is no wildcard
-matching. Apex and `www` are separate hostnames, which is why both are attached.
-[Cloudflare Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)
+The landing page reuses the showcase's type, colours, and marks. A page shell
+owns the layout; landing, privacy, and notice components supply the content.
+`join-form.svelte` owns form interaction, with copy passed as props. The form
+works as a native POST and uses SvelteKit's `enhance` for in-place results.
+There is no client data loader, third-party bot script, or service worker.
+[SvelteKit form actions](https://svelte.dev/docs/kit/form-actions)
 
-| Deployable | Address | Capability | Artifact |
-| --- | --- | --- | --- |
-| Futhr showcase | `futhr.io` | Read-only editorial site | `build/` |
-| Component workshop | `ui.futhr.io` | Storybook | `storybook-static/` |
-| Venture waitlists | five venture domains | Branded page, privacy notice, join | `apps/waitlist/dist/public/` |
-| List administration | `lists.futhr.io` | List, delete | Worker code only |
+SvelteKit generates a nonce CSP for HTML. The server hook covers rendered
+responses; `_headers` covers static assets. Icons have a one-day cache lifetime,
+generated documents one hour, and admin responses are uncacheable. The font
+licence ships under `static/licenses/archivo.txt` in both applications.
 
-Both waitlist Workers set `workers_dev = false` and `preview_urls = false`, so
-there is no `workers.dev` hostname and no versioned preview URL.
-[Preview URLs](https://developers.cloudflare.com/workers/versions-and-deployments/preview-urls/)
+## Joining
 
-The public Worker can create a row and has no read route. The admin Worker can
-list and delete, and only through Access. That is a clearer boundary than an
-admin path hidden inside the public application. Everything runs on the Workers
-free plan.
+The form action:
 
-## Page
-
-One Svelte 5 page, rendered per brand from the closed brand map in
-`src/lib/brands/brands.ts`. The map owns the host, brand id, lede, closing line, metadata, and
-consent version. The brand is derived from the
-request hostname, never from anything the browser sends. The marks are the
-showcase's logo components and the stylesheet is the showcase's `site.css`
-unchanged, so brand identity is the mark, the words, the icons, the social image,
-and the metadata. There are no per-brand colours.
-
-The public Worker is SvelteKit on the Cloudflare adapter, rendered per request.
-A universal `reroute` hook maps every path on a venture hostname into that
-brand's route tree, `handle` resolves the brand from the hostname before any
-route runs and sets the response headers, and SvelteKit generates the CSP nonce
-for a first-party-only policy. Hashed assets and the committed brand icons come from the static-asset binding;
-the icons are generated from the marks by `scripts/icons.ts`.
-[Static Assets binding](https://developers.cloudflare.com/workers/static-assets/binding/)
-
-The page says as little as possible: one centred column on ink with the mark,
-a "Waitlist" label, the brand name, its closing line, then a divider and the
-form under a "Get notified" heading, with a Privacy link as the only footer.
-No product copy, no countdown, and no links to futhr.io or the other ventures,
-which would be noise on a page whose one job is the address. The form is a
-SvelteKit form action: a plain post works without JavaScript, and with it the
-result appears in place.
-
-Each brand gets its own title, description, canonical URL, Open Graph image,
-icons, manifest with `id: "/"`, one-URL sitemap, robots, and an `llms.txt` that
-names the brand as pre-launch and links only to its own domain. Nothing
-canonicalises to futhr.io, and the visible copy differs per brand so the pages are
-not clustered as duplicates.
-[Google canonicalisation](https://developers.google.com/search/docs/crawling-indexing/canonicalization)
-
-There is no service worker. A one-field landing page gains nothing from offline
-caching, and leaving it out avoids a persistent cache and the terminal-storage
-question.
-
-## Request flow
-
-The public route table is closed: `/` with its form action, `/privacy`, the
-generated documents, `/assets/*`, and `/icons/*`. Anything else is the branded
-404. Wrong methods get `405` and rate-limited clients `429`. There is no CORS and
-no JSON endpoint; the form posts to its own page, and SvelteKit refuses
-cross-origin form posts before the action runs.
-[OWASP REST security](https://cheatsheetseries.owasp.org/cheatsheets/REST_Security_Cheat_Sheet.html)
-
-Subscribing:
-
-1. Resolve the brand from the hostname before reading anything else.
-2. Drop the post silently, answering as if it succeeded, when the hidden
-   honeypot field carries a value; people never see that field, bots fill every
-   field they find.
-3. Check email syntax. The mailbox is stored as typed; a lower-cased,
-   NFC-normalised form is what duplicate detection digests.
-4. Rate limit with the Workers binding, keyed by brand and client address, five
-   per minute. The counter lives in the binding; the address is never stored.
+1. Reads at most 8 KiB before parsing the form. Oversized requests return 413;
+   malformed form bodies return 400. SvelteKit rejects foreign-origin form
+   submissions before the action runs.
+2. Returns the success state without writing when the honeypot is filled.
+   This catches some automated submissions; it does not establish humanity.
+3. Validates a conservative ASCII email syntax. The trimmed address is kept
+   for later contact. Duplicate detection uses its lower-case canonical form;
+   lower-casing the local part is a deliberate simplification.
+4. Applies the rate-limit binding using brand and client IP, five attempts per
+   minute. This is a local, approximate abuse control, not a global quota.
    [Rate limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)
-5. Encrypt the address, digest it, and insert the row under the unique key on
-   `(brand_id, email_digest)`. A duplicate is a no-op.
+5. Encrypts the address with AES-256-GCM and a fresh 96-bit IV. A keyed HMAC of
+   brand and canonical address supplies the duplicate key. A unique constraint
+   makes concurrent duplicate submissions a no-op.
 
-The answer is the same page in its joined state whether the address is new or
-already on the list, so the list cannot be enumerated. A honeypot and a rate
-limit are proportionate for a pre-launch list; if spam appears, an invisible
-Turnstile widget can return behind the same action.
-[OWASP email verification](https://cheatsheetseries.owasp.org/cheatsheets/Email_Validation_and_Verification_Cheat_Sheet.html)
+New addresses and duplicates receive the same on-page result. The row stores
+an ID, ciphertext, IV, digest, key version, consent version, and join time.
+No email is sent. A submission does not verify ownership of the mailbox.
 
-Double opt-in moves to launch. The first message a platform sends asks the
-address to confirm before anything else follows, which is where the evidence is
-needed. Confirming at join time would need a mail pipeline for a list that
-otherwise sends nothing.
-
-## Data
-
-One D1 database created with `--jurisdiction=eu`. The jurisdiction is fixed at
-creation, and the Worker may still execute outside the region, so this is a
-storage-residency setting, not a claim that every operation stays in the EU.
+Keys are Worker secrets. Each row identifies its encryption key version, so
+old keys must remain available until affected rows are re-encrypted or deleted.
+The digest key must remain stable unless existing digests are migrated too.
+The EU D1 jurisdiction controls database residency; it does not constrain every
+Worker execution to the EU.
 [D1 data location](https://developers.cloudflare.com/d1/configuration/data-location/)
-
-Addresses are AES-256-GCM ciphertext under a versioned key. Duplicate detection
-uses a keyed HMAC of brand and canonical address rather than a plain hash that
-could be dictionary-tested. D1 encrypts at rest and in transit, but a database
-export or authorised database access would otherwise reveal the list. Keys are
-Worker secrets, separate from D1. Each row names the key version it was written
-under, so a rotation is a one-off re-encryption and the admin Worker can read
-every version still in use. Every statement binds its parameters.
-[D1 data security](https://developers.cloudflare.com/d1/reference/data-security/),
-[prepared statements](https://developers.cloudflare.com/d1/worker-api/prepared-statements/),
-[OWASP cryptographic storage](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)
-
-Full IP addresses, user agents, and referrers are not retained. Logs never carry
-an address or an authorization header. There is no retention job: the notice
-commits to a review every twelve months, and erasure goes through the admin
-delete. Time Travel is short-horizon recovery, not an archive.
-
-## Consent
-
-An email address is personal data. The form names the single purpose and links a
-layered notice at `/privacy` on each host that names the controller, the legal
-basis, retention, recipients, and how to withdraw. The basis is consent under
-Article 6(1)(a) GDPR: pressing the labelled join button is the affirmative act.
-Double opt-in is not mandated; it happens in the platform's first message, as
-above.
-[GDPR](https://eur-lex.europa.eu/eli/reg/2016/679/oj),
-[EDPB consent guidance](https://www.edpb.europa.eu/system/files/documents/files/file1/edpb_guidelines_202005_consent_en.pdf)
-
-Swedish law needs prior consent for promotional email to a natural person, and
-every marketing email needs a working stop address. The collector sends nothing;
-the platform that eventually does must carry the stop address. IMY treats an
-objection to direct marketing as absolute.
-[Marketing Act sections 19 and 20](https://www.riksdagen.se/sv/dokument-och-lagar/dokument/svensk-forfattningssamling/marknadsforingslag-2008486_sfs-2008-486/),
-[IMY on objections](https://www.imy.se/privatperson/dataskydd/dina-rattigheter/att-gora-invandningar/)
-
-The consent version is stored on every record, so a wording change is a new
-version and a fresh ask. Cross-venture mailing, profiling, and analytics are
-outside this consent and would need a separate one.
-
-Withdrawal is a message to the controller, executed through the admin delete.
-GDPR wants withdrawal to be as easy as consent; for a list that never contacts
-anyone, an email to the controller is proportionate, and it becomes self-service
-the moment a platform sends its first message with a stop link.
-
-The notice names the maintainer and the futhr.io contact mailbox as controller for
-all five brands until the legal entities are settled; `src/brands/controller.ts`
-is the one place to change. Cloudflare is the processor under its DPA. The
-wording is an engineering draft, not a legal opinion, and should be reviewed
-before production.
-[Cloudflare DPA](https://www.cloudflare.com/cloudflare-customer-dpa/)
 
 ## Administration
 
-`lists.futhr.io` sits behind Cloudflare Access. People authenticate with an
-identity and MFA; each automation gets its own service token. The Worker validates
-the `Cf-Access-Jwt-Assertion` signature, issuer, and audience itself rather than
-trusting the header's presence, and maps the email or service-token common name
-to brand grants through `ADMIN_BRAND_GRANTS`. The list returns addresses,
-decrypted, in join order with a cursor. Every list read and every delete is
-audited.
-[Service tokens](https://developers.cloudflare.com/cloudflare-one/access-controls/service-credentials/service-tokens/),
-[JWT validation](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/)
+The admin hostname is `lists.futhr.io`, intended to sit behind Cloudflare
+Access. The Worker independently verifies the Access JWT using `jose`: RS256,
+issuer, audience, expiry, time claims, and a non-empty identity. Signing keys
+are cached and refreshed through the remote JWKS resolver. Email or service-token
+`common_name` maps to brand grants in `ADMIN_BRAND_GRANTS`.
+[Cloudflare JWT validation](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/)
 
-## Rejected alternatives
+`GET /v1/brands` lists granted brands. The subscriptions endpoint returns
+decrypted addresses in `(joined_at, id)` order, capped at 200 records per page.
+A cursor advances through the composite index without scanning earlier pages.
+Every returned page is audited before its response is sent.
 
-| Alternative | Why not |
-| --- | --- |
-| `/waitlist` inside the Futhr SvelteKit app | Breaks the host and artifact boundary; the Futhr page on a venture host becomes an easy accident |
-| Pick the brand in browser JavaScript | Wrong first paint and crawler metadata, spoofable brand input |
-| Five copied applications | Isolation at the cost of drift across identical security, form, and legal behaviour |
-| Admin routes inside the public Worker | Larger public capability surface |
-| Plaintext email because D1 is encrypted | Database exports and authorised database access still reveal the list |
-| Confirmation email at join time | A mail pipeline, queue, token flow, and unsubscribe pages for a list that otherwise sends nothing; the platform's first message confirms instead |
-| A hosted list provider | Branded pages, EU residency, and ownership of the list are requirements, not preferences |
-| A visible bot-check widget | A third-party iframe and script on an otherwise first-party page; the honeypot and rate limit cover a pre-launch list |
+A successful delete and its audit record share one D1 transaction. If either
+statement fails, neither change commits. A missing or foreign-brand ID returns
+404 without creating an audit entry.
+[D1 batches](https://developers.cloudflare.com/d1/worker-api/d1-database/#batch)
 
-## Still open
+Application error logs contain fixed messages and status codes, not exception
+text, subscriber addresses, or authorization headers. `audit_log.actor` can
+contain an administrator's email address; it does not contain subscriber
+addresses. Hosting request logs have separate account retention settings.
 
-Product and account decisions, not gaps the code should guess:
+## Consent and operations
 
-1. The legal controller and contact mailbox for each brand.
-2. The review period, and what happens to a list whose platform is dropped.
-3. Who gets human admin access and which automations need brand-scoped tokens.
-4. Staging bindings. The Wrangler files carry a placeholder database id and no
-   staging environment. Never bind staging to production data.
+The draft notice in `src/lib/brands/privacy.ts` names the controller and the
+single contact purpose. Each row records the notice version in force when the
+form was submitted. A new version does not retroactively change earlier consent.
 
-Attach the production Custom Domains only after the verification checklist in
-[cloudflare.md](cloudflare.md) passes on a deployment.
+There is no mail pipeline, confirmation flow, retention job, or self-service
+withdrawal page. Withdrawal requests go to the controller and are executed
+through the admin API. The notice commits to a review every twelve months.
+The future product's mailing and verification flow remains outside this code.
+
+Before production, the maintainer needs to settle the controller and contact
+mailbox, retention procedure, withdrawal process, Access identities, and staging
+bindings. The legal notice needs qualified review against the actual operation;
+this architecture document does not establish consent or marketing compliance.
+
+## Verification
+
+Node unit tests cover brands, generated assets and documents, email syntax,
+crypto, headers, and JWT rejection. Workers tests exercise the built public
+Worker and admin module against local D1, including concurrent duplicates,
+brand authorization, pagination, and transactional rollback. Playwright checks
+all five brands on desktop and mobile Chromium, native and enhanced forms,
+metadata, and automated accessibility.
+
+These checks do not verify production DNS, Access policies, secrets, or D1
+provisioning. They also do not replace a screen-reader review or legal review
+of the collection process.

@@ -1,5 +1,5 @@
 # Public waitlist Worker. One deployment serves the five venture hostnames; the
-# brand is derived from the exact request hostname in src/brands/host.ts; a www
+# brand is derived from the exact request hostname in src/lib/brands/host.ts; a www
 # hostname redirects to its apex and any other hostname to futhr.io. Secrets are
 # listed in .dev.vars.example and are set with `wrangler secret put`, never here.
 name = "waitlist-web"

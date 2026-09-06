@@ -38,12 +38,12 @@ them on `http://127.0.0.1:8787/`, which lists the five brands on their
 | --- | --- |
 | `pnpm quality` | Biome lint and format check, one-export-per-module rule |
 | `pnpm check` | svelte-check and the service-worker TypeScript project |
-| `pnpm test:unit` | Content loader, agent documents, palette, site config; coverage gated |
+| `pnpm test:unit` | Content loader, agent documents, palette, site config, artifact boundaries; coverage gated |
 | `pnpm test:components` | Components in headless Chromium; coverage gated |
 | `pnpm test:storybook` | Story rendering, interactions, axe |
 | `pnpm test:e2e` | Builds, then Playwright on desktop and mobile Chromium |
 | `pnpm test:storybook:e2e` | Builds Storybook, then tests the static artifact |
-| `pnpm test:all` | Everything above in CI order |
+| `pnpm test:all` | Quality, types, and all test suites for both packages |
 | `pnpm build` | Prerenders to `build/` and verifies the artifact |
 | `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
 | `pnpm storybook:build` | Static Storybook to `storybook-static/` |
@@ -53,8 +53,8 @@ them on `http://127.0.0.1:8787/`, which lists the five brands on their
 | `pnpm test:waitlist` | Waitlist unit, Workers runtime, and Playwright suites |
 | `pnpm waitlist:icons` | Regenerates the brand icons from the mark components |
 
-CI runs the same sequence on pull requests and pushes to `main`, uploads coverage
-to Codecov, and dry-runs the Storybook deployment.
+CI checks both workspace packages on pull requests and pushes to `main`, uploads
+showcase coverage to Codecov, and dry-runs Storybook and both waitlist Workers.
 
 ## Layout
 
@@ -81,8 +81,9 @@ duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
 
 pnpm only, exact versions, lockfile committed and installed with
 `--frozen-lockfile` in CI. `pnpm-workspace.yaml` sets `minimumReleaseAge` to a
-day, so a version is not pulled in the hour it is published, and pins `postcss`
-through an override. Updates are made by hand; there are no update bots. Review
+day, so a version is not pulled in the hour it is published. Overrides pin
+`postcss` and the patched `cookie` release used by SvelteKit. Updates are made by
+hand; there are no update bots. Review
 a dependency before adding it and remove packages that stop being used.
 
 ## Documents
@@ -90,8 +91,9 @@ a dependency before adding it and remove packages that stop being used.
 | Document | Purpose |
 | --- | --- |
 | [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
-| [architecture/cloudflare.md](architecture/cloudflare.md) | Deployment of all four Workers: static assets, the waitlist bindings, zones and DNS with Namecheap and Hostinger, provisioning order, headers, custom domains and TLS, CI deploys, token scoping |
+| [architecture/cloudflare.md](architecture/cloudflare.md) | Current Pages and Workers configurations, waitlist provisioning, DNS and mail, deployment commands, headers, and the optional Pages migration |
 | [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
+| [audits/2026-09-06.md](audits/2026-09-06.md) | Repository audit, fixes, verification results, and remaining external checks |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
 | [legal/privacy.md](legal/privacy.md) | Privacy information for the static site |
 

@@ -6,8 +6,9 @@ description: Svelte 5 and SvelteKit rules for this repository, including runes, 
 # Svelte 5 and SvelteKit in this repository
 
 Svelte 5 with runes, SvelteKit 2 with `@sveltejs/adapter-static`, Tailwind CSS v4
-utilities, Biome, Vitest browser mode, Storybook. Everything is prerendered; there
-is no server runtime, no client data fetching, and no UI component library.
+utilities, Biome, Vitest browser mode, Storybook. The showcase is prerendered, with no server runtime or client data fetching.
+The separate waitlist package uses SvelteKit SSR on Cloudflare Workers, hostname
+hooks, and form actions; see `apps/waitlist/README.md`. Neither uses a UI kit.
 
 ## Files and modules
 
