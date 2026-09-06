@@ -29,7 +29,7 @@ changing the claim.
 |---|---|
 | `title` | Display name with readable capitalisation. Exact repository names belong in `repositories`, not in the title. Use a soft hyphen (U+00AD) only when a long word must break in the headline. |
 | `lede` | The pitch in one sentence: category, structural advantage, and the commercial or technical outcome. |
-| body | The broken status quo, the differentiated model, and the expansion path, in that order, in one or two paragraphs. Then a closing line in italics on its own paragraph: a short punchline that lands the idea without repeating the ingress or the body. No release-status sentences; availability is handled by the waiting lists, not the copy. |
+| body | The broken status quo, the differentiated model, and the expansion path, in that order, in one or two paragraphs. Then a closing line in italics on its own paragraph: a short punchline that lands the idea without repeating the ingress or the body. No release-status sentences; availability is handled by the waitlists, not the copy. |
 | `group` | One of the existing group names unless a new section is requested. Consecutive entries with the same group form one section. |
 | `links` | See link rules. Label with the destination, for example `Repository`, `HexDocs`, `Visit Refpath`, `Talk`. |
 
@@ -37,7 +37,7 @@ changing the claim.
 
 - Public repositories link to GitHub. Published Hex packages also link to HexDocs.
   A project without a published package gets no documentation link.
-- Venture entries link only to the public root domain or waiting-list page, never
+- Venture entries link only to the public root domain or waitlist page, never
   to GitHub, HexDocs, or a private repository. If no public domain resolves, the
   entry has no link.
 - Never link to a page that would 404 or that reveals private source.

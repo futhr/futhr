@@ -11,7 +11,12 @@ Svelte 5 with TypeScript, Tailwind CSS v4, prerendered to `build/` by
 `@sveltejs/adapter-static` and deployed to Cloudflare. Markdown entries in
 `src/lib/content/` are validated, rendered, and sanitised at build time by
 `src/lib/server/content.ts`. Storybook is a development and review surface only;
-`scripts/verify-artifact.ts` fails the build if any story code leaks into `build/`.
+`scripts/verify-artifact.ts` fails the build if a story file leaks into `build/`.
+
+The venture waitlists are a separate workspace package, `apps/waitlist/`: two
+Cloudflare Workers, one per public hostname set, with their own build, tests,
+and artifact. They reuse the showcase style system and marks and nothing else.
+`apps/waitlist/README.md` is their operating guide.
 
 The page is built to a reference design measured at 1440px wide. Layout values are
 viewport-relative and documented at the top of `src/lib/styles/site.css`. When a
@@ -42,6 +47,9 @@ pnpm test:e2e            # builds, then Playwright on desktop and mobile Chromiu
 pnpm test:storybook:e2e  # builds Storybook, then tests the static artifact
 pnpm test:all            # everything above, in CI order
 pnpm build               # production build plus artifact verification
+pnpm check:waitlist      # types for the waitlist Workers and components
+pnpm test:waitlist       # waitlist unit, Workers runtime, and Playwright suites
+pnpm build:waitlist      # build the waitlist Worker and its assets
 ```
 
 `pnpm quality` and `pnpm check` are fast; run them after every change. Run the
@@ -63,7 +71,8 @@ tests/components/          Vitest browser tests
 tests/stories/             Storybook stories with play functions
 tests/e2e/                 Playwright against the built site
 tests/storybook-e2e/       Playwright against the built Storybook
-docs/                      architecture, security, and legal records; README.md indexes them
+docs/                      architecture and legal records; README.md is the development guide
+apps/waitlist/             venture waitlist Workers; see apps/waitlist/README.md
 ```
 
 ## Content model
@@ -117,9 +126,9 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 - Storybook static assets live under `.storybook/static/brand/`; the artifact
   check rejects anything under `icons/` or other web-only paths.
 - Opening a row drives the scroll position on the same 420ms curve as the row
-  height animations (`src/lib/client/fold-motion.ts`), towards a target computed
-  from the collapsed-row height, so the header glides to the top with no
-  per-frame measurement. `body` has `overflow-anchor: none` and there is no
+  height animations (`src/lib/client/fold-motion.ts`), towards a target summed
+  from the settled heights of the rows above (a closing row reports its last
+  keyframe), so the header glides to the top with no per-frame measurement. `body` has `overflow-anchor: none` and there is no
   `scroll-behavior: smooth`, both on purpose: scroll anchoring and smooth
   programmatic scrolls each moved the header out of view. Measure before
   changing any of this.
@@ -134,6 +143,27 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 - The service worker is registered in dev too. It is network-first for HTML and
   generated documents and cache-first only for hashed `/_app/immutable/` files.
   Never make HTML cache-first again; it made every dev change invisible.
+
+## Waitlist app
+
+- `src/brands/brands.ts` is a closed map keyed by brand id. Hosts are exact
+  apexes; the Worker resolves the brand from the hostname, redirects `www` to
+  the apex, and sends any other hostname to futhr.io without serving anything.
+  Adding a brand means a mark component, icons from `pnpm waitlist:icons`, and
+  a Custom Domain, in that order.
+- Copy follows `showcase-voice`. Write "waitlist" as one word everywhere.
+- Icons under `apps/waitlist/static/brands/` are generated and committed;
+  regenerate them when a mark changes. The unit tests compare the SVGs to the
+  mark source and check every PNG size.
+- The public Worker is SvelteKit on `@sveltejs/adapter-cloudflare`, rendered
+  per request: `src/hooks.ts` reroutes every path on a venture hostname into
+  `src/routes/brands/[brand]/`, `src/hooks.server.ts` resolves the brand and
+  sets the headers, and `svelte.config.ts` holds the page CSP. The admin Worker
+  is the plain module `src/admin-worker.ts`, type-checked against the generated
+  `worker-configuration.d.ts` by `tsconfig.worker.json`. Biome resolves `$lib`
+  only under `src/`, so tests in the package import relatively.
+- Nothing is emailed. Joining ends on the page and the list is read through the
+  admin API. Never log an address or an authorization header.
 
 ## Git
 

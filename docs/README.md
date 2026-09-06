@@ -26,6 +26,12 @@ pnpm storybook                          # http://127.0.0.1:6006
 
 Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager` in `package.json`).
 
+The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
+them on `http://127.0.0.1:8787/`, which lists the five brands on their
+`<id>.localhost` stand-ins. Details in the "Viewing it locally" section of
+[apps/waitlist/README.md](../apps/waitlist/README.md). The showcase has no
+`/waitlist` route.
+
 ## Commands
 
 | Command | Does |
@@ -42,6 +48,10 @@ Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager` in `package.json`).
 | `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
 | `pnpm storybook:build` | Static Storybook to `storybook-static/` |
 | `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
+| `pnpm build:waitlist` | Builds the waitlist Worker and its assets to `apps/waitlist/.svelte-kit/cloudflare` |
+| `pnpm check:waitlist` | Runtime types, svelte-check, and TypeScript for the waitlist app |
+| `pnpm test:waitlist` | Waitlist unit, Workers runtime, and Playwright suites |
+| `pnpm waitlist:icons` | Regenerates the brand icons from the mark components |
 
 CI runs the same sequence on pull requests and pushes to `main`, uploads coverage
 to Codecov, and dry-runs the Storybook deployment.
@@ -60,23 +70,33 @@ to Codecov, and dry-runs the Storybook deployment.
 | `tests/` | `components/` Vitest browser, `stories/` Storybook, `e2e/` and `storybook-e2e/` Playwright, unit tests at the top level |
 | `static/` | Icons, `_headers`, font licence |
 | `.claude/` | Agent skills and settings; [AGENTS.md](../AGENTS.md) is the canonical contract |
+| `apps/waitlist/` | Venture waitlist Workers, a pnpm workspace package; see its [README](../apps/waitlist/README.md) |
 
 Conventions: kebab-case filenames, `$lib` imports, no barrel files, at most one
 public symbol per module. Entries are Markdown with `order`, `group`, `title`,
 `lede`, `repositories`, and `links` in frontmatter; the build rejects gaps,
 duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
 
+## Dependencies
+
+pnpm only, exact versions, lockfile committed and installed with
+`--frozen-lockfile` in CI. `pnpm-workspace.yaml` sets `minimumReleaseAge` to a
+day, so a version is not pulled in the hour it is published, and pins `postcss`
+through an override. Updates are made by hand; there are no update bots. Review
+a dependency before adding it and remove packages that stop being used.
+
 ## Documents
 
 | Document | Purpose |
 | --- | --- |
 | [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
-| [architecture/cloudflare.md](architecture/cloudflare.md) | Deployment: Workers static assets, headers and CSP, custom domains and TLS, CI deploys, token scoping, migration from Pages |
-| [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Proposal for a multi-brand waitlist platform; not implemented |
+| [architecture/cloudflare.md](architecture/cloudflare.md) | Deployment of all four Workers: static assets, the waitlist bindings, zones and DNS with Namecheap and Hostinger, provisioning order, headers, custom domains and TLS, CI deploys, token scoping |
+| [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
-| [legal/privacy.md](legal/privacy.md) | Privacy information for a static site with no processors |
-| [security/supply-chain.md](security/supply-chain.md) | Supply-chain policy and verification gates |
+| [legal/privacy.md](legal/privacy.md) | Privacy information for the static site |
 
-Repository policies are indexed in [POLICIES.md](../POLICIES.md). Agent guidance is
-[AGENTS.md](../AGENTS.md) with the skills under `.claude/skills/`; the deployed
-site serves the same guidance at `/agents.md` and `/agents/stack.md`.
+Licence and excluded material: [LICENSE.md](../LICENSE.md). Names and marks:
+[TRADEMARKS.md](../TRADEMARKS.md). Reporting a vulnerability:
+[SECURITY.md](../SECURITY.md). Agent guidance is [AGENTS.md](../AGENTS.md) with
+the skills under `.claude/skills/`; the deployed site serves the same guidance at
+`/agents.md` and `/agents/stack.md`.

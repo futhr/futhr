@@ -1,39 +1,53 @@
 # Cloudflare configuration guide
 
-Status: 4 September 2026, written against the Cloudflare and Wrangler
-documentation current on that date. Links point at the pages each statement
-comes from. Nothing in this file is a credential; account IDs, tokens, zone IDs,
-and beacon tokens are placeholders and must never be committed.
+Status: 5 September 2026, written against the Cloudflare, Wrangler, Namecheap,
+and Hostinger documentation current on that date. Links point at the pages each
+statement comes from. Account IDs, tokens, and zone IDs are placeholders and are
+never committed.
 
 ## What is deployed
 
-The repository produces two independent static artifacts. Each has its own
-Wrangler configuration and Cloudflare project, so a Storybook deploy can never
-touch the site and vice versa.
+The repository produces four deployables. Each has its own Wrangler
+configuration and Worker, so a deploy of one can never touch another.
 
-| Artifact | Built by | Output | Config | Worker name | Intended host |
+| Deployable | Built by | Output | Config | Worker name | Hostnames |
 | --- | --- | --- | --- | --- | --- |
 | Site | `pnpm build` | `build/` | `wrangler.toml` | `futhr` | `futhr.io` |
 | Storybook | `pnpm storybook:build` | `storybook-static/` | `wrangler.storybook.toml` | `futhr-ui` | `ui.futhr.io` |
+| Venture waitlists | `pnpm build:waitlist` | `apps/waitlist/.svelte-kit/cloudflare/` | `apps/waitlist/wrangler.toml` | `waitlist-web` | five apexes and their `www` |
+| List administration | none, Worker code only | | `apps/waitlist/wrangler.admin.toml` | `waitlist-admin` | `lists.futhr.io` |
 
-Both are fully prerendered. There is no server-side rendering, no request-time
-data, and no Worker code. Cloudflare serves the files as static assets, and
+The site and Storybook are fully prerendered: no Worker code, no request-time
+data. Cloudflare serves the files as static assets, and
 [requests to static assets are free and unlimited](https://developers.cloudflare.com/workers/static-assets/billing-and-limitations/).
+
+The waitlist Workers run code on every request. `waitlist-web` resolves the
+brand from the hostname, serves hashed assets, renders the pages, and writes to
+D1; `waitlist-admin` reads and deletes records behind Cloudflare Access.
+Nothing is emailed. Their design is in
+[waitlist-platform.md](waitlist-platform.md) and their operating guide in
+[apps/waitlist/README.md](../../apps/waitlist/README.md). This document covers
+the Cloudflare side of all four.
 
 Cloudflare's current guidance is to [start new projects with Workers](https://developers.cloudflare.com/pages/)
 rather than Pages: "Workers supports most Pages use cases and offers a broader
-feature set." Storybook already deploys that way. The site configuration still
-uses `pages_build_output_dir`, the Pages form; the migration is described at the
-end of this guide and is a small, reversible change.
+feature set." Three of the four already deploy that way. The site configuration
+still uses `pages_build_output_dir`, the Pages form; the migration is described
+near the end of this guide and is a small, reversible change.
 
 ## Prerequisites
 
-- A Cloudflare account with the `futhr.io` zone active on Cloudflare nameservers.
-  Custom Domains "cannot be created on a zone you do not own"
-  ([docs](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)).
+- A Cloudflare account with `futhr.io` and the five venture zones active on
+  Cloudflare nameservers. Custom Domains cannot be created "on a zone you do not
+  own" ([Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)).
+  The venture domains are registered at Namecheap; moving their DNS is covered
+  under [Zones and DNS](#zones-and-dns-namecheap-and-hostinger).
+- The Workers free plan. It covers everything used here: static assets, D1,
+  the rate-limiting binding, and Access for a small team.
 - Node 24 and pnpm 11.24.0, as pinned in `package.json`.
 - Wrangler is a dev dependency, so always run it through pnpm:
-  `pnpm exec wrangler <command>`. Do not install a global copy; versions drift.
+  `pnpm exec wrangler <command>`, or `pnpm --filter waitlist exec wrangler`
+  for the waitlist package. Do not install a global copy; versions drift.
 
 ## Authentication without leaking anything
 
@@ -49,16 +63,22 @@ The resulting credentials live outside the repository in
 environment ([system variables](https://developers.cloudflare.com/workers/wrangler/system-environment-variables/)).
 The account ID "can also be specified through the `CLOUDFLARE_ACCOUNT_ID`
 environment variable" ([config reference](https://developers.cloudflare.com/workers/wrangler/configuration/)),
-which is why neither Wrangler file in this repository contains `account_id`.
-Keep it that way; the ID is not secret in the strict sense, but it has no
-business in a public repository.
+which is why no Wrangler file in this repository contains `account_id`. Keep it
+that way; the ID is not secret in the strict sense, but it has no business in a
+public repository. Scopes for a provisioning token are listed under
+[API token for provisioning](#api-token-for-provisioning).
 
 Local files Wrangler may create are already ignored: `.wrangler/` (local state,
 which Cloudflare says [should be added to `.gitignore`](https://developers.cloudflare.com/workers/local-development/local-data/))
-and `.dev.vars*` (local secrets; "should not be committed to git"
-([secrets docs](https://developers.cloudflare.com/workers/configuration/secrets/))).
-This project has no runtime secrets, so those files should not exist at all; if
-one appears, something is misconfigured.
+and `.dev.vars*` (local secrets; the docs say to "Add `.dev.vars*` and `.env*`
+to your project's `.gitignore` file"
+([secrets](https://developers.cloudflare.com/workers/configuration/secrets/))).
+The site and Storybook have no runtime secrets, so those files should not exist
+at their root. The waitlist package does have secrets: production values go in
+with `wrangler secret put <KEY>`, and local development reads
+`apps/waitlist/.dev.vars.local`, because "When a `.dev.vars.<environment-name>`
+file exists, only that file loads" and the package runs the `local` environment.
+`apps/waitlist/.dev.vars.example` is the committed template.
 
 ## Site configuration (recommended form)
 
@@ -105,13 +125,15 @@ Why each line:
   ([static-site routing](https://developers.cloudflare.com/workers/static-assets/routing/static-site-generation/)).
   `html_handling` stays at its default `auto-trailing-slash`, which the same page
   says "will usually give you the desired behavior automatically".
-- `[observability]` persists request logs (three-day retention and 200,000 events
-  per day on the free plan, [Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/)).
-  Asset requests are served without invoking Worker code, so expect the log to be
-  quiet; it exists to catch anything unexpected.
+- `[observability]` persists request logs. Workers Logs keeps 200,000 events a
+  day for three days on the free plan and 20 million a month for seven days on
+  Paid; `head_sampling_rate` runs "from 0 to 1"
+  ([Workers Logs](https://developers.cloudflare.com/workers/observability/logs/workers-logs/)).
+  Asset requests are served without invoking Worker code, so expect this log to
+  be quiet; it exists to catch anything unexpected.
 - `[[routes]]` with `custom_domain = true` makes the Worker the origin for the
-  apex. Cloudflare "will create DNS records and issue necessary certificates on
-  your behalf" ([custom domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)).
+  apex. Cloudflare creates the DNS record and issues "an Advanced Certificate"
+  ([Custom Domains](https://developers.cloudflare.com/workers/configuration/routing/custom-domains/)).
   The hostname must not already carry a CNAME record.
 
 ## Storybook configuration (as deployed)
@@ -144,13 +166,151 @@ custom_domain = true
 Keep `preview_urls = true` only while the `workers.dev` subdomain is enabled;
 once `workers_dev = false`, previews are unavailable and the flag is inert.
 
+## Waitlist Workers configuration
+
+`apps/waitlist/wrangler.toml` is the public Worker. The pieces and why they are
+shaped that way:
+
+- **Assets.** `main = ".svelte-kit/cloudflare/_worker.js"` and
+  `[assets] directory = ".svelte-kit/cloudflare"` with `binding = "ASSETS"`,
+  both written by `@sveltejs/adapter-cloudflare`. The adapter's Worker serves
+  hashed files and brand icons from the binding and hands every other request to
+  SvelteKit, whose `reroute` hook does the hostname routing
+  ([binding](https://developers.cloudflare.com/workers/static-assets/binding/)).
+- **D1 with an EU jurisdiction.** The database is created once with
+  `wrangler d1 create waitlist --jurisdiction=eu`. "Jurisdictions can only be set
+  on database creation and cannot be added or updated after the database
+  exists", "the jurisdiction takes precedence and the location hint is ignored",
+  and "Workers may still access the database constrained to a jurisdiction from
+  anywhere in the world"
+  ([data location](https://developers.cloudflare.com/d1/configuration/data-location/)).
+  Time Travel covers 7 days on the free plan and "up to 30 days" on Paid, with
+  `wrangler d1 time-travel restore YOUR_DATABASE --timestamp=UNIX_TIMESTAMP`
+  ([Time Travel](https://developers.cloudflare.com/d1/reference/time-travel/)).
+  It is short-horizon recovery, not an archive.
+- **Rate limiting.** `[[ratelimits]]` with `name`, `namespace_id`, and
+  `simple = { limit = 5, period = 60 }`; `period` must be 10 or 60, and the
+  binding answers `limit({ key })` with `{ success }`
+  ([rate limiting](https://developers.cloudflare.com/workers/runtime-apis/bindings/rate-limit/)).
+  The key is brand plus client address and is never persisted.
+- **Routes.** Ten `[[routes]]` entries with `custom_domain = true`: the five
+  apexes and their `www` hostnames. The Worker answers `www` with a `308` to the
+  apex and any other hostname with a `302` to `https://futhr.io/`.
+- **`[env.local]`.** Same bindings, `routes = []`. When routes exist, `wrangler
+  dev` derives a development host from the first pattern and "replaces the
+  original Host header value with dev.host across every request"
+  ([workers-sdk #13871](https://github.com/cloudflare/workers-sdk/issues/13871)),
+  which would make every local request look like `rivure.com`. The CLI describes
+  the flags as `--host`, "Host to forward requests to, defaults to the zone of
+  project", and `--local-upstream`, "Host to act as origin in local mode,
+  defaults to dev.host or route". With no routes, requests keep their real
+  hostname, which the exact-host routing and the end-to-end tests depend on.
+- **`workers_dev = false` and `preview_urls = false`** on both Workers, for the
+  reasons given for the site.
+
+`apps/waitlist/wrangler.admin.toml` is the admin Worker: the same D1 database,
+no assets, one route for `lists.futhr.io`. Its secrets name the
+Access team domain and application audience so the Worker validates the JWT
+itself rather than trusting header presence.
+
+## Zones and DNS (Namecheap and Hostinger)
+
+The venture domains are registered at Namecheap and their mailboxes are hosted
+at Hostinger. Custom Domains need each zone on Cloudflare nameservers, so DNS
+moves to Cloudflare while Hostinger keeps the mail. Per domain:
+
+1. **Add the zone.** In the dashboard select "Onboard a domain", enter the apex,
+   and pick the free plan. Cloudflare scans existing records, but "the quick
+   scan is not guaranteed to find all existing DNS records", and the setup guide
+   singles out email records as commonly missed
+   ([full setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/)).
+2. **Check the mail records against Hostinger's published set**
+   ([Hostinger records](https://www.hostinger.com/support/8671319-set-up-a-domain-for-hostinger-email-manually/)):
+
+   | Type | Name | Value |
+   | --- | --- | --- |
+   | MX | `@` | `mx1.hostinger.com`, priority 5 |
+   | MX | `@` | `mx2.hostinger.com`, priority 10 |
+   | TXT | `@` | `v=spf1 include:_spf.mail.hostinger.com ~all` |
+   | CNAME | `hostingermail-a._domainkey` | `hostingermail-a.dkim.mail.hostinger.com` |
+   | CNAME | `hostingermail-b._domainkey` | `hostingermail-b.dkim.mail.hostinger.com` |
+   | CNAME | `hostingermail-c._domainkey` | `hostingermail-c.dkim.mail.hostinger.com` |
+   | TXT | `_dmarc` | `v=DMARC1; p=none; rua=mailto:dmarc@<domain>` |
+
+   Keep the DKIM CNAMEs unproxied. A domain has one SPF record; if another
+   sender is ever added to the apex, Hostinger's guidance is to "combine them in
+   a single line" ([SPF](https://www.hostinger.com/support/1583673-what-is-the-spf-record-for-hostinger-email/)).
+3. **Clear the web records.** Delete any `A`, `AAAA`, or `CNAME` for the apex
+   and `www` that point at parking or web hosting. "You cannot create a Custom
+   Domain on a hostname with an existing CNAME DNS record", and removing the
+   rest keeps the first deploy from stopping on a conflict.
+4. **Switch nameservers at Namecheap.** Domain List, Manage, Nameservers,
+   Custom DNS, then the two names Cloudflare assigned, "in the `ns1.example.tld`
+   format" ([Namecheap](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/)).
+   If DNSSEC is on at Namecheap, disable it first: "Changing nameservers while
+   DNSSEC is active can cause your domain to become unreachable." Activation can
+   take up to 24 hours; mail keeps working throughout if step 2 was complete.
+   Namecheap also has an API for this, `namecheap.domains.dns.setCustom`, which
+   requires API access on the account and a whitelisted IPv4 address
+   ([API intro](https://www.namecheap.com/support/api/intro/)).
+5. **Re-enable DNSSEC** through Cloudflare once the zone is active, if it was on.
+
+`futhr.io` is already on Cloudflare and is unaffected. `lists.futhr.io` is a
+new hostname on that zone and needs no DNS work of its own; the Custom Domain
+creates its record.
+
+## Provisioning the waitlist
+
+Order matters because later steps consume identifiers from earlier ones. The
+package README lists the secret names; this section is the Cloudflare side.
+
+1. **Database.** `wrangler d1 create waitlist --jurisdiction=eu`, paste the id
+   into both Wrangler files, then `wrangler d1 migrations apply waitlist
+   --remote`. The jurisdiction cannot be added later.
+2. **Access.** Create the Zero Trust organisation if none exists; the free plan
+   covers a small team ([plans](https://www.cloudflare.com/plans/zero-trust-services/)).
+   Enable One-time PIN under Integrations, Identity providers; Access "can send a
+   one-time PIN (OTP) to approved email addresses as an alternative to
+   integrating an identity provider" ([OTP](https://developers.cloudflare.com/cloudflare-one/integrations/identity-providers/one-time-pin/)).
+   Add a self-hosted application for `lists.futhr.io` with a policy allowing the
+   maintainer's email; "Domains must belong to an active zone in your Cloudflare
+   account" ([self-hosted app](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/)).
+   Copy the audience: "Select Configure for your application. From Additional
+   settings, copy the Application Audience (AUD) Tag"
+   ([JWT validation](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/authorization-cookie/validating-json/)).
+   Set `ACCESS_TEAM_DOMAIN` and `ACCESS_AUDIENCE` on the admin Worker. For
+   automation, create a service token and a second policy with the action set
+   to Service Auth, "otherwise, Access will prompt for an identity provider
+   login"; clients send `CF-Access-Client-Id` and `CF-Access-Client-Secret`, the
+   token expires on the chosen duration, and rotation keeps the client id
+   ([service tokens](https://developers.cloudflare.com/cloudflare-one/access-controls/service-credentials/service-tokens/)).
+   The Worker identifies a service token by the JWT's `common_name` claim and a
+   person by `email`; both map to brands through `ADMIN_BRAND_GRANTS`.
+3. **Keys and secrets.** Generate the encryption and digest keys and set them on
+   both Workers with `wrangler secret put`, or all at once with
+   `wrangler secret bulk`, which takes "up to 100 secrets per command"
+   ([secrets](https://developers.cloudflare.com/workers/configuration/secrets/)).
+4. **Deploy and attach.** Build with the production sitekeys and
+   `WAITLIST_ENVIRONMENT=production`, then `wrangler deploy` for each config.
+   The first deploy creates the Custom Domains. Verify with the checklist at the
+   end before announcing any hostname.
+
 ## Headers
 
-Both artifacts ship a `_headers` file in their asset directory
-(`static/_headers` for the site, `.storybook/static/_headers` for Storybook).
-Cloudflare applies it to asset responses; the syntax is a URL pattern line
-followed by indented `Name: value` lines, with at most 100 rules and 2,000
-characters per line ([headers docs](https://developers.cloudflare.com/workers/static-assets/headers/)).
+The site and Storybook ship a `_headers` file in their asset directory
+(`static/_headers` and `.storybook/static/_headers`). Cloudflare applies it to
+asset responses; the syntax is a URL pattern line followed by indented
+`Name: value` lines, with "up to 100 header rules" and a 2,000 character line
+limit ([headers docs](https://developers.cloudflare.com/workers/static-assets/headers/)).
+
+The waitlist Worker sets headers on rendered responses in code, because "Custom
+headers defined in the `_headers` file are not applied to responses generated by
+your Worker code, even if the request URL matches a rule defined in `_headers`".
+The page CSP with its nonce comes from `kit.csp` in `svelte.config.ts`; every
+other response gets a closed policy, `Referrer-Policy: same-origin`, `nosniff`,
+and a restrictive `Permissions-Policy` from `src/hooks.server.ts`; and
+`apps/waitlist/_headers` covers the asset layer, with the adapter appending the
+one-year immutable rule for `/_app/immutable/*`.
 
 The site file today:
 
@@ -165,7 +325,7 @@ The site file today:
   Cache-Control: public, max-age=31536000, immutable
 
 /icons/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=86400
 ```
 
 Cloudflare's own [security headers example](https://developers.cloudflare.com/workers/examples/security-headers/)
@@ -184,6 +344,8 @@ Notes before adding them:
   visitors for the duration of the Max Age Header"
   ([HSTS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/http-strict-transport-security/)).
   Start at one month and raise it once stable; `preload` needs twelve months.
+  The waitlist Workers already send HSTS on HTTPS responses; the venture zones
+  have nothing else under them.
 - `src/app.html` contains one inline script that sets `data-day` before first
   paint. Under a CSP it needs a hash. Compute it from the built page, since the
   build normalises whitespace:
@@ -204,25 +366,33 @@ Notes before adding them:
 
 The Storybook file adds `X-Robots-Tag: noindex, nofollow` and ships a
 `robots.txt` that disallows everything; `scripts/verify-artifact.ts` fails the
-build if either is missing, and it rejects anything under `icons/` or other
-site-only paths so the two artifacts stay separate.
+build if either is missing or if a site-only file such as the manifest or an icon
+has been copied into the Storybook artifact.
 
 ## Custom domains, www, and TLS
 
-1. **Apex.** Deploy the site Worker with the `[[routes]]` block above. Cloudflare
-   creates the DNS record and certificate.
-2. **www.** A Worker on `futhr.io` "will not receive requests sent to
-   `www.futhr.io`, and vice versa". Do not attach the Worker to both. Create a
-   Redirect Rule instead, following Cloudflare's
+1. **Apex.** Deploy each Worker with its `[[routes]]` block. Cloudflare creates
+   the DNS record and certificate. "You can add multiple Custom Domains" to one
+   Worker, up to 100 per zone
+   ([limits](https://developers.cloudflare.com/workers/platform/limits/)). "When
+   you delete a Custom Domain, the associated Advanced Certificate is not
+   automatically deleted"; remove it by hand if a hostname is ever retired.
+2. **www on futhr.io.** A Worker on `futhr.io` "will not receive requests sent
+   to `www.futhr.io`, and vice versa". Do not attach the site Worker to both.
+   Create a Redirect Rule instead, following Cloudflare's
    [www-to-root example](https://developers.cloudflare.com/rules/url-forwarding/examples/redirect-www-to-root/):
    wildcard `https://www.*`, target `https://${1}`, status 301, preserve query
    string. A proxied DNS record for `www` must exist for the rule to run. The
    free plan allows ten single redirect rules.
    `_redirects` files cannot do this; domain-level redirects are listed as
    unsupported there ([redirects docs](https://developers.cloudflare.com/workers/static-assets/redirects/)).
-3. **Storybook host.** Deploy `futhr-ui` with its own `[[routes]]` block for
-   `ui.futhr.io`.
-4. **TLS settings** under SSL/TLS in the dashboard for the zone:
+3. **www on the ventures.** No rules. The `www` hostnames are Custom Domains on
+   `waitlist-web`, which answers them with a `308` to the apex, keeping path and
+   query, and answers any hostname it does not know with a `302` to
+   `https://futhr.io/`.
+4. **Storybook and admin hosts.** `futhr-ui` on `ui.futhr.io` and
+   `waitlist-admin` on `lists.futhr.io`, each with its own `[[routes]]` block.
+5. **TLS settings** under SSL/TLS in the dashboard, for each of the six zones:
    - Encryption mode Full (strict). The origin is Cloudflare itself, so this is
      free of origin-certificate work.
    - [Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/)
@@ -232,32 +402,37 @@ site-only paths so the two artifacts stay separate.
      requirement.
    - [Automatic HTTPS Rewrites](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/automatic-https-rewrites/)
      on, as a safety net against mixed content.
-   - HSTS in the dashboard is optional if the `_headers` line above is used;
-     do not enable both with different max-ages.
+   - HSTS in the dashboard is optional where a `_headers` line or Worker code
+     already sends it; do not enable both with different max-ages.
 
 ## Deploying
 
 ### From a workstation
 
 ```sh
-pnpm build                     # writes build/ and verifies the artifact
-pnpm exec wrangler deploy      # site, reads wrangler.toml
-pnpm storybook:deploy          # Storybook, reads wrangler.storybook.toml
+pnpm build                                   # writes build/ and verifies the artifact
+pnpm exec wrangler deploy                    # site, reads wrangler.toml
+pnpm storybook:deploy                        # Storybook, reads wrangler.storybook.toml
+pnpm build:waitlist                          # builds the waitlist Worker and its assets
+pnpm --filter waitlist exec wrangler deploy  # public waitlist Worker
+pnpm --filter waitlist exec wrangler deploy --config wrangler.admin.toml
 ```
 
 `wrangler deploy` uploads a new version and makes it live. To inspect or undo,
 `pnpm exec wrangler versions list` and `pnpm exec wrangler rollback` are
-available on both Workers.
+available on every Worker. `wrangler deploy --dry-run` bundles and validates
+without touching the account; CI runs it for the Storybook and both waitlist
+configs.
 
 ### From GitHub Actions
 
 The current CI workflow only verifies; it does not deploy. To deploy on pushes
-to `main`, add a job that runs after the verification job succeeds, using
+to `main`, add a job that runs after the verification jobs succeed, using
 Cloudflare's [GitHub Actions guide](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/):
 
 ```yaml
   deploy:
-    needs: verify
+    needs: [verify, waitlist]
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
@@ -282,21 +457,19 @@ Cloudflare's [GitHub Actions guide](https://developers.cloudflare.com/workers/ci
 ```
 
 Storybook gets a second step with `command: deploy --config wrangler.storybook.toml`
-after `pnpm storybook:build`, or its own job.
-
-Points that matter:
+after `pnpm storybook:build`. The waitlist Workers get steps with
+`workingDirectory: apps/waitlist`, one per config, after `pnpm build:waitlist`.
+The sitekeys are `[vars]` in `wrangler.toml`, so the build needs no environment.
+[wrangler-action](https://github.com/cloudflare/wrangler-action) v4 installs
+Wrangler 4 by default; pin `wranglerVersion` to the version in `package.json`
+if the two drift.
 
 - Store the token and account ID as repository or environment secrets. Cloudflare
   is explicit: "Don't store the value of `CLOUDFLARE_API_TOKEN` in your
   repository, as it gives access to deploy Workers on your account."
-- Create the token from the **Edit Cloudflare Workers** template
-  ([template list](https://developers.cloudflare.com/fundamentals/api/reference/template/)),
-  then restrict it: scope Account to this account only and Zone to `futhr.io`
-  only. The template also grants KV, R2, and Tail permissions this project does
-  not use; a custom token with Workers Scripts: Edit, Account Settings: Read, and
-  Workers Routes: Edit (zone) is the tighter choice. Set an expiry and rotate.
-- Pin `wranglerVersion` in the action to the version in `package.json` if the
-  action's bundled Wrangler drifts from the local one.
+- A deploy token needs less than a provisioning token: Workers Scripts Edit,
+  Workers Routes Edit on the six zones, D1 Edit, and Account Settings Read. Set
+  an expiry and rotate.
 - A GitHub `environment` with required reviewers turns the deploy into an
   approval step. Keep `permissions: contents: read`; the job needs nothing else.
 
@@ -304,31 +477,60 @@ Points that matter:
 
 Cloudflare can build and deploy from the Git repository directly
 ([Workers Builds](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)).
-Settings for this repository: build command `pnpm build`, deploy command
-`pnpm exec wrangler deploy`, root directory `/`. The dashboard Worker name must
-match `name` in the config or "the build will fail". Builds generate their own
+For a monorepo, "Set the root directory for each Worker to specify the location
+of its `wrangler.jsonc`", and "a new build and deploy will trigger for each
+Worker if the change is within each of its included watch paths"; pnpm
+workspaces are named as supported
+([advanced setups](https://developers.cloudflare.com/workers/ci-cd/builds/advanced-setups/)).
+Settings for this repository: the site with root directory `/`, build command
+`pnpm build`, deploy command `pnpm exec wrangler deploy`; each waitlist Worker
+with root directory `apps/waitlist`, build command `pnpm build`, deploy command
+`pnpm exec wrangler deploy` or the same with `--config wrangler.admin.toml`. The
+dashboard Worker name must match `name` in the config. Builds generate their own
 scoped API token, so no secret has to be created by hand. The trade-off is that
 verification runs on Cloudflare's builder rather than in the CI matrix; keep the
 GitHub workflow as the required check on pull requests either way.
 
-## Limits that apply here
+## API token for provisioning
 
-From [Workers limits](https://developers.cloudflare.com/workers/platform/limits/):
-an individual asset may be at most 25 MiB, a free-plan version may contain
-20,000 files, `_headers` allows 100 rules, and `_redirects` allows 2,000 static
-plus 100 dynamic entries. The site is a few dozen files; Storybook is a few
-hundred. Neither is near a limit, but the file-count ceiling is the one to watch
-if Storybook ever gains large fixture sets.
+Create it under My Profile, API Tokens, as a custom token rather than a
+template; "The token secret is only shown once", and the form offers "Client IP
+Address Filtering and TTL (time to live)"
+([create a token](https://developers.cloudflare.com/fundamentals/api/get-started/create-token/)).
+Scope the zone permissions to the six zones, not all zones. Verify it with:
 
-## Optional analytics
+```sh
+curl "https://api.cloudflare.com/client/v4/user/tokens/verify" --header "Authorization: Bearer <API_TOKEN>"
+```
+
+Permissions the provisioning steps above use:
+
+| Scope | Permission | Used for |
+| --- | --- | --- |
+| Account | Account Settings: Read | Wrangler account lookup |
+| Account | Workers Scripts: Edit | deploys, secrets |
+| Account | D1: Edit | database and migrations |
+| Account | Access: Apps and Policies: Edit | the admin application |
+| Account | Access: Service Tokens: Edit | automation credentials |
+| Zone | Zone: Edit | creating the venture zones |
+| Zone | DNS: Edit | mail records and cleanup |
+| Zone | Workers Routes: Edit | Custom Domains |
+
+Keep the token in the shell environment or a file outside the repository, never
+in a chat transcript or a commit, and revoke it when provisioning is done.
+
+## Limits and analytics
+
+Every artifact here is a few dozen to a few hundred files, far below the
+[Workers limits](https://developers.cloudflare.com/workers/platform/limits/). The
+free plan's 100,000 requests a day and D1's free reads and writes are far above
+what five landing pages draw, so nothing here needs Workers Paid.
 
 [Cloudflare Web Analytics](https://developers.cloudflare.com/web-analytics/) is
-available on all plans and does not log query strings. It works by injecting a
-beacon script tagged with a site token. Adding it would change
-`docs/legal/privacy.md`, which currently states the site has no analytics, and it
-would need a `script-src` entry for `static.cloudflareinsights.com` in the CSP.
-Decide the privacy stance first; do not enable the dashboard's automatic
-injection casually.
+not enabled. Turning it on would contradict `docs/legal/privacy.md` and the
+venture notices, which promise no analytics, and would need a `script-src` entry
+for `static.cloudflareinsights.com`. Decide the privacy stance first; do not
+enable the dashboard's automatic injection.
 
 ## Migrating the site from Pages to Workers
 
@@ -341,7 +543,6 @@ injection casually.
 4. Attach the Custom Domain to the Worker (redeploying with the `[[routes]]`
    block does this) and verify with the checklist below.
 5. Add the www Redirect Rule, then delete the Pages project.
-6. Update the README deployment section; it still describes Pages settings.
 
 Cloudflare's [migration guide](https://developers.cloudflare.com/workers/static-assets/migration-guides/migrate-from-pages/)
 confirms that "`_headers` and `_redirects` files are supported natively in
@@ -360,8 +561,18 @@ curl -sI https://www.futhr.io/ | head -1                                # 301 to
 curl -sI https://futhr.io/does-not-exist | head -1                      # 404, not 200
 curl -s https://futhr.io/llms.txt | head -3                             # agent documents served
 curl -sI https://ui.futhr.io/ | grep -i x-robots-tag                    # noindex on Storybook
+
+for host in rivure.com diggymon.com refpath.io reloved.eco orvane.io; do
+  curl -sI "https://$host/" | grep -iE "^(HTTP|content-security|strict-transport|cache-control)"
+  curl -s "https://$host/manifest.webmanifest" | grep '"name"'         # the brand's own manifest
+  curl -sI "https://www.$host/privacy?x=1" | grep -iE "^(HTTP|location)" # 308 to the apex
+done
+curl -sI https://lists.futhr.io/v1/brands | head -1                    # Access login, not JSON
 ```
 
-Expected: security headers present, immutable caching on `/_app/*`, a 301 from
-www, a 404 with the site's own page, `llms.txt` beginning with the site name,
-and `X-Robots-Tag: noindex, nofollow` on Storybook.
+Expected: security headers present on every host, immutable caching on hashed
+assets, a 301 from `www.futhr.io`, a 404 with the site's own page, `llms.txt`
+beginning with the site name, `X-Robots-Tag: noindex, nofollow` on Storybook,
+each venture serving its own manifest name with a CSP that carries a fresh
+nonce, a 308 from every venture `www`, a 415 for a non-JSON post, an Access challenge on the admin host, and a 404 for the
+subscription path on `futhr.io`.

@@ -1,45 +1,18 @@
 # Contributing
 
-Focused fixes to the open-source application code are welcome. This repository is the
-production source for a personal editorial site, so a change must serve the deployed
-showcase rather than turn it into a general template or component library.
+This is the production source for a personal site. Fixes to the application code
+are welcome. Editorial copy, project selection, and the marks are
+maintainer-controlled and excluded from the MIT licence in [LICENSE.md](LICENSE.md),
+so open an issue before spending time on anything beyond a focused fix.
 
-## Before proposing a change
+Use GitHub issues for reproducible bugs and accessibility problems. Report
+vulnerabilities as described in [SECURITY.md](SECURITY.md), never in a public issue.
+Questions about the projects the site links to belong in their own repositories.
+Everything else goes to [hi@futhr.io](mailto:hi@futhr.io).
 
-Use a GitHub issue for reproducible bugs, accessibility problems and narrowly scoped
-improvements. Security reports must follow [SECURITY.md](SECURITY.md) and must never
-be filed publicly.
+The toolchain, commands, and conventions are in [docs/README.md](docs/README.md) and
+[AGENTS.md](AGENTS.md). Run `pnpm test:all` before opening a pull request.
 
-Editorial copy, project selection, visual identity and logo changes are
-maintainer-controlled. Open an issue before spending time on changes to material
-excluded by [LICENSE.md](LICENSE.md).
-
-## Development requirements
-
-- Use pnpm and commit the lockfile when dependencies change.
-- Write TypeScript; do not add authored JavaScript files.
-- Use Svelte 5 runes and callback props for new interactive components.
-- Name Svelte files in kebab case and avoid barrel modules.
-- Use Tailwind theme tokens and utilities; do not add a UI component library.
-- Keep source compatible with strict Biome and TypeScript checks.
-- Add the smallest test that demonstrates the changed behaviour.
-
-Run the full verification sequence before opening a pull request:
-
-```sh
-pnpm install --frozen-lockfile
-pnpm exec playwright install chromium
-pnpm test:all
-pnpm storybook:build
-pnpm build
-```
-
-## Contribution terms
-
-By intentionally submitting a code contribution, you agree that it may be distributed
-under the MIT terms in [LICENSE.md](LICENSE.md). Do not submit material you are not
-authorised to license, confidential information, credentials, customer data or
-unpublished project details.
-
-Participation is governed by [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md). Submission does
-not guarantee acceptance, publication or ongoing support.
+By submitting a code contribution you agree that it may be distributed under the MIT
+terms in [LICENSE.md](LICENSE.md). Do not submit material you are not authorised to
+license. Keep discussion on the work; harassment of any kind ends participation.

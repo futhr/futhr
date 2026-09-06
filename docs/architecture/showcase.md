@@ -17,24 +17,28 @@ Every measurement comes from a 1440px reference composition and is expressed in
 container-query units (`cqw`) rather than viewport units. On the site the
 container is the viewport, so nothing changes; inside a Storybook frame the same
 tokens scale to the frame, which is why stories match production. Below 1024px
-the open row stacks ingress above description, below 768px the label stacks
-above the headline and type steps down; both are container queries, so a
-narrow story frame behaves like a phone.
+the open row stacks ingress above description, below 768px the label overlays
+the inset above the headline and type steps down; both are container queries, so
+a narrow story frame behaves like a phone.
 
 The collapsed row is a fixed height with the headline's cap line sitting a fixed
-distance below the top edge; the next row clips the rest. Titles with soft
-hyphens break where the author decided, not where the browser guesses.
+distance below the top edge; the next row clips the rest at half the headline's
+em. Below 768px the group label overlays the inset instead of taking a line, so
+labelled and unlabelled rows are the same height and show the same slice of
+their headline. Titles with soft hyphens break where the author decided, not
+where the browser guesses.
 
 ## Motion
 
 One curve, one clock, one motion. When a row is clicked, the closing row and the
 opening row animate their heights over 420ms on an ease-out curve through the
 Web Animations API, and the scroll position travels on the same curve towards
-the row's final position, computed from the collapsed-row height rather than
-measured per frame. The result is that the clicked header glides from wherever
+the row's final position, computed from the settled heights of the rows above
+it rather than measured per frame; a row that is still closing reports the
+height its animation is heading for. The result is that the clicked header glides from wherever
 it was to the top of the viewport while the panel grows beneath it and every
-other row moves consistently around it; nothing jumps, nothing is pinned, and
-nothing is measured mid-flight, so nothing lags. The ingress, then the
+other row moves with it. Nothing is measured mid-flight, so nothing lags. The
+ingress, then the
 description and links, rise and fade in on a short stagger as the row settles.
 An open row is at least one viewport tall, so the destination always exists.
 Any wheel, touch, pointer, or key input during the glide hands control back at
@@ -64,8 +68,8 @@ Two fixed colours, ink and paper, plus one brand colour that changes with the
 weekday: seven mid-luminance hues chosen to pass on both backgrounds, declared in
 `src/lib/config/palette.ts` and `site.css`, selected before first paint by an
 inline script that sets `data-day` on the root element. The brand colour drives
-hover, focus, and the hand-drawn marker underline on links. The Storybook story
-Brand → Weekly colours shows the seven.
+hover, focus, and the hand-drawn marker underline on links. The Brand/Weekly
+colours story shows the seven.
 
 Marks are SVG components drawn in `currentColor`; an inverse area uses a contrast
 token that defaults to ink, so the same file works on either background and in
@@ -103,7 +107,7 @@ Agents that drive the reader's browser get WebMCP tools. When
 Registration is feature-detected and tied to an `AbortController`, so browsers
 without the API run identical code paths and nothing else changes. WebMCP is an
 origin trial in Chrome 149 and Edge 150; for real visitors the trial token goes
-in the placeholder comment in `src/app.html`, and locally the flag
+in an `origin-trial` meta tag in `src/app.html`, and locally the flag
 `chrome://flags/#enable-webmcp-testing` enables it. The DevTools Application panel
 lists the tools and logs calls.
 
@@ -112,7 +116,7 @@ lists the tools and logs calls.
 Biome and svelte-check gate every change. Vitest covers the content loader, agent
 documents, palette, and site config in Node, and every component in headless
 Chromium with coverage floors. Storybook stories carry interaction and axe checks
-and are built to a separate artifact that must not leak site files. Playwright
+and are built to a separate artifact that must not contain site-only files. Playwright
 runs the built site on desktop and mobile Chromium, including an axe scan, offline
 loading, and metadata endpoints. Layout work is checked against the reference by
 measurement, and performance with Lighthouse against `pnpm preview`.

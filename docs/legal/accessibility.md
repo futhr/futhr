@@ -1,16 +1,15 @@
 # Accessibility statement
 
-Status: 4 September 2026
+Status: 5 September 2026
 
-The Futhr showcase targets WCAG 2.2 Level AA. It uses semantic landmarks,
-keyboard-operable disclosure buttons, visible focus styles, labelled links,
-reduced-motion handling, responsive layouts, and automated accessibility checks.
+futhr.io targets WCAG 2.2 Level AA: semantic landmarks, keyboard-operable
+disclosure rows, visible focus styles, labelled links, reduced-motion handling,
+and an axe scan in the test suites on every change.
 
-Automated checks cannot establish complete conformance. Visual zoom, screen
-reader announcements, focus order, text reflow, motion, and contrast should also
-be reviewed manually before material design changes are deployed.
+Automated checks do not establish conformance. Zoom, screen-reader announcements,
+focus order, reflow, motion, and contrast should be checked by hand before a
+design change ships.
 
-Report an accessibility barrier through a GitHub issue or email
-[hi@futhr.io](mailto:hi@futhr.io). Include the page, browser or assistive
-technology, steps to reproduce, and the result you expected. Do not include
-sensitive personal information in a public issue.
+Report a barrier through a GitHub issue or to [hi@futhr.io](mailto:hi@futhr.io)
+with the page, the browser or assistive technology, the steps, and what you
+expected. Keep personal details out of public issues.
