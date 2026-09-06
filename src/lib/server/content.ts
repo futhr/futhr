@@ -13,6 +13,8 @@ interface ShowcaseSource {
 const allowedProtocols = new Set(['http:', 'https:', 'mailto:'])
 const markdownExtension = /\.md$/
 const kebabCase = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+// biome-ignore lint/suspicious/noControlCharactersInRegex: reject URL controls before browser normalisation
+const unsafeUrlCharacters = /[\\\u0000-\u0020\u007f]/
 const sanitizeOptions: sanitizeHtml.IOptions = {
   allowedTags: ['p', 'strong', 'em', 'code', 'ul', 'ol', 'li', 'a'],
   allowedAttributes: {
@@ -36,6 +38,9 @@ const requiredString = (
 }
 
 const safeHref = (value: string, filename: string): string => {
+  if (unsafeUrlCharacters.test(value)) {
+    throw new Error(`${filename}: link href must not contain whitespace, controls, or backslashes`)
+  }
   if (value.startsWith('/') && !value.startsWith('//')) {
     return value
   }
@@ -60,17 +65,23 @@ const parseLinks = (value: unknown, filename: string): ShowcaseLink[] => {
     throw new Error(`${filename}: frontmatter field "links" must be an array`)
   }
 
+  const destinations = new Set<string>()
   return value.map((link, index) => {
     if (!link || typeof link !== 'object') {
       throw new Error(`${filename}: links[${index}] must be an object`)
     }
     const entry = link as Record<string, unknown>
+    const href = safeHref(
+      requiredString(entry, 'href', `${filename} links[${index}]`),
+      `${filename} links[${index}]`
+    )
+    if (destinations.has(href)) {
+      throw new Error(`${filename}: duplicate link href "${href}"`)
+    }
+    destinations.add(href)
     return {
       label: requiredString(entry, 'label', `${filename} links[${index}]`),
-      href: safeHref(
-        requiredString(entry, 'href', `${filename} links[${index}]`),
-        `${filename} links[${index}]`
-      )
+      href
     }
   })
 }

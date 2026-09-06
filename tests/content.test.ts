@@ -21,7 +21,7 @@ ${overrides}---
 ${body}`
 
 const invalidFields = [
-  ['a non-URL link', 'https://example.com/repository', 'not a URL', 'absolute or root-relative'],
+  ['a non-URL link', 'https://example.com/repository', 'not-a-URL', 'absolute or root-relative'],
   [
     'a protocol-relative link',
     'https://example.com/repository',
@@ -162,4 +162,23 @@ describe('showcase collection ordering', () => {
       'kebab-case Markdown filename'
     )
   })
+})
+
+it('rejects browser-normalised external links disguised as root-relative paths', async () => {
+  await expect(
+    content.parse({
+      filename: 'unsafe-link.md',
+      source: source().replace('https://example.com/repository', String.raw`/\evil.example`)
+    })
+  ).rejects.toThrow('backslashes')
+})
+
+it('rejects duplicate link keys before rendering the component', async () => {
+  const duplicate = source().replace(
+    'links:',
+    'links:\n  - label: Another label\n    href: https://example.com/repository'
+  )
+  await expect(content.parse({ filename: 'duplicate-link.md', source: duplicate })).rejects.toThrow(
+    'duplicate link href'
+  )
 })
