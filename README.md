@@ -42,14 +42,3 @@ should name what was checked and where the evidence stops.
 
 *Bootstrapped by default, built for durable ownership.*
 
-## This repository
-
-This is the production source for [futhr.io](https://futhr.io/), a SvelteKit
-showcase. Development commands and architecture are indexed in
-[docs/README.md](docs/README.md); contributions follow
-[CONTRIBUTING.md](CONTRIBUTING.md).
-
-The site links public libraries to their repositories and published
-documentation. Agents can read the portfolio through
-[llms.txt](https://futhr.io/llms.txt) or
-[llms-full.txt](https://futhr.io/llms-full.txt).
