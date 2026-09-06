@@ -1,4 +1,4 @@
-import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
+import { afterAll, afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import { verifyAccessJwt } from '../../src/lib/server/admin/access.ts'
 
 const teamDomain = 'example.cloudflareaccess.com'
@@ -18,8 +18,10 @@ const base64url = (input: ArrayBuffer | string) => {
     .replace(padding, '')
 }
 
-const sign = async (claims: Record<string, unknown>, header: Record<string, unknown> = {}) => {
-  const head = base64url(JSON.stringify({ alg: 'RS256', kid: 'key-1', ...header }))
+const sign = async (claims: unknown, header: Record<string, unknown> | null = {}) => {
+  const head = base64url(
+    JSON.stringify(header === null ? null : { alg: 'RS256', kid: 'key-1', ...header })
+  )
   const body = base64url(JSON.stringify(claims))
   const signature = await crypto.subtle.sign(
     'RSASSA-PKCS1-v1_5',
@@ -66,6 +68,8 @@ afterEach(() => {
   vi.clearAllMocks()
 })
 
+afterAll(() => vi.unstubAllGlobals())
+
 describe('verifyAccessJwt', () => {
   it('accepts a signed token for the right issuer and audience and caches the keys', async () => {
     const result = await verifyAccessJwt(await sign(validClaims), { teamDomain, audience })
@@ -97,3 +101,30 @@ describe('verifyAccessJwt', () => {
     expect(await verifyAccessJwt(await sign(validClaims), { teamDomain, audience: '' })).toBeNull()
   })
 })
+
+const invalidClaims = [
+  null,
+  [],
+  'invalid',
+  { ...validClaims, exp: undefined },
+  { ...validClaims, exp: 'tomorrow' },
+  { ...validClaims, email: { name: 'owner@example.com' } },
+  { ...validClaims, email: '' },
+  { ...validClaims, nbf: now + 120 },
+  { ...validClaims, nbf: 'later' },
+  { ...validClaims, iat: now + 120 },
+  { ...validClaims, iat: 'yesterday' }
+]
+
+it.each(invalidClaims)('rejects malformed or premature claims: %j', async (claims) => {
+  expect(await verifyAccessJwt(await sign(claims), { teamDomain, audience })).toBeNull()
+})
+
+it.each([null, { crit: ['unknown'], unknown: true }])(
+  'rejects an invalid header: %j',
+  async (header) => {
+    expect(
+      await verifyAccessJwt(await sign(validClaims, header), { teamDomain, audience })
+    ).toBeNull()
+  }
+)

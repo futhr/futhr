@@ -5,7 +5,6 @@ import { localSecrets } from '../local-secrets.ts'
 const key = localSecrets.EMAIL_KEY_V1
 const otherKey = localSecrets.EMAIL_KEY_V2
 const keyLengthError = /32 bytes/
-const noncePattern = /^[A-Za-z0-9+/]{22}==$/
 
 describe('vault', () => {
   it('round-trips AES-GCM with a fresh IV per call and rejects the wrong key', async () => {
@@ -23,10 +22,5 @@ describe('vault', () => {
     expect(digest).toBe(await vault.hmac('rivure\nperson@example.com', key))
     expect(digest).not.toBe(await vault.hmac('rivure\nperson@example.com', otherKey))
     expect(digest).not.toBe(await vault.hmac('diggymon\nperson@example.com', key))
-  })
-
-  it('issues base64 nonces', () => {
-    expect(vault.randomNonce()).toMatch(noncePattern)
-    expect(vault.randomNonce()).not.toBe(vault.randomNonce())
   })
 })

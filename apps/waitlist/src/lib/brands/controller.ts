@@ -16,7 +16,7 @@ const controller = {
     dpaUrl: 'https://www.cloudflare.com/cloudflare-customer-dpa/'
   },
   retention: { reviewMonths: 12 },
-  noticeDate: '5 September 2026'
+  noticeDate: '6 September 2026'
 } as const
 
 export { controller }

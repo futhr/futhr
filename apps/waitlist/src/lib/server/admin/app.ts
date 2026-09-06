@@ -81,10 +81,14 @@ const listSubscriptions = async (call: AdminCall, brand: Brand): Promise<Respons
 }
 
 const deleteSubscription = async (call: AdminCall, brand: Brand, id: string): Promise<Response> => {
-  if (!(idPattern.test(id) && (await adminStore.remove(call.env.DB, brand.id, id)))) {
+  if (
+    !(
+      idPattern.test(id) &&
+      (await adminStore.remove(call.env.DB, brand.id, id, call.actor.identity))
+    )
+  ) {
     return notFound()
   }
-  await audited(call, 'subscription.delete', brand, id)
   return json(status.noContent, null)
 }
 
@@ -130,8 +134,8 @@ const fetchHandler = async (request: Request, env: AdminEnv): Promise<Response> 
       url,
       segments: url.pathname.split('/').filter(Boolean)
     })
-  } catch (error) {
-    console.error('admin request failed', error instanceof Error ? error.message : 'unknown error')
+  } catch {
+    console.error('admin request failed')
     return problem(status.serverError, 'internal_error')
   }
 }

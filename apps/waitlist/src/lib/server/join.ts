@@ -2,6 +2,7 @@ import { fail, type RequestEvent } from '@sveltejs/kit'
 import { bindings } from '$lib/server/bindings'
 import { vault } from '$lib/server/crypto'
 import { normaliseEmail } from '$lib/server/email'
+import { joinData } from '$lib/server/join-data'
 import { secrets } from '$lib/server/secrets'
 import { store } from '$lib/server/store'
 
@@ -15,7 +16,7 @@ const tooManyRequests = 429
  * posts before this runs.
  */
 const join = async (event: RequestEvent) => {
-  const data = await event.request.formData()
+  const data = await joinData(event.request)
   if (String(data.get('website') ?? '') !== '') {
     return { joined: true }
   }

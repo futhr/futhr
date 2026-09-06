@@ -39,7 +39,7 @@ describe('the join form action', () => {
     expect(html).not.toContain('join-form-email')
     const [stored] = await rows()
     expect(stored?.brand_id).toBe('rivure')
-    expect(stored?.consent_version).toBe('2026-09-05')
+    expect(stored?.consent_version).toBe('2026-09-06')
     expect(stored?.encryption_key_version).toBe('v1')
     expect(stored?.joined_at).toBeTruthy()
     expect(stored?.email_ciphertext).not.toContain('example.com')
@@ -89,4 +89,20 @@ describe('the join form action', () => {
       'Too many attempts'
     )
   })
+})
+
+it('rejects an oversized form before parsing or storing an address', async () => {
+  const response = await join(host, { email: 'a@example.com', extra: 'x'.repeat(8192) })
+  expect(response.status).toBe(413)
+  expect(await rows()).toHaveLength(0)
+})
+
+it('rejects malformed multipart input as a client error', async () => {
+  const response = await helpers.call(`https://${host}/`, {
+    method: 'POST',
+    headers: { origin: `https://${host}`, 'content-type': 'multipart/form-data' },
+    body: 'not multipart'
+  })
+  expect(response.status).toBe(400)
+  expect(await rows()).toHaveLength(0)
 })

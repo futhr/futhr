@@ -86,9 +86,9 @@ export const handle: Handle = async ({ event, resolve }) => {
 }
 
 /** Unknown paths are routine on a public host; only real failures reach the log. */
-export const handleError: HandleServerError = ({ error, status, message }) => {
+export const handleError: HandleServerError = ({ status, message }) => {
   if (status !== notFound) {
-    console.error('request failed', status, error instanceof Error ? error.message : message)
+    console.error('request failed', status)
   }
   return { message }
 }

@@ -2,7 +2,6 @@ const encoder = new TextEncoder()
 const decoder = new TextDecoder()
 const aesKeyBytes = 32
 const ivBytes = 12
-const nonceBytes = 16
 const base64Pattern = /^[A-Za-z0-9+/]+={0,2}$/
 const padding = /[=]+$/
 const keyCache = new Map<string, Promise<CryptoKey>>()
@@ -83,9 +82,6 @@ const hmac = async (message: string, secret: string): Promise<string> => {
   return toBase64Url(new Uint8Array(signature))
 }
 
-/** A CSP nonce: 128 random bits as base64. */
-const randomNonce = (): string => toBase64(randomBytes(nonceBytes))
-
-const vault = { encrypt, decrypt, hmac, randomNonce } as const
+const vault = { encrypt, decrypt, hmac } as const
 
 export { vault }

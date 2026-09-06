@@ -1,10 +1,10 @@
 import type { Brand } from '$lib/types/brand'
 import type { BrandId } from '$lib/types/brand-id'
 
-const consentVersion = '2026-09-05'
+const consentVersion = '2026-09-06'
 
 /**
- * The closed brand map, in the order the ventures appear on futhr.io. Copy is
+ * The closed brand map, in local navigation order. Copy is
  * unique per brand and follows the showcase voice: noun-led, pre-release,
  * no availability claims. Colours, type, and layout come from the shared style
  * system; the brand is the mark, the words, and the metadata.

@@ -29,16 +29,18 @@ const list = async (
 ): Promise<ListPage> => {
   const limit = Math.min(Math.max(options.limit, 1), maxPageSize)
   const cursor = decodeCursor(options.cursor)
-  const rows = (
-    await db
-      .prepare(
-        `SELECT * FROM subscriptions
-         WHERE brand_id = ?1 AND (?2 IS NULL OR (joined_at, id) > (?2, ?3))
-         ORDER BY joined_at, id LIMIT ?4`
-      )
-      .bind(brandId, cursor?.[0] ?? null, cursor?.[1] ?? null, limit + 1)
-      .all<SubscriptionRow>()
-  ).results
+  const statement = cursor
+    ? db
+        .prepare(
+          `SELECT * FROM subscriptions
+           WHERE brand_id = ?1 AND (joined_at, id) > (?2, ?3)
+           ORDER BY joined_at, id LIMIT ?4`
+        )
+        .bind(brandId, cursor[0], cursor[1], limit + 1)
+    : db
+        .prepare('SELECT * FROM subscriptions WHERE brand_id = ?1 ORDER BY joined_at, id LIMIT ?2')
+        .bind(brandId, limit + 1)
+  const rows = (await statement.all<SubscriptionRow>()).results
   const items = rows.slice(0, limit)
   const last = items.at(-1)
   return {
@@ -47,12 +49,24 @@ const list = async (
   }
 }
 
-const remove = async (db: D1Database, brandId: string, id: string): Promise<boolean> => {
-  const result = await db
-    .prepare('DELETE FROM subscriptions WHERE brand_id = ?1 AND id = ?2')
-    .bind(brandId, id)
-    .run()
-  return result.meta.changes === 1
+/** Audit and delete in one transaction; a failed audit leaves the address intact. */
+const remove = async (
+  db: D1Database,
+  brandId: string,
+  id: string,
+  actor: string
+): Promise<boolean> => {
+  const [, result] = await db.batch([
+    db
+      .prepare(
+        `INSERT INTO audit_log (id, at, actor, action, brand_id, subject_id)
+         SELECT ?1, ?2, ?3, 'subscription.delete', brand_id, id FROM subscriptions
+         WHERE brand_id = ?4 AND id = ?5`
+      )
+      .bind(crypto.randomUUID(), new Date().toISOString(), actor, brandId, id),
+    db.prepare('DELETE FROM subscriptions WHERE brand_id = ?1 AND id = ?2').bind(brandId, id)
+  ])
+  return result?.meta.changes === 1
 }
 
 const audit = (

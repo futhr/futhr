@@ -118,6 +118,7 @@ beforeAll(async () => {
 
 afterEach(() => {
   vi.unstubAllGlobals()
+  vi.restoreAllMocks()
 })
 
 const stubCertificates = () =>
@@ -179,7 +180,7 @@ describe('admin API', () => {
       id: second,
       brandId: 'rivure',
       email: 'b@example.com',
-      joinedAt: '2026-09-02T00:00:00.000Z'
+      joinedAt: '2026-09-01T00:00:00.000Z'
     })
     await seed({ id: third, brandId: 'diggymon', email: 'c@example.com' })
 
@@ -236,4 +237,28 @@ describe('admin API', () => {
     ).json()) as Listing
     expect(page.items.map(({ email }) => email)).toEqual(['old@example.com', 'new@example.com'])
   })
+})
+
+it('rolls back deletion when its audit record cannot be written', async () => {
+  stubCertificates()
+  const log = vi.spyOn(console, 'error').mockImplementation(() => undefined)
+  await seed({ id: first, brandId: 'rivure', email: 'retained@example.com' })
+  await environment.DB.exec(
+    "CREATE TRIGGER reject_audit BEFORE INSERT ON audit_log BEGIN SELECT RAISE(ABORT, 'audit unavailable'); END"
+  )
+  try {
+    const response = await as('owner@example.com', `/v1/brands/rivure/subscriptions/${first}`, {
+      method: 'DELETE'
+    })
+    expect(response.status).toBe(500)
+    expect(
+      await environment.DB.prepare('SELECT id FROM subscriptions WHERE id = ?1')
+        .bind(first)
+        .first('id')
+    ).toBe(first)
+    expect(await audit()).toEqual([])
+    expect(log).toHaveBeenCalledWith('admin request failed')
+  } finally {
+    await environment.DB.exec('DROP TRIGGER reject_audit')
+  }
 })
