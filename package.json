@@ -21,11 +21,13 @@
     "dev": "vite dev",
     "build": "pnpm build:web",
     "build:web": "vite build && node scripts/verify-artifact.ts web",
+    "build:waitlist": "pnpm --filter waitlist build",
     "preview": "vite preview",
     "storybook": "storybook dev --port 6006 --no-open",
     "storybook:build": "storybook build --output-dir storybook-static && node scripts/verify-artifact.ts storybook",
     "storybook:deploy": "pnpm storybook:build && wrangler deploy --config wrangler.storybook.toml",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc --noEmit --project ./tsconfig.service-worker.json",
+    "check:waitlist": "pnpm --filter waitlist check",
     "lint": "biome lint --error-on-warnings .",
     "format": "biome format --write .",
     "format:check": "biome format .",
@@ -36,7 +38,9 @@
     "test:storybook": "vitest run --project=storybook",
     "test:storybook:e2e": "playwright test --config playwright.storybook.config.ts",
     "test:e2e": "playwright test",
-    "test:all": "pnpm quality && pnpm check && pnpm test:unit && pnpm test:components && pnpm test:storybook && pnpm test:e2e && pnpm test:storybook:e2e"
+    "test:waitlist": "pnpm --filter waitlist test",
+    "test:all": "pnpm quality && pnpm check && pnpm test:unit && pnpm test:components && pnpm test:storybook && pnpm test:e2e && pnpm test:storybook:e2e && pnpm test:waitlist",
+    "waitlist:icons": "pnpm --filter waitlist icons"
   },
   "devDependencies": {
     "@axe-core/playwright": "4.13.0",

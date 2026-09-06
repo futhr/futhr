@@ -1,0 +1,41 @@
+{
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "forceConsistentCasingInFileNames": true,
+    "isolatedModules": true,
+    "lib": ["ES2023"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "noEmit": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitOverride": true,
+    "noImplicitReturns": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022",
+    "types": ["@cloudflare/vitest-plugin/types"],
+    "useUnknownInCatchVariables": true,
+    "verbatimModuleSyntax": true,
+    "paths": {
+      "$lib/*": ["./src/lib/*"]
+    }
+  },
+  "include": [
+    "worker-configuration.d.ts",
+    "src/app.d.ts",
+    "src/lib/brands/**/*.ts",
+    "src/lib/server/**/*.ts",
+    "src/lib/types/**/*.ts",
+    "src/admin-worker.ts",
+    "tests/local-secrets.ts",
+    "tests/workers/**/*.ts",
+    "vitest.workers.config.ts"
+  ]
+}

@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import { extname, join, relative } from 'node:path'
 import ts from 'typescript'
 
-const sourceDirectory = 'src'
+const sourceDirectories = ['src', 'apps/waitlist/src']
 const svelteExportPattern =
   /\bexport\s+(?:default|const|let|var|function|class|interface|type|\{|\*)/gv
 const multipleExportExceptions = new Set([
@@ -13,7 +13,9 @@ const multipleExportExceptions = new Set([
   'src/routes/work/[slug].md/+server.ts',
   'src/routes/manifest.webmanifest/+server.ts',
   'src/routes/robots.txt/+server.ts',
-  'src/routes/sitemap.xml/+server.ts'
+  'src/routes/sitemap.xml/+server.ts',
+  'apps/waitlist/src/hooks.server.ts',
+  'apps/waitlist/src/routes/brands/[brand=brand]/+page.server.ts'
 ])
 
 const collectSourceFiles = async (directory: string): Promise<string[]> => {
@@ -43,7 +45,7 @@ const countTypeScriptExports = (source: string, filename: string) => {
   }, 0)
 }
 
-const files = await collectSourceFiles(sourceDirectory)
+const files = (await Promise.all(sourceDirectories.map(collectSourceFiles))).flat()
 const sources = await Promise.all(
   files.map(async (filename) => ({ filename, source: await readFile(filename, 'utf8') }))
 )

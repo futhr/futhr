@@ -9,7 +9,7 @@ export default mergeConfig(
       coverage: {
         provider: 'v8',
         reporter: ['text', 'lcov'],
-        include: ['src/lib/config/**/*.ts', 'src/lib/server/**/*.ts'],
+        include: ['src/lib/*.ts', 'src/lib/config/**/*.ts', 'src/lib/server/**/*.ts'],
         reportsDirectory: 'coverage/unit',
         thresholds: {
           statements: 95,
@@ -22,7 +22,8 @@ export default mergeConfig(
         ...configDefaults.exclude,
         'tests/components/**',
         'tests/e2e/**',
-        'tests/storybook-e2e/**'
+        'tests/storybook-e2e/**',
+        'apps/**'
       ]
     }
   })

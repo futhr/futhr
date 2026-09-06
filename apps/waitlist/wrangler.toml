@@ -1,0 +1,100 @@
+# Public waitlist Worker. One deployment serves the five venture hostnames; the
+# brand is derived from the exact request hostname in src/brands/host.ts; a www
+# hostname redirects to its apex and any other hostname to futhr.io. Secrets are
+# listed in .dev.vars.example and are set with `wrangler secret put`, never here.
+name = "waitlist-web"
+main = ".svelte-kit/cloudflare/_worker.js"
+compatibility_date = "2026-09-03"
+workers_dev = false
+preview_urls = false
+
+# Built by `pnpm build` (SvelteKit on @sveltejs/adapter-cloudflare). Hashed
+# files and brand icons are served from the binding; everything else is
+# rendered per request.
+[assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
+WAITLIST_ENVIRONMENT = "production"
+
+# Create with `wrangler d1 create waitlist --jurisdiction=eu` and paste the id.
+[[d1_databases]]
+binding = "DB"
+database_name = "waitlist"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[ratelimits]]
+name = "SUBSCRIBE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 5, period = 60 }
+
+[[routes]]
+pattern = "rivure.com"
+custom_domain = true
+
+[[routes]]
+pattern = "diggymon.com"
+custom_domain = true
+
+[[routes]]
+pattern = "refpath.io"
+custom_domain = true
+
+[[routes]]
+pattern = "reloved.eco"
+custom_domain = true
+
+[[routes]]
+pattern = "orvane.io"
+custom_domain = true
+
+# The www hostnames are attached too; the Worker redirects them to the apex.
+[[routes]]
+pattern = "www.rivure.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.diggymon.com"
+custom_domain = true
+
+[[routes]]
+pattern = "www.refpath.io"
+custom_domain = true
+
+[[routes]]
+pattern = "www.reloved.eco"
+custom_domain = true
+
+[[routes]]
+pattern = "www.orvane.io"
+custom_domain = true
+
+# Local development and end-to-end tests. Same bindings, no Custom Domains:
+# with routes present, `wrangler dev` rewrites every request to the first route
+# hostname, which would hide the exact-host routing this Worker depends on.
+[env.local]
+routes = []
+
+[env.local.assets]
+directory = ".svelte-kit/cloudflare"
+binding = "ASSETS"
+
+[env.local.vars]
+WAITLIST_ENVIRONMENT = "development"
+
+[[env.local.d1_databases]]
+binding = "DB"
+database_name = "waitlist"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[env.local.ratelimits]]
+name = "SUBSCRIBE_LIMITER"
+namespace_id = "1001"
+simple = { limit = 5, period = 60 }

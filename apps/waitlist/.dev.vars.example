@@ -1,0 +1,13 @@
+# Copy to .dev.vars.local for `pnpm dev`, which runs the `local` environment. Every value here is a local placeholder;
+# production values are set with `wrangler secret put <NAME>` per Worker.
+# Generate a key with: node -e "console.log(crypto.randomBytes(32).toString('base64'))"
+
+# Public Worker (wrangler.toml)
+EMAIL_KEY_VERSION=v1
+EMAIL_KEY_V1=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=
+EMAIL_DIGEST_KEY=ZGlnZXN0LWtleS1kaWdlc3Qta2V5LWRpZ2VzdC1rZXk=
+
+# Admin Worker (wrangler.admin.toml); also needs EMAIL_KEY_VERSION, EMAIL_KEY_V1, and EMAIL_DIGEST_KEY
+ACCESS_TEAM_DOMAIN=example.cloudflareaccess.com
+ACCESS_AUDIENCE=replace-with-the-access-application-aud-tag
+ADMIN_BRAND_GRANTS={"maintainer@example.com":["*"],"service-token-client-id":["rivure"]}

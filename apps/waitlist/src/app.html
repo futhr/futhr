@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script nonce="%sveltekit.nonce%">
+      'use strict'
+      document.documentElement.dataset.day = String(new Date().getDay())
+    </script>
+    %sveltekit.head%
+  </head>
+  <body>
+    <div class="contents" data-sveltekit-reload>%sveltekit.body%</div>
+  </body>
+</html>

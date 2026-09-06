@@ -1,0 +1,8 @@
+/*
+ * The waitlist pages reuse the futhr.io style system unchanged: ink and paper,
+ * Archivo, the weekday brand colour, and the container-relative layout tokens.
+ * Nothing brand-specific is declared here; the brand is the mark and the copy.
+ * @source keeps Tailwind scanning this package when the build runs elsewhere.
+ */
+@import "../../../../../src/lib/styles/site.css";
+@source "../../";

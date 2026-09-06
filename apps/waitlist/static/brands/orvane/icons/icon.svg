@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img">
+  <title>Orvane icon</title>
+  <rect width="560" height="560" rx="112" fill="#1b1b1b" />
+  <svg x="112" y="112" width="336" height="336" viewBox="0 0 512 512" color="#dcdbd6" style="--mark-contrast: #1b1b1b" aria-hidden="true">
+    <path
+        transform="matrix(2.048 0 0 2.048 256 248.218852)"
+        d="M119 0c0 66-53 119-119 119S-119 66-119 0c0-74 45-116 119-111C66-107 119-66 119 0ZM85 0c0-46-38-83-85-83s-83 37-83 83 37 78 83 78 85-32 85-78Z"
+        fill="currentColor"
+        fill-rule="evenodd"
+      />
+  </svg>
+</svg>

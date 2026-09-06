@@ -90,7 +90,13 @@
       }
     },
     {
-      "includes": ["*.config.ts", "svelte.config.ts", ".storybook/**/*.ts"],
+      "includes": [
+        "*.config.ts",
+        "svelte.config.ts",
+        ".storybook/**/*.ts",
+        "apps/*/*.config.ts",
+        "apps/*/svelte.config.ts"
+      ],
       "linter": {
         "rules": {
           "style": {
@@ -101,7 +107,7 @@
       }
     },
     {
-      "includes": ["tests/**/*.ts"],
+      "includes": ["tests/**/*.ts", "apps/*/tests/**/*.ts"],
       "linter": {
         "rules": {
           "security": {
@@ -111,18 +117,24 @@
       }
     },
     {
-      "includes": ["scripts/**/*.ts"],
+      "includes": ["scripts/**/*.ts", "apps/*/scripts/**/*.ts"],
       "linter": {
         "rules": {
           "correctness": {
             "noNodejsModules": "off",
             "useQwikValidLexicalScope": "off"
+          },
+          "performance": {
+            "noAwaitInLoops": "off"
+          },
+          "style": {
+            "noProcessEnv": "off"
           }
         }
       }
     },
     {
-      "includes": ["src/lib/config/site.ts"],
+      "includes": ["src/lib/config/site.ts", "apps/*/src/lib/brands/*.ts"],
       "linter": {
         "rules": {
           "style": {
@@ -130,6 +142,89 @@
           }
         }
       }
+    },
+    {
+      "includes": ["apps/*/src/admin-worker.ts", "apps/*/src/lib/types/*.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noDefaultExport": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "apps/*/src/lib/server/**/*.ts",
+        "apps/*/src/routes/**/*.server.ts",
+        "apps/*/src/hooks.server.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
+          },
+          "suspicious": {
+            "noConsole": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/*/src/app.d.ts"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noNamespace": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/*/tests/**/*.ts"],
+      "linter": {
+        "rules": {
+          "complexity": {
+            "noExcessiveLinesPerFunction": "off"
+          },
+          "correctness": {
+            "useQwikValidLexicalScope": "off"
+          },
+          "performance": {
+            "noAwaitInLoops": "off"
+          },
+          "style": {
+            "noExcessiveLinesPerFile": "off",
+            "useNamingConvention": "off"
+          },
+          "suspicious": {
+            "noMisplacedAssertion": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/*/tests/unit/**/*.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noNodejsModules": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["apps/*/tests/workers/**/*.ts"],
+      "linter": {
+        "rules": {
+          "correctness": {
+            "noUnresolvedImports": "off"
+          }
+        }
+      }
     }
-  ]
+  ],
+  "files": {
+    "includes": ["**", "!apps/*/static"]
+  }
 }

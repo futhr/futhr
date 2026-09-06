@@ -1,0 +1,26 @@
+# Private list API on lists.futhr.io. The hostname sits behind Cloudflare Access
+# and the Worker validates the Access JWT itself; see src/server/access.ts.
+name = "waitlist-admin"
+main = "src/admin-worker.ts"
+tsconfig = "tsconfig.worker.json"
+compatibility_date = "2026-09-03"
+workers_dev = false
+preview_urls = false
+
+[observability]
+enabled = true
+head_sampling_rate = 1
+
+[vars]
+WAITLIST_ENVIRONMENT = "production"
+
+# The same EU-jurisdiction database as wrangler.toml.
+[[d1_databases]]
+binding = "DB"
+database_name = "waitlist"
+database_id = "00000000-0000-0000-0000-000000000000"
+migrations_dir = "migrations"
+
+[[routes]]
+pattern = "lists.futhr.io"
+custom_domain = true
