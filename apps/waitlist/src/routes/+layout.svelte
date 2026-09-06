@@ -1,5 +1,4 @@
 <script lang="ts">
-  import archivoLatinItalic from '@fontsource-variable/archivo/files/archivo-latin-wght-italic.woff2?url'
   import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url'
   import type { Snippet } from 'svelte'
   import { page } from '$app/state'
@@ -18,7 +17,6 @@
   <meta name="theme-color" content="#1b1b1b">
   <meta name="color-scheme" content="dark light">
   <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="preload" href={archivoLatinItalic} as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="icon" type="image/svg+xml" href="/icons/favicon.svg">
   <link rel="icon" type="image/png" sizes="48x48" href="/icons/favicon-48.png">
   <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">

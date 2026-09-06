@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { brands } from '../../../src/lib/brands/brands.ts'
+import { environment } from '../environment.ts'
 import { helpers } from './helpers.ts'
 
 const { call } = helpers
@@ -154,4 +155,13 @@ describe('host routing', () => {
       "default-src 'none'; frame-ancestors 'none'"
     )
   })
+})
+
+it('applies icon cache and resource headers at the static asset layer', async () => {
+  const response = await environment.ASSETS.fetch(
+    'https://rivure.com/brands/rivure/icons/favicon.svg'
+  )
+  expect(response.status).toBe(200)
+  expect(response.headers.get('cross-origin-resource-policy')).toBe('cross-origin')
+  expect(response.headers.get('cache-control')).toBe('public, max-age=86400')
 })
