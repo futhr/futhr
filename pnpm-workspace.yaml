@@ -6,6 +6,7 @@ saveExact: true
 
 overrides:
   postcss: 8.5.26
+  '@sveltejs/kit>cookie': 0.7.2
 
 allowBuilds:
   esbuild: true
