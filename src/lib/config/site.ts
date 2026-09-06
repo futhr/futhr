@@ -26,13 +26,12 @@ const identity = {
   links: {
     github: 'https://github.com/futhr',
     email: 'mailto:hi@futhr.io',
-    mastodon: 'https://mastodon.social/',
-    bluesky: 'https://bsky.app/',
-    x: 'https://x.com/'
+    mastodon: 'https://mastodon.social/@futhr',
+    bluesky: 'https://bsky.app/profile/futhr.bsky.social',
+    x: 'https://x.com/futhr'
   },
   seo: {
     title: 'futhr — trust, interoperability, unit economics.',
-    socialTitle: 'futhr — trust, interoperability, unit economics.',
     description:
       'A capital-efficient portfolio of platforms and open infrastructure for domains where software decisions carry operational, financial, or legal consequences.',
     keywords: [
@@ -123,7 +122,12 @@ const structuredData = JSON.stringify({
       image: identity.images.social,
       jobTitle: identity.author.role,
       description: identity.author.description,
-      sameAs: [identity.links.github]
+      sameAs: [
+        identity.links.github,
+        identity.links.mastodon,
+        identity.links.bluesky,
+        identity.links.x
+      ]
     },
     {
       '@type': 'WebSite',

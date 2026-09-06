@@ -2,7 +2,7 @@
 order: 19
 group: Venture
 title: Äger
-lede: Shareholder coordination infrastructure that turns fragmented retail owners into an organized, verifiable voice at Swedish general meetings.
+lede: Coordination infrastructure that gives retail shareholders one verifiable voice at Swedish general meetings.
 repositories: []
 links: []
 ---

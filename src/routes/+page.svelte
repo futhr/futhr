@@ -20,14 +20,14 @@
   <meta property="og:type" content="website">
   <meta property="og:site_name" content={site.displayName}>
   <meta property="og:locale" content={site.openGraphLocale}>
-  <meta property="og:title" content={site.seo.socialTitle}>
+  <meta property="og:title" content={site.seo.title}>
   <meta property="og:description" content={site.description}>
   <meta property="og:url" content={site.canonicalUrl}>
   <meta property="og:image" content={site.images.social}>
   <meta property="og:image:alt" content={site.displayName}>
 
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content={site.seo.socialTitle}>
+  <meta name="twitter:title" content={site.seo.title}>
   <meta name="twitter:description" content={site.description}>
   <meta name="twitter:image" content={site.images.social}>
   {@html `<script type="application/ld+json">${site.documents.structuredData}</script>`}
