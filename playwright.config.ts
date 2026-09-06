@@ -1,6 +1,6 @@
 import { defineConfig, devices } from '@playwright/test'
 
-const port = 51_823
+const port = 24_173
 
 export default defineConfig({
   testDir: './tests/e2e',
