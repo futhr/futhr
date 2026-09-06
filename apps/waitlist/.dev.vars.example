@@ -10,4 +10,7 @@ EMAIL_DIGEST_KEY=ZGlnZXN0LWtleS1kaWdlc3Qta2V5LWRpZ2VzdC1rZXk=
 # Admin Worker (wrangler.admin.toml); also needs EMAIL_KEY_VERSION, EMAIL_KEY_V1, and EMAIL_DIGEST_KEY
 ACCESS_TEAM_DOMAIN=example.cloudflareaccess.com
 ACCESS_AUDIENCE=replace-with-the-access-application-aud-tag
-ADMIN_BRAND_GRANTS={"maintainer@example.com":["*"],"service-token-client-id":["rivure"]}
+ADMIN_BRAND_GRANTS={"maintainer@example.com":["*"],"operator-service-token-id":["rivure"]}
+
+# Optional AI/reviewer token: inbox metadata only. Never also grant it operator access.
+ADMIN_REVIEWER_BRAND_GRANTS={"reviewer-service-token-id":["rivure"]}

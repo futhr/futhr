@@ -8,6 +8,9 @@ const strings = {
   skipToForm: 'Skip to the form',
   form: {
     heading: 'Get notified',
+    consent: 'Joining is optional. Read the',
+    privacyNotice: 'privacy notice',
+    withdrawAnytime: 'at any time.',
     purpose: (brand: Brand) =>
       `Leave your email and hear from ${brand.name} when there is something to announce. Nothing before that.`,
     email: 'Email address',
@@ -18,6 +21,22 @@ const strings = {
     sent: 'Nothing is sent until there is something to announce.',
     invalidEmail: 'Enter a valid email address.',
     rateLimited: 'Too many attempts from this connection. Try again in a minute.'
+  },
+  withdraw: {
+    link: 'Withdraw',
+    title: (brand: Brand) => `Withdraw — ${brand.name} waitlist`,
+    lede: 'Request removal from the waitlist.',
+    purpose: (brand: Brand) =>
+      `Enter the address you used for ${brand.name}. Requests are handled manually; a request alone does not delete an address.`,
+    alternative: 'You can also request withdrawal or exercise your data rights by emailing',
+    form: {
+      heading: 'Request withdrawal',
+      submit: 'Request removal',
+      sentHeading: 'Request received',
+      sent: 'If this address is on the list, the request will be reviewed promptly. We may contact that address to check that the request is yours.',
+      unavailable:
+        'The request could not be recorded. Please try again or use the email address below.'
+    }
   },
   notFound: {
     title: (brand: Brand) => `Not found — ${brand.name}`,

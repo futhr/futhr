@@ -43,6 +43,7 @@ export default defineConfig({
                 WAITLIST_ENVIRONMENT: 'test',
                 ACCESS_TEAM_DOMAIN: 'example.cloudflareaccess.com',
                 ACCESS_AUDIENCE: 'test-audience',
+                ADMIN_REVIEWER_BRAND_GRANTS: JSON.stringify({ 'review-bot': ['rivure'] }),
                 ADMIN_BRAND_GRANTS: JSON.stringify({
                   'owner@example.com': ['*'],
                   'rivure-bot': ['rivure']

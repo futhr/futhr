@@ -1,5 +1,6 @@
 <script lang="ts">
   import type { Component } from 'svelte'
+  import { controller } from '$lib/brands/controller'
   import { privacyNotice } from '$lib/brands/privacy'
   import { strings } from '$lib/brands/strings'
   import Page from '$lib/components/page.svelte'
@@ -22,5 +23,13 @@
     {#each paragraphs as paragraph (paragraph)}
       <p class="m-0">{paragraph}</p>
     {/each}
+    <p class="m-0">
+      <a href="/withdraw" class="text-paper underline underline-offset-4">{strings.withdraw.link}</a
+      >.
+      {strings.withdraw.alternative}
+      <a href={`mailto:${controller.contact}`} class="text-paper underline underline-offset-4"
+        >{controller.contact}</a
+      >.
+    </p>
   </article>
 </Page>

@@ -64,6 +64,11 @@
       class="font-bold text-paper/80 no-underline hover:text-signal-light focus-visible:text-signal-light"
       >{strings.footer.privacy}</a
     >
+    <a
+      href="/withdraw"
+      class="font-bold text-paper/80 no-underline hover:text-signal-light focus-visible:text-signal-light"
+      >{strings.withdraw.link}</a
+    >
     <span>{brand.name} · {year}</span>
   </footer>
 </div>

@@ -15,7 +15,8 @@ const multipleExportExceptions = new Set([
   'src/routes/robots.txt/+server.ts',
   'src/routes/sitemap.xml/+server.ts',
   'apps/waitlist/src/hooks.server.ts',
-  'apps/waitlist/src/routes/brands/[brand=brand]/+page.server.ts'
+  'apps/waitlist/src/routes/brands/[brand=brand]/+page.server.ts',
+  'apps/waitlist/src/routes/brands/[brand=brand]/withdraw/+page.server.ts'
 ])
 
 const collectSourceFiles = async (directory: string): Promise<string[]> => {

@@ -12,6 +12,7 @@ beforeAll(async () => {
 // Rate-limit counters cannot be reset; tests vary the client.
 beforeEach(async () => {
   await environment.DB.batch([
+    environment.DB.prepare('DELETE FROM withdrawal_requests'),
     environment.DB.prepare('DELETE FROM subscriptions'),
     environment.DB.prepare('DELETE FROM audit_log')
   ])

@@ -4,6 +4,7 @@ import type { AdminEnv } from '$lib/server/admin/env'
 import { grants } from '$lib/server/admin/grants'
 import { adminResponses } from '$lib/server/admin/responses'
 import { adminStore } from '$lib/server/admin/store'
+import { withdrawalRoutes } from '$lib/server/admin/withdrawal-routes'
 import { vault } from '$lib/server/crypto'
 import { secrets } from '$lib/server/secrets'
 import type { SubscriptionRow } from '$lib/server/subscription-row'
@@ -34,7 +35,8 @@ const authenticate = async (request: Request, env: AdminEnv): Promise<AdminActor
   return verified
     ? {
         identity: verified.identity,
-        grants: grants.parse(env.ADMIN_BRAND_GRANTS, verified.identity)
+        grants: grants.parse(env.ADMIN_BRAND_GRANTS, verified.identity),
+        reviewGrants: grants.parse(env.ADMIN_REVIEWER_BRAND_GRANTS ?? '{}', verified.identity)
       }
     : null
 }
@@ -94,9 +96,12 @@ const deleteSubscription = async (call: AdminCall, brand: Brand, id: string): Pr
 
 const brandRoutes = (call: AdminCall): Reply => {
   const [, , brandId, collection, id] = call.segments
-  const brand = grants.brandFor(call.actor, brandId)
+  const brand = grants.brandFor(call.actor, brandId, collection === 'withdrawals')
   if (!brand) {
     return problem(status.forbidden, 'brand_not_permitted')
+  }
+  if (collection === 'withdrawals') {
+    return withdrawalRoutes({ ...call, brandId: brand.id })
   }
   if (collection !== 'subscriptions') {
     return notFound()

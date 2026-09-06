@@ -15,12 +15,23 @@ const parse = (raw: string, identity: string): ReadonlySet<string> => {
 }
 
 const allowedBrands = (actor: AdminActor): Brand[] =>
-  Object.values(brands).filter((brand) => actor.grants.has('*') || actor.grants.has(brand.id))
+  Object.values(brands).filter(
+    (brand) =>
+      actor.grants.has('*') ||
+      actor.grants.has(brand.id) ||
+      actor.reviewGrants.has('*') ||
+      actor.reviewGrants.has(brand.id)
+  )
 
 /** The brand for a path segment, if it exists and the actor may touch it. */
-const brandFor = (actor: AdminActor, id: string | undefined): Brand | null => {
+const brandFor = (actor: AdminActor, id: string | undefined, review = false): Brand | null => {
   const brand = id && Object.hasOwn(brands, id) ? brands[id as BrandId] : null
-  return brand && (actor.grants.has('*') || actor.grants.has(brand.id)) ? brand : null
+  return brand &&
+    (actor.grants.has('*') ||
+      actor.grants.has(brand.id) ||
+      (review && (actor.reviewGrants.has('*') || actor.reviewGrants.has(brand.id))))
+    ? brand
+    : null
 }
 
 const grants = { parse, allowedBrands, brandFor } as const

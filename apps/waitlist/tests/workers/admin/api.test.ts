@@ -1,6 +1,7 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import admin from '../../../src/admin-worker.ts'
 import { vault } from '../../../src/lib/server/crypto.ts'
+import { requestWithdrawal } from '../../../src/lib/server/request-store.ts'
 import { localSecrets } from '../../local-secrets.ts'
 import { environment } from '../environment.ts'
 
@@ -261,4 +262,132 @@ it('rolls back deletion when its audit record cannot be written', async () => {
   } finally {
     await environment.DB.exec('DROP TRIGGER reject_audit')
   }
+})
+
+const queue = async (email = 'owner@example.com') => {
+  await requestWithdrawal(
+    environment.DB,
+    'rivure',
+    await vault.hmac(`rivure\n${email}`, environment.EMAIL_DIGEST_KEY)
+  )
+  return (await environment.DB.prepare(
+    "SELECT id FROM withdrawal_requests WHERE brand_id = 'rivure' AND status = 'pending'"
+  ).first<string>('id')) as string
+}
+const resolveRequest = (id: string, decision = 'mailbox_reply', identity = 'owner@example.com') =>
+  as(identity, `/v1/brands/rivure/withdrawals/${id}/resolve`, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ decision, case_reference: 'case-test-1' })
+  })
+
+it('gives AI reviewers only the brand-scoped inbox metadata', async () => {
+  stubCertificates()
+  await seed({ id: first, brandId: 'rivure', email: 'owner@example.com' })
+  const id = await queue()
+  const response = await as('review-bot', '/v1/brands/rivure/withdrawals')
+  expect(response.status).toBe(200)
+  const body = await response.text()
+  expect(body).toContain(id)
+  expect(body).not.toContain('email')
+  expect(body).not.toContain('owner@example.com')
+  expect(body).not.toContain('digest')
+  expect(body).not.toContain('ciphertext')
+  expect(body).not.toContain('case_reference')
+  expect((await as('review-bot', '/v1/brands/diggymon/withdrawals')).status).toBe(403)
+  expect((await as('review-bot', '/v1/brands/rivure/subscriptions')).status).toBe(403)
+  expect(
+    (await as('review-bot', `/v1/brands/rivure/subscriptions/${first}`, { method: 'DELETE' }))
+      .status
+  ).toBe(403)
+  expect((await as('review-bot', `/v1/brands/rivure/withdrawals/${id}`)).status).toBe(403)
+  expect((await resolveRequest(id, 'mailbox_reply', 'review-bot')).status).toBe(403)
+  const detail = await as('owner@example.com', `/v1/brands/rivure/withdrawals/${id}`)
+  expect(await detail.json()).toMatchObject({ email: 'owner@example.com', status: 'pending' })
+})
+
+it('requires an operator decision and closes deletion and audit together', async () => {
+  stubCertificates()
+  await seed({ id: first, brandId: 'rivure', email: 'owner@example.com' })
+  const id = await queue()
+  expect((await resolveRequest(id, 'ai_says_spam')).status).toBe(400)
+  expect((await resolveRequest(id, 'already_absent')).status).toBe(409)
+  expect((await resolveRequest(id)).status).toBe(204)
+  expect(await environment.DB.prepare('SELECT id FROM subscriptions').first()).toBeNull()
+  expect(
+    await environment.DB.prepare(
+      'SELECT status, decision, case_reference FROM withdrawal_requests WHERE id = ?1'
+    )
+      .bind(id)
+      .first()
+  ).toEqual({ status: 'completed', decision: 'mailbox_reply', case_reference: 'case-test-1' })
+  expect(await audit()).toEqual(['owner@example.com:withdrawal.complete'])
+  expect((await resolveRequest(id)).status).toBe(409)
+  expect(await audit()).toHaveLength(1)
+})
+
+it('paginates pending requests even when the previous page is resolved', async () => {
+  stubCertificates()
+  const ids = Array.from({ length: 51 }, () => crypto.randomUUID()).sort()
+  await environment.DB.batch(
+    ids.map((id) =>
+      environment.DB.prepare(
+        'INSERT INTO withdrawal_requests (id, brand_id, subscription_id, requested_at) VALUES (?1, ?2, ?3, ?4)'
+      ).bind(id, 'rivure', crypto.randomUUID(), '2026-09-06T10:00:00.000Z')
+    )
+  )
+  const page = (await (await as('review-bot', '/v1/brands/rivure/withdrawals')).json()) as {
+    items: Array<{ id: string }>
+    next_cursor: string
+  }
+  expect(page.items.map(({ id }) => id)).toEqual(ids.slice(0, 50))
+  expect(page.next_cursor).toBe(ids[49])
+  expect((await resolveRequest(page.next_cursor, 'already_absent')).status).toBe(204)
+  const rest = await as('review-bot', `/v1/brands/rivure/withdrawals?cursor=${page.next_cursor}`)
+  expect(await rest.json()).toMatchObject({ items: [{ id: ids[50] }], next_cursor: null })
+  expect((await as('review-bot', `/v1/brands/rivure/withdrawals?cursor=${first}`)).status).toBe(400)
+})
+
+it('never lets an old request erase a later re-subscription', async () => {
+  stubCertificates()
+  await seed({ id: first, brandId: 'rivure', email: 'owner@example.com' })
+  const id = await queue()
+  await environment.DB.prepare('DELETE FROM subscriptions WHERE id = ?1').bind(first).run()
+  await seed({ id: second, brandId: 'rivure', email: 'owner@example.com' })
+  expect((await resolveRequest(id, 'already_absent')).status).toBe(204)
+  expect(await environment.DB.prepare('SELECT id FROM subscriptions').first('id')).toBe(second)
+})
+
+it('keeps subscriptions and pending requests intact when the audit fails', async () => {
+  stubCertificates()
+  vi.spyOn(console, 'error').mockImplementation(() => undefined)
+  await seed({ id: first, brandId: 'rivure', email: 'owner@example.com' })
+  const id = await queue()
+  await environment.DB.exec(
+    "CREATE TRIGGER reject_withdrawal_audit BEFORE INSERT ON audit_log BEGIN SELECT RAISE(ABORT, 'unavailable'); END"
+  )
+  try {
+    expect((await resolveRequest(id)).status).toBe(500)
+    expect(await environment.DB.prepare('SELECT id FROM subscriptions').first('id')).toBe(first)
+    expect(
+      await environment.DB.prepare('SELECT status FROM withdrawal_requests WHERE id = ?1')
+        .bind(id)
+        .first('status')
+    ).toBe('pending')
+  } finally {
+    await environment.DB.exec('DROP TRIGGER reject_withdrawal_audit')
+  }
+})
+
+it('records an operator dismissal without deleting the subscription', async () => {
+  stubCertificates()
+  await seed({ id: first, brandId: 'rivure', email: 'owner@example.com' })
+  const id = await queue()
+  expect((await resolveRequest(id, 'not_requester')).status).toBe(204)
+  expect(await environment.DB.prepare('SELECT id FROM subscriptions').first('id')).toBe(first)
+  expect(
+    await environment.DB.prepare('SELECT status FROM withdrawal_requests WHERE id = ?1')
+      .bind(id)
+      .first('status')
+  ).toBe('dismissed')
 })
