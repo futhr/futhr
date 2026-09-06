@@ -1,0 +1,8 @@
+{
+  // Vite loads the nearest tsconfig that includes a file. The Workers tests are
+  // not part of ../../tsconfig.json, so without this file the lookup climbs to
+  // the repository root, whose tsconfig extends a generated file the waitlist
+  // checks never create.
+  "extends": "../../tsconfig.worker.json",
+  "include": ["./**/*.ts"]
+}
