@@ -20,15 +20,15 @@ with the application that uses it. Tests and formal checks establish specific
 properties within that boundary; a consuming product still needs its own
 validation.
 
-## The work
+## Projects
 
 - **Elixir and OTP:** application libraries, agent security, and Web of Things
   infrastructure. Each package documents its runtime and supervision needs.
 - **Ruby and Solidus:** payment and shipping extensions for existing shops.
 - **Rust:** NUIF research into interface interchange and measurable conversion
   loss.
-- **Ventures and research:** Refpath, Rivure, Reloved, Orvane, Diggymon, and Äger.
-  The showcase describes their direction; it does not offer released products.
+- **Ventures:** Refpath, Rivure, Diggymon, WoTEx, Orvane, Reloved, and Äger, all
+  in development and described as direction rather than released products.
 
 ## Method
 
