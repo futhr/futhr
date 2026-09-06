@@ -5,6 +5,8 @@ boundaries, and checking whether it works still take judgement. The work here
 starts with those questions. Agents help with implementation; architecture,
 review, and release decisions remain human responsibilities.
 
+*Fast is now table stakes. Fast and correct is the edge.*
+
 ## Thesis
 
 Trust, interoperability, and unit economics shape the architecture. A model
