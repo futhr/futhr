@@ -4,7 +4,9 @@ group: Venture
 title: Rivure
 lede: Embedded billing infrastructure that keeps product state and financial state in one transaction.
 repositories: []
-links: []
+links:
+  - label: Visit Rivure
+    href: https://rivure.com
 ---
 
 A headless billing engine for Elixir products that cannot afford drift between what the application believes and what the ledger says. External billing APIs push core commercial truth across a network boundary and leave teams with duplicate models and permanent reconciliation work. **Rivure** keeps subscriptions, usage, invoices, wallets, payments, and webhooks inside the host application's own data and transaction model, with provider effects handled as recoverable operations.

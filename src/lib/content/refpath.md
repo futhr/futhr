@@ -4,7 +4,9 @@ group: Venture
 title: Refpath
 lede: Open execution infrastructure for autonomous software that has to finish real work.
 repositories: []
-links: []
+links:
+  - label: Visit Refpath
+    href: https://refpath.io
 ---
 
 An agent runtime that sits between foundation models and production systems. Model access is becoming interchangeable; what stays scattered across every serious deployment is the hard part: durable execution, policy, budgets, tool authority, recovery, and evidence. **Refpath** consolidates those responsibilities into one execution substrate with a public core, a runnable worker, versioned integrations, declarative packs, and executable examples, so a run is a durable, inspectable record rather than a transcript.

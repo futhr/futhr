@@ -38,9 +38,11 @@ changing the claim.
 - Public repositories link to GitHub. Published Hex packages also link to HexDocs.
   A project without a published package gets no documentation link.
 - Venture entries link only to the public root domain or waitlist page, never
-  to GitHub, HexDocs, or a private repository. If no public domain resolves, the
-  entry has no link.
-- Never link to a page that would 404 or that reveals private source.
+  to GitHub, HexDocs, or a private repository. Keep configured venture links
+  while their servers and DNS are being set up. Timeouts or pending deployment
+  are not grounds to remove approved destinations.
+- Report broken destinations for review; do not remove approved links based only
+  on a failed availability check. Never link to private source.
 
 ## Disclosure limits
 
@@ -60,6 +62,6 @@ changing the claim.
 
 1. Ingress is one sentence and reads as the pitch on its own.
 2. Description ends with a one-line italic punchline that repeats nothing above it.
-3. Links obey the link rules and resolve.
+3. Links obey the link rules; report availability issues separately from copy edits.
 4. `pnpm test:unit` passes; the content loader validates frontmatter and order.
 5. Reread once for AI tells and cut them.

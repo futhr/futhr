@@ -4,7 +4,9 @@ group: Venture
 title: Orvane
 lede: Independent research on the failure boundaries of standards-based connected systems.
 repositories: []
-links: []
+links:
+  - label: Visit Orvane
+    href: https://orvane.io
 ---
 
 A research lab examining what happens when connected-system standards meet unreliable networks, contested timing, incomplete state, and real device behavior. **Orvane** centers on dependable interaction, explicit failure boundaries, and methods that can be reproduced outside a diagram. Its public surface is deliberately narrow: reviewed experiments, selected findings, standards notes, and independent research releases.
