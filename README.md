@@ -28,7 +28,7 @@ validation.
 - **Rust:** NUIF research into interface interchange and measurable conversion
   loss.
 - **Ventures:** Refpath, Rivure, Diggymon, WoTEx, Orvane, Reloved, and Äger, all
-  in development and described as direction rather than released products.
+  in development and described as direction rather than released solutions.
 
 ## Method
 
