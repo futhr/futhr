@@ -5,7 +5,8 @@ import { build, files, prerendered, version } from '$service-worker'
 
 const successfulStatus = 200
 const serviceWorker = globalThis as unknown as ServiceWorkerGlobalScope
-const cacheName = `futhr-${version}`
+const cachePrefix = 'futhr-'
+const cacheName = `${cachePrefix}${version}`
 const assets = [...build, ...files, ...prerendered]
 // Hashed build output never changes under the same URL, so it is safe to serve
 // from the cache first. Everything else (HTML, generated documents, icons) is
@@ -21,7 +22,11 @@ const install = async (): Promise<void> => {
 
 const activate = async (): Promise<void> => {
   const keys = await caches.keys()
-  await Promise.all(keys.filter((key) => key !== cacheName).map((key) => caches.delete(key)))
+  await Promise.all(
+    keys
+      .filter((key) => key.startsWith(cachePrefix) && key !== cacheName)
+      .map((key) => caches.delete(key))
+  )
   await serviceWorker.clients.claim()
 }
 

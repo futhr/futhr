@@ -144,3 +144,19 @@ test('serves the prerendered page offline after service-worker installation', as
     page.getByRole('heading', { name: 'futhr:lab — selected work and research' })
   ).toBeAttached()
 })
+
+test('preserves other applications caches when a service worker activates', async ({ browser }) => {
+  const context = await browser.newContext()
+  const page = await context.newPage()
+  await context.route('**/service-worker.js', async (route) => {
+    await page.evaluate(async () => {
+      const cache = await caches.open('another-app')
+      await cache.put('/retained', new Response('keep'))
+    })
+    await route.continue()
+  })
+  await page.goto(test.info().project.use.baseURL ?? '')
+  await page.evaluate(() => navigator.serviceWorker.ready)
+  expect(await page.evaluate(() => caches.has('another-app'))).toBe(true)
+  await context.close()
+})
