@@ -1,3 +1,4 @@
+import { entryText } from '$lib/entry-text'
 import type { ShowcaseEntry } from '$lib/types/showcase-entry'
 
 interface ShowcaseToolHost {
@@ -11,27 +12,14 @@ const text = (value: string): ModelContextToolResult => ({
   content: [{ type: 'text', text: value }]
 })
 const failure = (value: string): ModelContextToolResult => ({ ...text(value), isError: true })
-const plainTitle = (item: ShowcaseEntry) => item.title.replaceAll('­', '')
 
 const summary = (item: ShowcaseEntry) => ({
   slug: item.slug,
   group: item.group,
-  title: plainTitle(item),
+  title: entryText.plainTitle(item),
   lede: item.lede,
   links: item.links
 })
-
-const markdown = (item: ShowcaseEntry) =>
-  [
-    `# ${plainTitle(item)}`,
-    '',
-    `> ${item.lede}`,
-    '',
-    `- Group: ${item.group}`,
-    ...item.links.map((link) => `- ${link.label}: ${link.href}`),
-    '',
-    item.body
-  ].join('\n')
 
 const slugSchema = (items: readonly ShowcaseEntry[]) => ({
   type: 'object',
@@ -79,7 +67,7 @@ const registerShowcaseTools = ({ items, open }: ShowcaseToolHost): (() => void) 
           return failure(`Unknown slug. Valid slugs: ${items.map(({ slug }) => slug).join(', ')}`)
         }
         open(item.slug)
-        return text(`Opened ${plainTitle(item)}.`)
+        return text(`Opened ${entryText.plainTitle(item)}.`)
       }
     },
     {
@@ -89,7 +77,9 @@ const registerShowcaseTools = ({ items, open }: ShowcaseToolHost): (() => void) 
       inputSchema: slugSchema(items),
       execute: (input) => {
         const item = find(input)
-        return item ? text(markdown(item)) : failure('Unknown slug. Call list-work first.')
+        return item
+          ? text(entryText.markdown(item))
+          : failure('Unknown slug. Call list-work first.')
       }
     }
   ]
