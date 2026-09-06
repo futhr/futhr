@@ -18,7 +18,6 @@
   let article = $state<HTMLElement>()
   let renderedOpen: boolean | undefined
   let previousHeight: number | undefined
-  let animation: Animation | undefined
 
   // Measure the row before Svelte applies the new state, then animate the
   // height from the previous value to the new one so both the headline reveal
@@ -38,18 +37,21 @@
       return
     }
     renderedOpen = isOpen
-    animation?.cancel()
     const to = element.getBoundingClientRect().height
     if (from === to || globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       return
     }
 
     element.style.overflow = 'hidden'
-    animation = element.animate([{ height: `${from}px` }, { height: `${to}px` }], {
+    const animation = element.animate([{ height: `${from}px` }, { height: `${to}px` }], {
       duration: foldMotion.duration,
       easing: foldMotion.easing
     })
     animation.onfinish = () => {
+      element.style.overflow = ''
+    }
+    return () => {
+      animation.cancel()
       element.style.overflow = ''
     }
   })

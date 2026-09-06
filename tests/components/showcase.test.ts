@@ -1,7 +1,9 @@
-import { expect, test, vi } from 'vitest'
+import { afterEach, expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-svelte'
 import Showcase from '$lib/components/showcase.svelte'
 import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+
+afterEach(() => vi.restoreAllMocks())
 
 const items: ShowcaseEntry[] = [
   {
@@ -81,9 +83,9 @@ test('animates the closing and opening rows together, then settles', async () =>
 })
 
 test('applies the final state without animating under reduced motion', async () => {
-  const matchMedia = vi
-    .spyOn(globalThis, 'matchMedia')
-    .mockImplementation((query) => ({ matches: query.includes('reduce') }) as MediaQueryList)
+  vi.spyOn(globalThis, 'matchMedia').mockImplementation(
+    (query) => ({ matches: query.includes('reduce') }) as MediaQueryList
+  )
   const screen = await render(Showcase, { items: rows })
   const nuif = screen.getByRole('button', { name: 'Rust & Research NUIF' })
   const nuifRow = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
@@ -92,7 +94,6 @@ test('applies the final state without animating under reduced motion', async () 
 
   await expect.element(nuif).toHaveAttribute('aria-expanded', 'true')
   expect(nuifRow.getAnimations()).toHaveLength(0)
-  matchMedia.mockRestore()
 })
 
 test('renders an empty collection without a disclosure', async () => {
@@ -100,4 +101,15 @@ test('renders an empty collection without a disclosure', async () => {
 
   await expect.element(screen.getByRole('region', { name: 'Selected work' })).toBeVisible()
   expect(screen.container.querySelectorAll('article')).toHaveLength(0)
+})
+
+test('cleans up an interrupted row animation on unmount', async () => {
+  const screen = await render(Showcase, { items: rows })
+  await screen.getByRole('button', { name: 'Rust & Research NUIF' }).click()
+  const row = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
+  const [animation] = row.getAnimations()
+  expect(animation).toBeDefined()
+  await screen.unmount()
+  expect(animation?.playState).toBe('idle')
+  expect(row.style.overflow).toBe('')
 })

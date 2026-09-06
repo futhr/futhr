@@ -3,7 +3,7 @@ import type { ShowcaseEntry } from '$lib/types/showcase-entry'
 
 interface ShowcaseToolHost {
   items: readonly ShowcaseEntry[]
-  open: (slug: string) => void
+  open: (slug: string) => void | Promise<void>
 }
 
 const noop = () => undefined
@@ -61,12 +61,12 @@ const registerShowcaseTools = ({ items, open }: ShowcaseToolHost): (() => void) 
       description:
         'Expand one entry on the page so the reader sees its full description, and scroll it into view.',
       inputSchema: slugSchema(items),
-      execute: (input) => {
+      execute: async (input) => {
         const item = find(input)
         if (!item) {
           return failure(`Unknown slug. Valid slugs: ${items.map(({ slug }) => slug).join(', ')}`)
         }
-        open(item.slug)
+        await open(item.slug)
         return text(`Opened ${entryText.plainTitle(item)}.`)
       }
     },

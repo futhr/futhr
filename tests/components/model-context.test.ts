@@ -59,6 +59,11 @@ test('registers list, open, and get tools when the browser offers a model contex
     .element(screen.getByRole('button', { name: 'Elixir & OTP SigilGuard' }))
     .toHaveAttribute('aria-expanded', 'true')
 
+  await tools[1]?.execute({ slug: 'sigil-guard' })
+  await expect
+    .element(screen.getByRole('button', { name: 'Elixir & OTP SigilGuard' }))
+    .toHaveAttribute('aria-expanded', 'true')
+
   const missing = await tools[1]?.execute({ slug: 'nope' })
   expect(missing?.isError).toBe(true)
 
