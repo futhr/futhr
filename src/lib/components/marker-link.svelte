@@ -3,7 +3,8 @@
 
   interface Props {
     href: string
-    label: string
+    /** Accessible name when the visible text is not descriptive on its own. */
+    label?: string
     seed?: number
     children: Snippet
   }
@@ -32,7 +33,6 @@
   class="group/link relative isolate inline-block px-[0.3em] py-[0.15em] font-semibold text-inherit no-underline"
   target="_blank"
   rel="noopener noreferrer"
-  onclick={(event) => event.stopPropagation()}
 >
   <svg
     viewBox="0 0 200 20"

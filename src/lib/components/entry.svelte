@@ -73,12 +73,12 @@
       onclick={onToggle}
     >
       <span
-        class="px-(--gutter) pt-[calc(var(--fold-inset)-0.15em)] text-(length:--label-size) leading-[1.1] font-extrabold tracking-[0.06em] uppercase"
+        class="px-(--gutter) pt-[calc(var(--fold-inset)-0.15em)] text-(length:--label-size) leading-[1.1] font-extrabold tracking-[0.06em] uppercase @max-3xl:absolute @max-3xl:top-2 @max-3xl:left-0 @max-3xl:pt-0"
         >{divider ? item.group : ''}</span
       >
       <span
         lang={site.language}
-        class="min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) text-(length:--headline-size) leading-[0.75] font-black tracking-[-0.04em] hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5 @max-3xl:pt-1"
+        class="min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) text-(length:--headline-size) leading-[0.75] font-black tracking-[-0.04em] hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5"
         >{item.title}</span
       >
     </button>
@@ -101,7 +101,7 @@
         {#if item.links.length}
           <div class="flex flex-wrap gap-x-6 gap-y-2 text-(length:--body-size)">
             {#each item.links as link, linkIndex (link.href)}
-              <MarkerLink href={link.href} label={link.label} seed={index * 7 + linkIndex * 13 + 1}>
+              <MarkerLink href={link.href} seed={index * 7 + linkIndex * 13 + 1}>
                 {link.label}
               </MarkerLink>
             {/each}

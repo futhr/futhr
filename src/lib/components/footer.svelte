@@ -12,7 +12,7 @@
   <div
     class="footer-grid grid min-w-0 grid-cols-[27.5fr_32.1fr_40.4fr] items-start gap-y-12 px-(--gutter) pt-6 pb-10 @max-5xl:grid-cols-[27.5fr_72.5fr] @max-3xl:grid-cols-1 @max-3xl:px-5 @max-3xl:pb-12"
   >
-    <div class="flex flex-col">
+    <div class="flex flex-col @max-3xl:order-last">
       <div
         class="flex items-start gap-3 text-xl leading-5.5 font-bold whitespace-nowrap [&>svg]:-mt-1.25"
       >
@@ -24,7 +24,7 @@
         class="mt-9 flex items-center gap-3.5 [&_a]:grid [&_a]:size-6 [&_a]:place-items-center [&_a]:text-paper [&_a]:opacity-85 [&_a]:transition-[color,opacity] [&_a]:duration-200 [&_a:hover]:text-signal [&_a:hover]:opacity-100 [&_a:focus-visible]:text-signal [&_a:focus-visible]:opacity-100 [&_svg]:size-4.5 [&_svg]:fill-current"
         aria-label={site.ui.socialNavigation}
       >
-        <a href={site.links.mastodon} aria-label="Mastodon" title="Mastodon">
+        <a href={site.links.mastodon} rel="me" aria-label="Mastodon" title="Mastodon">
           <Mastodon />
         </a>
         <a href={site.links.bluesky} aria-label="Bluesky" title="Bluesky">
@@ -46,7 +46,7 @@
     </div>
 
     <nav
-      class="grid grid-cols-[32.4%_auto] justify-start @max-3xl:grid-cols-[minmax(0,7rem)_auto] [&_h2]:mt-0 [&_h2]:mb-4.5 [&_h2]:text-xl [&_h2]:leading-5.5 [&_h2]:font-bold"
+      class="grid grid-cols-[32.4%_auto] justify-start @max-3xl:grid-cols-2 [&_h2]:mt-0 [&_h2]:mb-4.5 [&_h2]:text-xl [&_h2]:leading-5.5 [&_h2]:font-bold"
       aria-label={site.ui.footerNavigation}
     >
       <div>

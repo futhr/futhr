@@ -27,22 +27,18 @@
     }
   }
 
-  // Height of a collapsed row: any closed row that is not mid-animation, or a
-  // probe placed inside a row container so the container tokens apply.
-  const foldHeight = (section: HTMLElement, row: HTMLElement) => {
-    const settled = [...section.querySelectorAll<HTMLElement>('article[data-state="closed"]')].find(
-      (article) => article.getAnimations().length === 0
-    )
-    if (settled) {
-      return settled.getBoundingClientRect().height
-    }
-    const probe = document.createElement('div')
-    probe.className = 'fold'
-    probe.style.height = 'var(--fold-height)'
-    row.parentElement?.append(probe)
-    const { height } = probe.getBoundingClientRect()
-    probe.remove()
-    return height
+  // The height a row will have once it has settled. A closed row already has
+  // it; the row that is closing right now is mid-animation, and its last
+  // keyframe is the height it is heading for. Nothing here assumes the rows
+  // match, so the tokens can change per container without touching this.
+  const noKeyframe: Partial<ComputedKeyframe> = {}
+  const settledHeight = (article: HTMLElement) => {
+    const effect = article.getAnimations()[0]?.effect
+    const keyframe = effect instanceof KeyframeEffect ? effect.getKeyframes().at(-1) : undefined
+    const { height } = keyframe ?? noKeyframe
+    return typeof height === 'string'
+      ? Number.parseFloat(height)
+      : article.getBoundingClientRect().height
   }
 
   // The rows animate their heights on one curve. Driving the scroll position on
@@ -57,7 +53,10 @@
       return
     }
     const sectionTop = section.getBoundingClientRect().top + globalThis.scrollY
-    const target = Math.round(sectionTop + index * foldHeight(section, row))
+    const above = [...section.querySelectorAll<HTMLElement>('article')].slice(0, index)
+    const target = Math.round(
+      above.reduce((sum, article) => sum + settledHeight(article), sectionTop)
+    )
     const from = globalThis.scrollY
     if (from === target) {
       return

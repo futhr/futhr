@@ -9,7 +9,6 @@
   --color-signal: var(--brand);
   --font-display: "Archivo Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-system: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --ease-fold: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /*
@@ -20,9 +19,15 @@
  *
  *   gutter        36px   outer padding for labels and the footer
  *   column        412px  left column; headlines, ingress and footer nav start here
- *   fold-height   112px  height of a collapsed row
- *   fold-inset    39px   distance from a row top to the label and headline cap height
+ *   fold-height   127px  height of a collapsed row (reference 112px)
+ *   fold-inset    55px   distance from a row top to the label and headline cap height
+ *                        (reference 39px)
  *   headline      144px  row headline, line-height 0.75
+ *
+ * The inset and the fold height sit 16px above the reference so an accented
+ * title such as Äger clears the row edge: a diaeresis rises about 28px above
+ * the cap line at this size. Both moved together, so a collapsed row still
+ * shows the same 73px of every headline.
  *
  * The brand colour rotates by weekday. app.html sets `data-day` on <html>
  * before first paint (JavaScript order, 0 = Sunday). The seven values are
@@ -32,13 +37,12 @@
 :root {
   --gutter: clamp(1.25rem, 2.5cqw, 2.5rem);
   --column: max(200px, 28.6cqw);
-  --fold-height: clamp(6rem, 7.75cqw, 12rem);
-  --fold-inset: clamp(1.25rem, 2.7cqw, 3.5rem);
+  --fold-height: clamp(6.75rem, 8.85cqw, 13.5rem);
+  --fold-inset: clamp(1.5rem, 3.8cqw, 4.75rem);
   --headline-size: clamp(3.5rem, 10cqw, 15rem);
   --label-size: clamp(0.75rem, 0.97cqw, 1rem);
   --lede-size: clamp(1.25rem, 2cqw, 2rem);
   --body-size: clamp(1rem, 1.15cqw, 1.25rem);
-  --duration-fold: 680ms;
   --brand-monday: #e4472b;
   --brand-tuesday: #cf7412;
   --brand-wednesday: #1f9470;
@@ -155,14 +159,17 @@ html[data-day="6"] {
 }
 
 /* Narrow containers. Rows and the footer read their tokens from the nearest
-   container, so the overrides sit on the elements inside it. */
-@container (max-width: 48rem) {
+   container, so the overrides sit on the elements inside it. A collapsed row
+   shows half the headline's em below the cap line, the same proportion as the
+   wide layout (72.6px of 144px), and the group label overlays the inset
+   instead of taking a line, so labelled and unlabelled rows are one height. */
+@container (width < 48rem) {
   .fold,
   .footer-grid {
     --gutter: 1.25rem;
     --column: max(92px, 28cqw);
-    --fold-height: clamp(3.75rem, 16.5cqw, 5.5rem);
-    --fold-inset: 1.25rem;
+    --fold-inset: 1.75rem;
+    --fold-height: calc(var(--fold-inset) + 0.5 * var(--headline-size));
     --headline-size: clamp(3rem, 15cqw, 5.5rem);
     --label-size: 0.72rem;
     --lede-size: 1.375rem;

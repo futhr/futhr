@@ -8,13 +8,13 @@
  * index 0.
  */
 const palette = [
-  { day: 'Sunday', short: 'Sun', name: 'Teal', hex: '#1b9a9a', rgb: '27 154 154' },
-  { day: 'Monday', short: 'Mon', name: 'Vermilion', hex: '#e4472b', rgb: '228 71 43' },
-  { day: 'Tuesday', short: 'Tue', name: 'Amber', hex: '#cf7412', rgb: '207 116 18' },
-  { day: 'Wednesday', short: 'Wed', name: 'Jade', hex: '#1f9470', rgb: '31 148 112' },
-  { day: 'Thursday', short: 'Thu', name: 'Azure', hex: '#2b7de0', rgb: '43 125 224' },
-  { day: 'Friday', short: 'Fri', name: 'Violet', hex: '#8f5cf5', rgb: '143 92 245' },
-  { day: 'Saturday', short: 'Sat', name: 'Magenta', hex: '#e0409a', rgb: '224 64 154' }
+  { day: 'Sunday', short: 'Sun', name: 'Teal', hex: '#1b9a9a' },
+  { day: 'Monday', short: 'Mon', name: 'Vermilion', hex: '#e4472b' },
+  { day: 'Tuesday', short: 'Tue', name: 'Amber', hex: '#cf7412' },
+  { day: 'Wednesday', short: 'Wed', name: 'Jade', hex: '#1f9470' },
+  { day: 'Thursday', short: 'Thu', name: 'Azure', hex: '#2b7de0' },
+  { day: 'Friday', short: 'Fri', name: 'Violet', hex: '#8f5cf5' },
+  { day: 'Saturday', short: 'Sat', name: 'Magenta', hex: '#e0409a' }
 ] as const
 
 export { palette }

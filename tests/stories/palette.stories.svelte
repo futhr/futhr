@@ -4,7 +4,10 @@
   import MarkerLink from '$lib/components/marker-link.svelte'
   import { palette } from '$lib/config/palette'
 
+  const hexPairs = /[0-9a-f]{2}/g
   const week = [...palette.slice(1), palette[0]]
+  const rgb = (hex: string) =>
+    (hex.match(hexPairs) ?? []).map((part) => Number.parseInt(part, 16)).join(', ')
 
   const { Story } = defineMeta({
     title: 'Brand/Weekly colours',
@@ -12,7 +15,7 @@
       docs: {
         description: {
           component:
-            'The brand colour changes with the weekday. Each cube shows the colour on ink and on paper next to a sample hover link, with its name, hex, and rgb values. The site selects the day before first paint through the data-day attribute on the root element.'
+            'The brand colour changes with the weekday. Each cube shows the colour on ink and on paper next to a sample hover link, with its name and hex value. The site selects the day before first paint through the data-day attribute on the root element.'
         }
       }
     }
@@ -51,7 +54,7 @@
           <div class="text-[13px] leading-[1.5]">
             <div class="font-bold">{entry.name}</div>
             <div class="text-muted">{entry.hex}</div>
-            <div class="text-muted">rgb({entry.rgb.replaceAll(' ', ', ')})</div>
+            <div class="text-muted">rgb({rgb(entry.hex)})</div>
           </div>
         </li>
       {/each}

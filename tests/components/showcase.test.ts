@@ -1,4 +1,4 @@
-import { expect, test } from 'vitest'
+import { expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-svelte'
 import Showcase from '$lib/components/showcase.svelte'
 import type { ShowcaseEntry } from '$lib/types/showcase-entry'
@@ -78,6 +78,21 @@ test('animates the closing and opening rows together, then settles', async () =>
   expect(thesisRow.getAnimations()).toHaveLength(0)
   expect(nuifRow.getAnimations()).toHaveLength(0)
   expect(nuifRow.style.overflow).toBe('')
+})
+
+test('applies the final state without animating under reduced motion', async () => {
+  const matchMedia = vi
+    .spyOn(globalThis, 'matchMedia')
+    .mockImplementation((query) => ({ matches: query.includes('reduce') }) as MediaQueryList)
+  const screen = await render(Showcase, { items: rows })
+  const nuif = screen.getByRole('button', { name: 'Rust & Research NUIF' })
+  const nuifRow = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
+
+  await nuif.click()
+
+  await expect.element(nuif).toHaveAttribute('aria-expanded', 'true')
+  expect(nuifRow.getAnimations()).toHaveLength(0)
+  matchMedia.mockRestore()
 })
 
 test('renders an empty collection without a disclosure', async () => {

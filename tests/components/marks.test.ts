@@ -33,7 +33,7 @@ test('renders the WoTEx library mark as an accessible image', async () => {
   await expect.element(screen.getByRole('img', { name: 'WoTEx mark' })).toBeVisible()
 })
 
-test('renders the complete gallery of extracted marks', async () => {
+test('renders every venture mark in footer order', async () => {
   const screen = await render(Marks)
 
   await Promise.all(

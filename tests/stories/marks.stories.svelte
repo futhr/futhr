@@ -14,7 +14,7 @@
       docs: {
         description: {
           component:
-            'The seven extracted venture marks, identified by project rather than by informal shape names. Each production SVG remains an independently reusable Svelte component.'
+            'The seven venture marks on ink, in footer order. Each is its own Svelte component drawn in currentColor.'
         }
       }
     }

@@ -17,7 +17,7 @@ const contrast = (a: string, b: string) => {
 }
 
 describe('weekly brand palette', () => {
-  it('covers the week in Date#getDay order with matching rgb values', () => {
+  it('covers the week in Date#getDay order', () => {
     expect(palette.map(({ short }) => short)).toEqual([
       'Sun',
       'Mon',
@@ -27,10 +27,8 @@ describe('weekly brand palette', () => {
       'Fri',
       'Sat'
     ])
-    for (const { hex, rgb } of palette) {
+    for (const { hex } of palette) {
       expect(hex).toMatch(hexPattern)
-      const channels = (hex.match(/[0-9a-f]{2}/g) ?? []).map((part) => Number.parseInt(part, 16))
-      expect(rgb).toBe(channels.join(' '))
     }
   })
 
