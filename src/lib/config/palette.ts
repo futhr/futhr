@@ -3,9 +3,9 @@
  * the `--brand` token in src/lib/styles/site.css, which app.html selects before
  * first paint by setting `data-day` on the root element.
  *
- * Each colour sits at a mid luminance so it reads as a hover and focus colour
- * on both ink and paper. Order follows JavaScript's `Date#getDay`, so Sunday is
- * index 0.
+ * The raw hues are decorative accents. Small text on ink uses the lighter
+ * signal-light token; text on paper keeps its ink colour. Order follows
+ * JavaScript's `Date#getDay`, so Sunday is index 0.
  */
 const palette = [
   { day: 'Sunday', short: 'Sun', name: 'Teal', hex: '#1b9a9a' },

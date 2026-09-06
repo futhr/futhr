@@ -6,9 +6,13 @@
   --color-paper: #dcdbd6;
   --color-ink: #1b1b1b;
   --color-muted: #9a9a94;
-  --color-signal: var(--brand);
   --font-display: "Archivo Variable", "Helvetica Neue", Helvetica, Arial, sans-serif;
   --font-system: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+@theme inline {
+  --color-signal: var(--brand);
+  --color-signal-light: color-mix(in srgb, var(--brand) 80%, var(--color-paper));
 }
 
 /*
@@ -101,7 +105,7 @@ html[data-day="6"] {
   }
 
   :focus-visible {
-    outline: 3px solid var(--color-signal);
+    outline: 3px solid currentColor;
     outline-offset: 4px;
   }
 }
@@ -154,7 +158,8 @@ html[data-day="6"] {
   }
 
   .showcase-copy a:hover {
-    color: var(--color-signal);
+    text-decoration-color: var(--brand);
+    text-decoration-thickness: 2px;
   }
 }
 

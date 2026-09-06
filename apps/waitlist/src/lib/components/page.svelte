@@ -61,7 +61,7 @@
   >
     <a
       href="/privacy"
-      class="font-bold text-paper/80 no-underline hover:text-signal focus-visible:text-signal"
+      class="font-bold text-paper/80 no-underline hover:text-signal-light focus-visible:text-signal-light"
       >{strings.footer.privacy}</a
     >
     <span>{brand.name} · {year}</span>

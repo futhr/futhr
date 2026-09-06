@@ -19,7 +19,7 @@
     {#if notice.back}
       <a
         href="/"
-        class="font-bold text-paper underline underline-offset-4 hover:text-signal focus-visible:text-signal"
+        class="font-bold text-paper underline underline-offset-4 hover:text-signal-light focus-visible:text-signal-light"
         >{notice.back}</a
       >
     {/if}

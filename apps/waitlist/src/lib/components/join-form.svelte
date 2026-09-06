@@ -19,7 +19,7 @@
 </script>
 
 {#if joined}
-  <div class="flex flex-col items-center gap-5">
+  <div role="status" class="flex flex-col items-center gap-5">
     <h2
       class="m-0 pl-[0.35em] text-(length:--label-size) leading-none font-extrabold tracking-[0.35em] uppercase"
     >
@@ -38,8 +38,11 @@
     use:enhance={() => {
       pending = true
       return async ({ update }) => {
-        await update()
-        pending = false
+        try {
+          await update({ reset: false })
+        } finally {
+          pending = false
+        }
       }
     }}
   >
@@ -68,10 +71,12 @@
         enterkeyhint="send"
         maxlength="254"
         placeholder={text.email}
+        aria-invalid={result?.error === 'invalid_email' || undefined}
+        aria-describedby={message ? 'join-form-error' : undefined}
         disabled={pending}
         class="h-14 min-w-0 grow border border-paper/25 bg-paper/5 px-4 text-(length:--body-size) text-paper outline-none placeholder:text-muted focus-visible:border-signal focus-visible:outline-none disabled:opacity-60"
       >
-      <!-- Bots fill every field; people never see this one, and the server drops the post if it is filled. -->
+      <!-- A hidden field catches bots that fill every input. -->
       <div class="hidden" aria-hidden="true">
         <label for="join-form-website">{text.trap}</label>
         <input id="join-form-website" name="website" type="text" tabindex="-1" autocomplete="off">
@@ -79,12 +84,16 @@
       <button
         type="submit"
         disabled={pending}
-        class="h-14 shrink-0 cursor-pointer border-0 bg-paper px-7 text-(length:--body-size) font-extrabold text-ink transition-colors duration-150 hover:bg-signal hover:text-paper focus-visible:bg-signal focus-visible:text-paper disabled:cursor-wait disabled:opacity-60 motion-reduce:transition-none"
+        class="h-14 shrink-0 cursor-pointer border-0 bg-paper px-7 text-(length:--body-size) font-extrabold text-ink transition-colors duration-150 hover:bg-signal-light focus-visible:bg-signal-light focus-visible:outline-paper disabled:cursor-wait disabled:opacity-60 motion-reduce:transition-none"
       >
         {pending ? text.submitting : text.submit}
       </button>
     </div>
-    <p role="alert" class="m-0 min-h-[1.5em] text-(length:--body-size) font-semibold text-signal">
+    <p
+      id="join-form-error"
+      role="alert"
+      class="m-0 min-h-[1.5em] text-(length:--body-size) font-semibold text-signal-light"
+    >
       {message}
     </p>
   </form>

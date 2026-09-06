@@ -21,7 +21,7 @@
       </div>
 
       <nav
-        class="mt-9 flex items-center gap-3.5 [&_a]:grid [&_a]:size-6 [&_a]:place-items-center [&_a]:text-paper [&_a]:opacity-85 [&_a]:transition-[color,opacity] [&_a]:duration-200 [&_a:hover]:text-signal [&_a:hover]:opacity-100 [&_a:focus-visible]:text-signal [&_a:focus-visible]:opacity-100 [&_svg]:size-4.5 [&_svg]:fill-current"
+        class="mt-9 flex items-center gap-3.5 [&_a]:grid [&_a]:size-6 [&_a]:place-items-center [&_a]:text-paper [&_a]:opacity-85 [&_a]:transition-[color,opacity] [&_a]:duration-200 [&_a:hover]:text-signal-light [&_a:hover]:opacity-100 [&_a:focus-visible]:text-signal-light [&_a:focus-visible]:opacity-100 [&_svg]:size-4.5 [&_svg]:fill-current"
         aria-label={site.ui.socialNavigation}
       >
         <a href={site.links.mastodon} rel="me" aria-label="Mastodon" title="Mastodon">
@@ -52,7 +52,7 @@
       <div>
         <h2>{site.ui.elsewhereHeading}</h2>
         <div
-          class="flex flex-col items-start text-[13px] leading-[1.5] font-bold [&>a]:py-1 [&>span]:py-1 [&_a]:text-paper [&_a]:no-underline [&_a:hover]:text-signal [&_a:focus-visible]:text-signal"
+          class="flex flex-col items-start text-[13px] leading-[1.5] font-bold [&>a]:py-1 [&>span]:py-1 [&_a]:text-paper [&_a]:no-underline [&_a:hover]:text-signal-light [&_a:focus-visible]:text-signal-light"
         >
           {#each site.footer.elsewhere as item (item.label)}
             {#if item.href}
@@ -66,7 +66,7 @@
       <div>
         <h2>{site.ui.agentsHeading}</h2>
         <div
-          class="flex flex-col items-start text-[13px] leading-[1.5] font-bold [&>a]:py-1 [&>span]:py-1 [&_a]:text-paper [&_a]:no-underline [&_a:hover]:text-signal [&_a:focus-visible]:text-signal"
+          class="flex flex-col items-start text-[13px] leading-[1.5] font-bold [&>a]:py-1 [&>span]:py-1 [&_a]:text-paper [&_a]:no-underline [&_a:hover]:text-signal-light [&_a:focus-visible]:text-signal-light"
         >
           {#each site.footer.agents as item (item.label)}
             <a href={item.href}>{item.label}</a>
