@@ -5,7 +5,7 @@ title: Diggymon
 lede: A local-first business platform for CGI creators, projects, and professional growth.
 repositories: []
 links:
-  - label: Visit Diggymon
+  - label: Join waitlist
     href: https://diggymon.com
 ---
 

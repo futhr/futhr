@@ -5,7 +5,7 @@ title: Orvane
 lede: Independent research on the failure boundaries of standards-based connected systems.
 repositories: []
 links:
-  - label: Visit Orvane
+  - label: Join waitlist
     href: https://orvane.io
 ---
 

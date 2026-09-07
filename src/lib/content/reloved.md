@@ -5,7 +5,7 @@ title: Reloved
 lede: Decentralized resale infrastructure that turns every household into an independent second-hand storefront.
 repositories: []
 links:
-  - label: Visit Reloved
+  - label: Join waitlist
     href: https://reloved.eco
 ---
 

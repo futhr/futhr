@@ -5,7 +5,7 @@ title: Refpath
 lede: Open execution infrastructure for autonomous software that has to finish real work.
 repositories: []
 links:
-  - label: Visit Refpath
+  - label: Join waitlist
     href: https://refpath.io
 ---
 

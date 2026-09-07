@@ -5,7 +5,7 @@ title: Rivure
 lede: Embedded billing infrastructure that keeps product state and financial state in one transaction.
 repositories: []
 links:
-  - label: Visit Rivure
+  - label: Join waitlist
     href: https://rivure.com
 ---
 
