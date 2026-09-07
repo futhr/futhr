@@ -18,7 +18,7 @@ WAITLIST_ENVIRONMENT = "production"
 [[d1_databases]]
 binding = "DB"
 database_name = "waitlist"
-database_id = "00000000-0000-0000-0000-000000000000"
+database_id = "5460764d-8c17-4c96-91df-2031567d51fb"
 migrations_dir = "migrations"
 
 [[routes]]

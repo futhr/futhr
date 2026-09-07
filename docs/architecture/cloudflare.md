@@ -1,8 +1,9 @@
 # Cloudflare deployment
 
-Checked against the repository on 6 September 2026. Configuration in Git
-records deployment intent; account settings, DNS, and deployed versions must
-be checked in Cloudflare before a release.
+Checked against the repository and Cloudflare account on 7 September 2026.
+Configuration in Git records deployment intent; registrar settings, mail DNS,
+Access identities, secret values, billing plans, and deployed versions still
+need an account-side check before a release.
 
 ## Current configuration
 
@@ -17,10 +18,28 @@ The showcase and Storybook serve static files. The waitlist public Worker
 renders pages and accepts forms; its asset binding serves hashed files and
 brand icons. The admin Worker lists records and resolves withdrawal requests. Neither sends email.
 
-The waitlist configs contain placeholder D1 identifiers. They declare ten
-public Custom Domains and `lists.futhr.io`, but that does not establish that
-those domains are provisioned. The Storybook config does not declare a custom
-domain; `ui.futhr.io` is an account-side setting to verify separately.
+The production waitlist configs bind the EU-jurisdiction `waitlist` D1 database.
+The local development environment retains a non-production placeholder ID because
+Wrangler uses a local database there. The configs declare ten public Custom
+Domains and `lists.futhr.io`, but that does not establish that those domains are
+provisioned. The Storybook config declares `ui.futhr.io` as a Custom Domain.
+
+## Live account status
+
+| Resource | Status on 7 September 2026 |
+| --- | --- |
+| Showcase | Production Pages deployment is healthy at `futhr.io`; the five venture links say “Join waitlist” |
+| `www.futhr.io` | Still reaches the previous Netlify site; it needs the redirect cutover below |
+| Storybook | Worker `futhr-ui` is deployed and `ui.futhr.io` is attached; the site sends `X-Robots-Tag: noindex, nofollow` |
+| D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
+| Waitlist Workers | `waitlist-web` and `waitlist-admin` are not deployed |
+| Venture zones | Not present in the Cloudflare account; their authoritative DNS remains Namecheap BasicDNS |
+| Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
+
+The authenticated Wrangler session can deploy Pages, Workers, and D1, but its
+OAuth grant cannot create zones, edit DNS, inspect billing, or administer
+Access. Those remaining account actions must be performed in the dashboard or
+with a separately scoped API token.
 
 ## Authentication
 
@@ -42,11 +61,11 @@ values. Production secrets are set separately for each Worker.
 The package [operating guide](../../apps/waitlist/README.md) lists secrets and
 API routes. Provisioning requires these steps:
 
-1. Create a D1 database with `pnpm --filter waitlist exec wrangler d1 create
-   waitlist --jurisdiction=eu`. Set its identifier in both waitlist configs,
-   then apply both committed migrations with `pnpm --filter waitlist exec wrangler d1 migrations apply
-   waitlist --remote`. EU jurisdiction controls database storage location;
-   Worker execution is a separate consideration.
+1. The EU-jurisdiction D1 database has been created, its identifier is set in
+   both production waitlist configs, and both committed migrations are applied.
+   Check for future pending migrations with `pnpm --filter waitlist exec
+   wrangler d1 migrations list waitlist --remote`. EU jurisdiction controls
+   database storage location; Worker execution is a separate consideration.
    [D1 location](https://developers.cloudflare.com/d1/configuration/data-location/)
 2. Create an Access application for `lists.futhr.io` before attaching that
    hostname. Configure the human identity policy and MFA requirement. Email
@@ -85,6 +104,79 @@ and web resolution after activation.
 [Namecheap nameservers](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/),
 [Hostinger mail records](https://www.hostinger.com/support/8671319-set-up-a-domain-for-hostinger-email-manually/)
 
+The public DNS baseline checked on 7 September 2026 is:
+
+- Every venture has `mx1.hostinger.com` priority 5 and
+  `mx2.hostinger.com` priority 10, apex SPF
+  `v=spf1 include:_spf.mail.hostinger.com ~all`, and the three
+  `hostingermail-{a,b,c}._domainkey` CNAMEs to the matching
+  `*.dkim.mail.hostinger.com` targets.
+- Rivure, Diggymon, Refpath, and Reloved use `_dmarc` value
+  `v=DMARC1; p=none`. Orvane uses
+  `v=DMARC1; p=none; rua=mailto:dmarc@orvane.io`.
+- Apex verification TXT values are `f232aadb745c3cb21b1c3ddd77dbf34b`
+  for Rivure, `973504e814120e5864a5dc380e809398` for Diggymon,
+  `a45887666e3ecb5cc9aaf12ba9689435` for Refpath, and
+  `8bb2b117678892e2e724be9c3a9a8bd0` for Reloved. Orvane has no
+  separate verification TXT record.
+- None of the five domains currently publishes a DS record. Still check the
+  registrar before cutover because a recently changed record may not appear in
+  every resolver cache immediately.
+
+### Remaining external cutover
+
+1. In Cloudflare, confirm the account is on **Workers Free**. A zone's “Free
+   Website” plan is separate and does not prove the Workers plan. Do not proceed
+   if Workers Paid is enabled without a new cost review.
+2. Fix `www.futhr.io` with **Rules > Bulk Redirects**. Create a `301` from
+   `https://www.futhr.io/` to `https://futhr.io/` with subpath matching,
+   preserved path suffix, and preserved query string. Replace the old Netlify
+   DNS record with a proxied `A` record named `www` whose address is
+   `192.0.2.1`. Verify a nested path and query, not only `/`.
+   [Pages www redirect](https://developers.cloudflare.com/pages/how-to/www-redirect/)
+3. Use **Account home > Domains > Onboard a domain** to add `rivure.com`,
+   `diggymon.com`, `refpath.io`, `reloved.eco`, and `orvane.io` as Free full
+   zones. Review the quick scan manually; it can miss uncommon records.
+   [Full zone setup](https://developers.cloudflare.com/dns/zone-setups/full-setup/setup/),
+   [quick-scan limits](https://developers.cloudflare.com/dns/zone-setups/reference/dns-quick-scan/)
+4. Before changing nameservers, compare each new Cloudflare zone with both the
+   Namecheap export and **Hostinger > Emails > Mailboxes > Domain settings**.
+   Preserve every current MX, SPF, DKIM, DMARC, and verification record; keep
+   mail records DNS-only. Account values shown by Hostinger take precedence
+   over the dated public baseline above.
+5. Remove the imported Namecheap parking `A` record at each venture apex before
+   deploying `waitlist-web`; the Worker Custom Domains will create their own
+   DNS records and certificates. There are currently no public `www` records,
+   and the Worker deployment will create those too.
+6. At Namecheap, check DNSSEC first. If a DS record is active, remove it and
+   wait for its TTL to expire before changing nameservers. Then choose
+   **Domain List > Manage > Nameservers > Custom DNS**, enter the two
+   nameservers assigned by that domain's Cloudflare zone, and save. Namecheap
+   does not copy DNS records during this change. Wait for every Cloudflare zone
+   to become Active, test web and mail, then enable Cloudflare DNSSEC and add
+   its new DS record at Namecheap.
+   [Cloudflare DNSSEC](https://developers.cloudflare.com/dns/dnssec/),
+   [Namecheap nameservers](https://www.namecheap.com/support/knowledgebase/article.aspx/767/10/how-to-change-dns-for-a-domain/)
+7. In Zero Trust, enable independent MFA, create a self-hosted public
+   application for `lists.futhr.io`, and attach an Allow policy restricted to
+   the exact operator/reviewer identities. Do not use an unrestricted
+   “Everyone” or login-method-only rule. Require independent MFA at the
+   application or policy level. Create a separate Service Auth policy only for
+   an automation that has its own service token.
+   [Access application](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/),
+   [independent MFA](https://developers.cloudflare.com/cloudflare-one/access-controls/access-settings/independent-mfa/),
+   [service tokens](https://developers.cloudflare.com/cloudflare-one/access-controls/service-credentials/service-tokens/)
+8. Record the Access team domain and application audience. Generate and store
+   the waitlist encryption and digest keys in the team's secret manager, then
+   set the runtime secrets listed in the package operating guide. The public
+   and admin Workers must receive the same active encryption and digest keys.
+   Fill the operator and reviewer grant maps with exact identities and brand
+   IDs. Setting a secret with `wrangler secret put` deploys a Worker version, so
+   do this only when the intended routing and Access protection are ready.
+9. Deploy `waitlist-admin` only after Access exists, then deploy
+   `waitlist-web` after all five venture zones are Active. Run every release
+   check and the legal receipt-to-resolution test before opening collection.
+
 ## Cost boundary
 
 The waitlists must use the Workers Free account plan and D1 Free for the intended
@@ -121,7 +213,7 @@ pnpm exec wrangler pages deploy build --project-name futhr
 pnpm storybook:deploy
 
 pnpm build:waitlist
-pnpm --filter waitlist exec wrangler deploy
+pnpm --filter waitlist exec wrangler deploy --env=""
 pnpm --filter waitlist exec wrangler deploy --config wrangler.admin.toml
 ```
 
@@ -133,13 +225,25 @@ These commands only bundle and validate the Worker deployment packages:
 
 ```sh
 pnpm exec wrangler deploy --config wrangler.storybook.toml --dry-run
-pnpm --filter waitlist exec wrangler deploy --dry-run
+pnpm --filter waitlist exec wrangler deploy --env="" --dry-run
 pnpm --filter waitlist exec wrangler deploy --config wrangler.admin.toml --dry-run
 ```
 
 CI runs tests and these three dry runs. It does not deploy. Any future deploy
 job must wait for both `verify` and `waitlist`, use the relevant package's
 config, and receive a token scoped to the resources it changes.
+
+The existing `futhr` Pages project uses Direct Upload and Cloudflare does not
+allow converting a Direct Upload project to Git integration. Automatic
+showcase deployments therefore require a CI job that runs the Pages deploy
+command above, or a separately tested Pages project followed by a domain
+cutover. Do not repeat the generic Workers import that failed at the workspace
+root. For Workers Builds, connect each existing Worker separately and use an
+explicit root and deploy command: `/` plus the Storybook config for `futhr-ui`,
+and `/apps/waitlist` plus the relevant public or admin config for each waitlist
+Worker. The Worker name must match the config's `name`.
+[Pages Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/),
+[Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
 
 ## Response headers
 
