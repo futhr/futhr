@@ -36,6 +36,7 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | --- | --- |
 | Showcase | Production Pages deployment `2515bacf` is live with Recetas, the eight-mark footer, and “Visit Reloved” |
 | Legacy domains | Bohwalli and Entvue apex and `www` hostnames permanently redirect to the equivalent path on `futhr.io` |
+| Bohwalli security | Host-only HSTS with a one-year maximum age, a TLS 1.2 minimum, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC are live and independently verified |
 | `www.futhr.io` | The redirect Worker returns `301` to the equivalent path and query on `futhr.io`; requests no longer reach the previous Netlify origin |
 | Storybook | Updated Worker `futhr-ui` is live on `ui.futhr.io`; noindex is verified, and both `workers.dev` and versioned previews are disabled |
 | D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
@@ -64,6 +65,30 @@ The restored WoTEx mail records are three DNS-only CNAMEs named
 `_dmarc` TXT `v=DMARC1; p=none` (TTL 3600). They were copied through the
 authenticated dashboard with explicit approval after MCP rejected writes,
 and verified on both authoritative nameservers. Existing MX/SPF were preserved.
+
+The Bohwalli Security Insights export from 8 September contained 11 rows but
+seven distinct conditions: the five SPF rows described one missing apex
+record. The zone now publishes Google Workspace SPF
+`v=spf1 include:_spf.google.com ~all` and `_dmarc` value
+`v=DMARC1; p=none`. Cloudflare serves a managed disclosure file at
+`/.well-known/security.txt` with `mailto:hi@futhr.io`, an apex canonical URL,
+English as the preferred language, and an 8 August 2027 expiry. The zone's
+minimum TLS version is 1.2; host-only HSTS uses a one-year maximum age and
+`nosniff`, without preload or `includeSubDomains`. Both apex and `www` return
+the header over HTTPS, and HTTP still reaches the Worker through an edge HTTPS
+upgrade.
+
+Bot Fight Mode and AI Labyrinth remain disabled deliberately. Bohwalli is a
+redirect-only zone with no application or form to protect; the free-plan bot
+control applies across the zone and can challenge legitimate automated
+clients, while AI Labyrinth would add decoy content to a response surface that
+has no content. These are optional configuration suggestions, not unresolved
+transport or mail defects.
+
+The stale `www.bohwalli.se` Netlify address was also replaced with proxied
+originless `A 192.0.2.1`. The redirect Worker still preserves path and query,
+so the change removes the dangling-origin finding without changing the public
+response. The apex CNAME remains unchanged.
 
 ## Authentication
 
@@ -155,15 +180,19 @@ The public DNS baseline checked on 7 September 2026 is:
 - None of the five domains currently publishes a DS record. Still check the
   registrar before cutover because a recently changed record may not appear in
   every resolver cache immediately.
+- Bohwalli uses Google Workspace rather than Hostinger. Its five DNS-only MX
+  records are unchanged; the apex SPF and monitoring-only DMARC records above
+  were added without changing web routing or mail destinations.
 
 ### Remaining external cutover
 
 1. The redirect Worker already handles `www.futhr.io`, `bohwalli.se`,
-   `www.bohwalli.se`, `entvue.com`, and `www.entvue.com`. Their underlying
-   Netlify DNS records remain stale. With DNS-edit access, replace only those
-   five web records with proxied originless records, such as `A 192.0.2.1`.
-   Keep all mail records. MCP rejected the attempted `www.futhr.io` update;
-   the existing redirect remains operational and preserves path/query.
+   `www.bohwalli.se`, `entvue.com`, and `www.entvue.com`.
+   `www.bohwalli.se` now uses proxied originless `A 192.0.2.1`; the other four
+   underlying Netlify web records remain stale. With DNS-edit access, replace
+   only those four records with an equivalent proxied originless record. Keep
+   all mail records. MCP rejected the attempted `www.futhr.io` update; the
+   existing redirect remains operational and preserves path/query.
    [Pages www redirect](https://developers.cloudflare.com/pages/how-to/www-redirect/)
 2. `futhr.pages.dev` still serves the default Pages copy. Do not delete the
    Pages project or its apex CNAME: it hosts `futhr.io`. The documented fix is
@@ -335,6 +364,11 @@ The SvelteKit hook bypasses the adapter's internal Cache API with `no-store`;
 the outer gate alone sets the public page cache policy, avoiding stale HTML
 after a build changes the stylesheet hash. Server `app.js` is excluded from
 the asset upload.
+
+The Bohwalli redirect receives zone-level host-only HSTS and `nosniff` at the
+edge. The one-year HSTS maximum applies to apex and `www`; subdomains and
+preload remain excluded until every hostname on the registrable domain has
+been inventoried.
 
 Cloudflare adds Network Error Logging (`NEL`/`Report-To`) headers at the edge.
 These are separate from application analytics: no analytics script, cookie,
