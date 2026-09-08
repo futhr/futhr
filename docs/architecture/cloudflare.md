@@ -42,7 +42,7 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | Workers plan | Last checked 7 September: Workers Free active, no payment method attached; recheck before release |
 | Waitlist Workers | `waitlist-web` and `waitlist-admin` are not deployed |
 | Venture zones | Account read on 8 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, and `reloved.eco` are active Cloudflare zones |
-| Landing Worker | `project-landings` is deployed with all six intended Custom Domains; HTTPS, redirects, and live desktop/mobile layouts verified |
+| Landing Worker | Version `e26a788f-1328-4520-ae52-e0a31cfe7dc9` is deployed with all six intended Custom Domains; HTTPS, redirects, and complete live desktop/mobile layouts verified |
 | WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the landing deploy added apex/`www` web records without changing mail DNS |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
 | Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |

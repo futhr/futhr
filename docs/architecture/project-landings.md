@@ -367,14 +367,14 @@ visibility.
 
 ### Live release audit — 8 September 2026
 
-Production Worker version `b65a6b0a-0b07-4551-b7b6-5ea27b4feeb1` serves the
-six declared Custom Domains. Its final dry run was 382.72 KiB (89.81 KiB gzip),
-with ASSETS only. `workers.dev` and versioned preview URLs were confirmed
-disabled through the account API. The landing tests passed again after adding
-the HTTP upgrade and host-only HSTS policy.
+Production Worker version `e26a788f-1328-4520-ae52-e0a31cfe7dc9` serves the six
+declared Custom Domains. Its final dry run was 383.40 KiB (90.02 KiB gzip), with
+ASSETS only. `workers.dev` and versioned preview URLs were confirmed disabled
+through the account API. The landing tests passed after completing the Recetas
+copy and indexing policy.
 
-Live screenshots, geometry, network requests, and axe results are in
-`/Users/roam/Desktop/project-landings-live-audit-2026-09-08/`. All six
+The latest live screenshots, geometry, network requests, and axe results are in
+`/Users/roam/Desktop/project-landings-live-audit-recetas-copy-2026-09-08/`. All six
 desktop/mobile views returned 200, made only same-origin requests, had no
 scripts or forms, and had no automated accessibility violations or viewport
 overflow. The 1440px frames remained 1240px wide at x=100 and centred to within

@@ -81,5 +81,6 @@ landing domains and showcase. During DNS propagation, add `--authoritative-dns`
 to resolve the landing apexes through their assigned `brenda.ns.cloudflare.com`
 nameserver. This overrides DNS only inside the audit browser, keeps TLS
 verification enabled, and records the override in the report. It does not
-prove that every recursive DNS cache has expired. The release captures are at
-`/Users/roam/Desktop/project-landings-live-audit-2026-09-08/`.
+prove that every recursive DNS cache has expired. The latest release captures
+are at
+`/Users/roam/Desktop/project-landings-live-audit-recetas-copy-2026-09-08/`.
