@@ -1,0 +1,198 @@
+@import "../../../../../src/lib/styles/site.css";
+
+.landing-shell {
+  container-type: inline-size;
+  display: grid;
+  min-height: 100svh;
+  align-items: center;
+  color: var(--color-paper);
+}
+.landing-frame {
+  container-type: inline-size;
+  width: min(1240px, calc(100% - 11.67cqw));
+  margin: 3rem auto;
+}
+.landing-upper {
+  display: grid;
+  grid-template-columns: 24.5% minmax(0, 1fr);
+  column-gap: 9.05cqw;
+}
+.landing-upper.without-mark {
+  grid-template-columns: minmax(0, 1fr);
+}
+.landing-mark {
+  width: 22.13cqw;
+  padding-top: 3.6cqw;
+}
+.landing-mark svg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+.landing-mark.wide-mark {
+  width: 27cqw;
+  padding-top: 1.3cqw;
+}
+.landing-copy h1 {
+  margin: 0;
+  font-size: clamp(3.5rem, 8.63cqw, 6.7rem);
+  font-weight: 850;
+  letter-spacing: -0.052em;
+  line-height: 1.12;
+}
+.landing-statement {
+  margin: 3.64cqw 0 0;
+  font-size: clamp(1.5rem, 3.417cqw, 2.65rem);
+  font-weight: 450;
+  letter-spacing: -0.029em;
+  line-height: 1.25;
+}
+.landing-description {
+  margin: 1.12cqw 0 0;
+  color: #a6a69f;
+  font-size: clamp(1.0625rem, 2.428cqw, 1.883rem);
+  letter-spacing: -0.015em;
+  line-height: 1.4;
+}
+.landing-relationship {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 9.7cqw minmax(0, 1fr);
+  gap: 2.7cqw;
+  align-items: center;
+  margin-top: 5.863cqw;
+  padding: 2.46cqw 0;
+  border-block: 1px solid #55554f;
+}
+.landing-relationship span {
+  display: block;
+  color: #999a92;
+  font-size: clamp(0.8125rem, 1.17cqw, 0.91rem);
+  font-weight: 650;
+  line-height: 1.2;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+.landing-relationship p {
+  margin: 0.99cqw 0 0;
+  font-size: clamp(1.0625rem, 2.16cqw, 1.67rem);
+  letter-spacing: -0.017em;
+  font-weight: 550;
+  line-height: 1.2;
+}
+.landing-arrow {
+  position: relative;
+  height: 1px;
+  background: #999a92;
+}
+.landing-arrow::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  top: -4px;
+  width: 8px;
+  height: 8px;
+  border-top: 1px solid #999a92;
+  border-right: 1px solid #999a92;
+  transform: rotate(45deg);
+}
+.landing-destination {
+  display: flex;
+  justify-content: space-between;
+  gap: 1.5rem;
+  align-items: center;
+  margin-top: 5.25cqw;
+  color: #999a92;
+  text-transform: uppercase;
+  font-size: clamp(0.875rem, 1.53cqw, 1.18rem);
+  font-weight: 550;
+  letter-spacing: 0.1em;
+}
+.landing-destination a,
+.landing-host {
+  font-size: clamp(1rem, 2.25cqw, 1.74rem);
+  letter-spacing: 0.04em;
+  font-weight: 650;
+  overflow-wrap: anywhere;
+}
+.landing-destination a {
+  text-decoration: none;
+}
+.landing-destination a:hover {
+  color: var(--color-paper);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+.identity-only .landing-upper {
+  align-items: center;
+}
+.identity-only .landing-mark {
+  padding-top: 0;
+}
+.error-page {
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  padding: 2rem;
+  color: var(--color-paper);
+}
+.error-page h1 {
+  font-size: 3rem;
+  margin-block: 1rem;
+}
+.error-page a {
+  text-decoration: underline;
+}
+
+@container (width < 48rem) {
+  .landing-frame {
+    width: calc(100% - 2.5rem);
+    margin-block: 2.5rem;
+  }
+  .landing-upper {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2rem;
+    text-align: center;
+  }
+  .landing-mark,
+  .landing-mark.wide-mark {
+    width: 36cqw;
+    max-width: 10rem;
+    padding: 0;
+    margin-inline: auto;
+  }
+  .landing-mark.wide-mark {
+    max-width: 13rem;
+    width: 48cqw;
+  }
+  .landing-copy h1 {
+    font-size: clamp(3rem, 12cqw, 4.5rem);
+  }
+  .landing-statement {
+    margin-top: 1.5rem;
+    font-size: clamp(1.375rem, 4cqw, 1.875rem);
+  }
+  .landing-description {
+    margin-top: 1rem;
+    font-size: 1.0625rem;
+  }
+  .landing-relationship {
+    margin-top: 1.75rem;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 1rem;
+    padding-block: 1.25rem;
+  }
+  .landing-relationship p {
+    margin-top: 0.5rem;
+    font-size: 1.125rem;
+  }
+  .landing-arrow {
+    width: 4rem;
+    margin-inline: auto;
+  }
+  .landing-destination {
+    margin-top: 2rem;
+    flex-direction: column;
+    gap: 0.75rem;
+    text-align: center;
+  }
+}

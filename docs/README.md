@@ -27,7 +27,7 @@ pnpm storybook                          # http://127.0.0.1:6006
 Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager` in `package.json`).
 
 The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
-them on `http://127.0.0.1:8787/`, which lists the five brands on their
+them on `http://127.0.0.1:8787/`, which lists the four brands on their
 `<id>.localhost` stand-ins. Details in the "Viewing it locally" section of
 [apps/waitlist/README.md](../apps/waitlist/README.md). The showcase has no
 `/waitlist` route.
@@ -43,18 +43,24 @@ them on `http://127.0.0.1:8787/`, which lists the five brands on their
 | `pnpm test:storybook` | Story rendering, interactions, axe |
 | `pnpm test:e2e` | Builds, then Playwright on desktop and mobile Chromium |
 | `pnpm test:storybook:e2e` | Builds Storybook, then tests the static artifact |
-| `pnpm test:all` | Quality, types, and all test suites for both packages |
+| `pnpm test:all` | Quality, types, and all test suites for all three packages |
 | `pnpm build` | Prerenders to `build/` and verifies the artifact |
 | `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
 | `pnpm storybook:build` | Static Storybook to `storybook-static/` |
 | `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
+| `pnpm redirects:deploy` | Deploys the legacy-domain-to-Futhr redirect Worker |
 | `pnpm build:waitlist` | Builds the waitlist Worker and its assets to `apps/waitlist/.svelte-kit/cloudflare` |
 | `pnpm check:waitlist` | Runtime types, svelte-check, and TypeScript for the waitlist app |
 | `pnpm test:waitlist` | Waitlist unit, Workers runtime, and Playwright suites |
 | `pnpm waitlist:icons` | Regenerates the brand icons from the mark components |
+| `pnpm build:landing` | Builds the stateless landing Worker and checks its artifact |
+| `pnpm check:landing` | Generated runtime types and Svelte/TypeScript checks |
+| `pnpm test:landing` | Landing unit, component, Workers runtime, and browser tests |
+| `pnpm landing:icons` | Regenerates landing icons and social images |
 
-CI checks both workspace packages on pull requests and pushes to `main`, uploads
-showcase coverage to Codecov, and dry-runs Storybook and both waitlist Workers.
+CI checks all three workspace packages on pull requests and pushes to `main`, uploads
+showcase coverage to Codecov, and dry-runs the redirect, Storybook, and both
+waitlist Workers, plus the landing Worker. Nothing is deployed by CI.
 
 ## Layout
 
@@ -71,6 +77,7 @@ showcase coverage to Codecov, and dry-runs Storybook and both waitlist Workers.
 | `static/` | Icons, `_headers`, font licence |
 | `.claude/` | Agent skills and settings; [AGENTS.md](../AGENTS.md) is the canonical contract |
 | `apps/waitlist/` | Venture waitlist Workers, a pnpm workspace package; see its [README](../apps/waitlist/README.md) |
+| `apps/landing/` | Stateless project landing Worker; see its [README](../apps/landing/README.md) |
 
 Conventions: kebab-case filenames, `$lib` imports, no barrel files, at most one
 public symbol per module. Entries are Markdown with `order`, `group`, `title`,
@@ -92,6 +99,7 @@ a dependency before adding it and remove packages that stop being used.
 | --- | --- |
 | [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
 | [architecture/cloudflare.md](architecture/cloudflare.md) | Current Pages and Workers configurations, waitlist provisioning, DNS and mail, deployment commands, headers, and the optional Pages migration |
+| [architecture/project-landings.md](architecture/project-landings.md) | Deployed landing pages for WoTEx, Reloved, and Recetas; routing, Reloved migration, and local/live audit evidence |
 | [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |
 | [legal/privacy.md](legal/privacy.md) | Privacy information for the static site |

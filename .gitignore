@@ -10,8 +10,10 @@ test-results/
 .DS_Store
 *.local
 .claude/settings.local.json
+/.codex/config.toml
 .dev.vars
 .dev.vars.*
 tests/components/__screenshots__/
 apps/waitlist/worker-configuration.d.ts
+apps/landing/worker-configuration.d.ts
 !.dev.vars.example

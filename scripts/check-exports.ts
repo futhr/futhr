@@ -2,7 +2,7 @@ import { readdir, readFile } from 'node:fs/promises'
 import { extname, join, relative } from 'node:path'
 import ts from 'typescript'
 
-const sourceDirectories = ['src', 'apps/waitlist/src']
+const sourceDirectories = ['src', 'apps/waitlist/src', 'apps/landing/src']
 const svelteExportPattern =
   /\bexport\s+(?:default|const|let|var|function|class|interface|type|\{|\*)/gv
 const multipleExportExceptions = new Set([

@@ -144,7 +144,11 @@
       }
     },
     {
-      "includes": ["apps/*/src/admin-worker.ts", "apps/*/src/lib/types/*.d.ts"],
+      "includes": [
+        "apps/*/src/admin-worker.ts",
+        "apps/*/src/worker.ts",
+        "apps/*/src/lib/types/*.d.ts"
+      ],
       "linter": {
         "rules": {
           "style": {
@@ -157,6 +161,7 @@
       "includes": [
         "apps/*/src/lib/server/**/*.ts",
         "apps/*/src/routes/**/*.server.ts",
+        "apps/*/src/routes/**/+server.ts",
         "apps/*/src/hooks.server.ts"
       ],
       "linter": {

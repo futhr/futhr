@@ -1,0 +1,30 @@
+{
+  "extends": "./.svelte-kit/tsconfig.json",
+  "compilerOptions": {
+    "allowImportingTsExtensions": true,
+    "esModuleInterop": true,
+    "exactOptionalPropertyTypes": true,
+    "moduleResolution": "bundler",
+    "noImplicitReturns": true,
+    "noUncheckedIndexedAccess": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "target": "ES2022"
+  },
+  "include": [
+    ".svelte-kit/ambient.d.ts",
+    ".svelte-kit/non-ambient.d.ts",
+    ".svelte-kit/types/**/$types.d.ts",
+    "worker-configuration.d.ts",
+    "src/**/*.ts",
+    "src/**/*.svelte",
+    "../../src/lib/components/logos/*.svelte",
+    "scripts/**/*.ts",
+    "tests/unit/**/*.ts",
+    "tests/e2e/**/*.ts",
+    "tests/components/**/*.ts",
+    "*.config.ts",
+    "svelte.config.ts"
+  ]
+}

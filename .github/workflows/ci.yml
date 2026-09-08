@@ -75,6 +75,40 @@ jobs:
         env:
           WRANGLER_SEND_METRICS: 'false'
 
+      - name: Validate domain redirect deployment package
+        run: pnpm exec wrangler deploy --config wrangler.redirects.jsonc --dry-run
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+
+  landing:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v7.0.1
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6.1.0
+        with:
+          version: 11.24.0
+          run_install: false
+      - name: Install Node.js
+        uses: actions/setup-node@v7.0.0
+        with:
+          node-version: 24
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+      - name: Check landing types
+        run: pnpm check:landing
+      - name: Install headless Chromium
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Run landing tests
+        run: pnpm test:landing
+      - name: Validate landing deployment package
+        run: pnpm --filter landing exec wrangler deploy --env="" --dry-run
+        env:
+          WRANGLER_SEND_METRICS: 'false'
+
   waitlist:
     runs-on: ubuntu-latest
     timeout-minutes: 25
@@ -114,7 +148,7 @@ jobs:
 
       - name: Validate waitlist deployment packages
         run: |
-          pnpm --filter waitlist exec wrangler deploy --dry-run
+          pnpm --filter waitlist exec wrangler deploy --env="" --dry-run
           pnpm --filter waitlist exec wrangler deploy --config wrangler.admin.toml --dry-run
         env:
           WRANGLER_SEND_METRICS: 'false'

@@ -1,0 +1,38 @@
+{
+  "name": "landing",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "SEE LICENSE IN ../../LICENSE.md",
+  "scripts": {
+    "build": "vite build && node scripts/verify-artifact.ts",
+    "dev": "pnpm build && wrangler dev --env local --ip 127.0.0.1 --port 8788",
+    "check": "wrangler types worker-configuration.d.ts && svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+    "icons": "node scripts/icons.ts",
+    "test": "pnpm test:unit && pnpm test:components && pnpm test:workers && pnpm test:e2e",
+    "test:unit": "vitest run --config vitest.unit.config.ts",
+    "test:components": "vitest run --config vitest.browser.config.ts",
+    "test:workers": "pnpm build && vitest run --config vitest.workers.config.ts",
+    "test:e2e": "playwright test"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@cloudflare/vitest-plugin": "1.1.4",
+    "@fontsource-variable/archivo": "5.3.0",
+    "@playwright/test": "1.63.0",
+    "@sveltejs/adapter-cloudflare": "7.2.9",
+    "@sveltejs/kit": "2.70.3",
+    "@sveltejs/vite-plugin-svelte": "7.3.0",
+    "@tailwindcss/vite": "4.3.3",
+    "@types/node": "24.13.3",
+    "@vitest/browser-playwright": "4.1.11",
+    "svelte": "5.57.0",
+    "svelte-check": "4.7.6",
+    "tailwindcss": "4.3.3",
+    "typescript": "6.0.3",
+    "vite": "8.2.2",
+    "vitest": "4.1.11",
+    "vitest-browser-svelte": "3.1.0",
+    "wrangler": "4.129.0"
+  }
+}

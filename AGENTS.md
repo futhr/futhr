@@ -18,6 +18,12 @@ Cloudflare Workers, one for the public waitlists and one for the private admin
 API, with their own build, tests, and artifacts. They reuse the showcase style system and marks and nothing else.
 `apps/waitlist/README.md` is their operating guide.
 
+The stateless project landings are a third package, `apps/landing/`, for WoTEx,
+Reloved, and Recetas. They share marks and the style system, but no waitlist
+data or components. `apps/landing/README.md` is their operating guide. The
+production Worker must retain its outer host gate and Worker-first asset
+routing; the adapter's build-only config must never be deployed.
+
 The page is built to a reference design measured at 1440px wide. Layout values are
 container-relative and documented at the top of `src/lib/styles/site.css`. When a
 layout change is requested, measure the result against the reference before
@@ -50,6 +56,10 @@ pnpm build               # production build plus artifact verification
 pnpm check:waitlist      # types for the waitlist Workers and components
 pnpm test:waitlist       # waitlist unit, Workers runtime, and Playwright suites
 pnpm build:waitlist      # build the waitlist Worker and its assets
+pnpm check:landing       # generated runtime types and Svelte checks
+pnpm test:landing        # unit, component, workerd, and browser tests
+pnpm build:landing       # build the stateless Worker and verify its artifact
+pnpm landing:icons       # regenerate landing icons after mark/copy changes
 ```
 
 `pnpm quality` and `pnpm check` are fast; run them after every change. Run the
