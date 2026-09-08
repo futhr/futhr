@@ -59,12 +59,12 @@ describe('valid showcase content', () => {
     }))
     const items = await content.load(sources)
 
-    expect(items).toHaveLength(20)
+    expect(items).toHaveLength(21)
     expect(items[0]).toMatchObject({ order: 1, slug: 'thesis', group: 'Thesis' })
     expect(items[13]).toMatchObject({ order: 14, slug: 'refpath', group: 'Venture' })
     expect(items[18]).toMatchObject({ order: 19, slug: 'ager', group: 'Venture', title: 'Äger' })
-    expect(items.at(-1)).toMatchObject({ order: 20, slug: 'goatmire-2026', group: 'Conf talks' })
-    expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 20 }, (_, i) => i + 1))
+    expect(items.at(-1)).toMatchObject({ order: 21, slug: 'goatmire-2026', group: 'Conf talks' })
+    expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 21 }, (_, i) => i + 1))
     expect([...new Set(items.map(({ group }) => group))]).toEqual([
       'Thesis',
       'Elixir & OTP',

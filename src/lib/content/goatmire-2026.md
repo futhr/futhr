@@ -1,5 +1,5 @@
 ---
-order: 20
+order: 21
 group: Conf talks
 title: Zero alert storms
 lede: Formal verification for IoT automation, scheduled for Goatmire 2026 in Varberg, Sweden.

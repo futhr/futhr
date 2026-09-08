@@ -14,7 +14,7 @@ test('prerenders every ordered showcase section and metadata', async ({ page }) 
     'content',
     'A capital-efficient portfolio of platforms and open infrastructure for domains where software decisions carry operational, financial, or legal consequences.'
   )
-  await expect(page.locator('section[aria-label="Selected work"] article')).toHaveCount(20)
+  await expect(page.locator('section[aria-label="Selected work"] article')).toHaveCount(21)
   const firstEntry = page.locator('#showcase-row-thesis')
   await expect(firstEntry.locator('button')).toHaveAttribute('aria-expanded', 'true')
   await expect(firstEntry).toHaveCSS('background-color', 'rgb(27, 27, 27)')
