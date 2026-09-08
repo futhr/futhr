@@ -21,9 +21,14 @@ describe('closed project map', () => {
   ])('rejects %s', (host) => {
     expect(resolveHost(host)).toBeUndefined()
   })
-  it('keeps Recetas identity-only and unindexed until copy is approved', () => {
-    expect(projects.recetas.indexed).toBe(false)
-    expect(projects.recetas.statement).toBeUndefined()
+  it('publishes the approved Recetas positioning without exposing its private repository', () => {
+    expect(projects.recetas.indexed).toBe(true)
+    expect(projects.recetas.statement).toBe('Plan meals. Keep the kitchen in sync.')
+    expect(projects.recetas.description).toContain('Home Assistant and Nx')
+    expect(projects.recetas.relationship).toEqual({
+      from: { label: 'Kitchen planning', value: 'Recipes & meal plans' },
+      to: { label: 'Home automation', value: 'Timers & displays' }
+    })
     expect(projects.recetas.link).toBeUndefined()
   })
   it('gives the landing Worker sole ownership of all six domains', async () => {

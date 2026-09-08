@@ -173,7 +173,7 @@ try {
   )
   await writeFile(
     join(directory, 'measurements.json'),
-    `${JSON.stringify({ source, capturedAt: new Date().toISOString(), dns: { mode: authoritativeDns ? 'authoritative override' : 'system', nameserver: authoritativeDns ? nameserver : null, addresses }, reference: { canvas: [1280, 640], innerWidth: 1112, mark: { x: 84, y: 104, width: 246 }, title: { x: 456, y: 64, fontSize: 96 }, note: 'Landing composition uses the same two-column grid and cap-height rhythm, scaled into a centered 1240px frame. WoTEx statement wraps deliberately. Recetas omits unapproved copy. Footer retains prior mark order and adds Recetas eighth.' }, pages, showcase }, null, 2)}\n`
+    `${JSON.stringify({ source, capturedAt: new Date().toISOString(), dns: { mode: authoritativeDns ? 'authoritative override' : 'system', nameserver: authoritativeDns ? nameserver : null, addresses }, reference: { canvas: [1280, 640], innerWidth: 1112, mark: { x: 84, y: 104, width: 246 }, title: { x: 456, y: 64, fontSize: 96 }, note: 'Landing composition uses the same two-column grid and cap-height rhythm, scaled into a centered 1240px frame. WoTEx statement wraps deliberately. Recetas uses the same complete copy and relationship rhythm as the other projects. Footer retains prior mark order and adds Recetas eighth.' }, pages, showcase }, null, 2)}\n`
   )
   const gallery = pages
     .map(

@@ -202,12 +202,11 @@ The public DNS baseline checked on 7 September 2026 is:
    conflicts immediately before that deploy. Run every release check and the
    receipt-to-resolution test before opening collection. No test subscribers
    were inserted into production during this audit.
-8. Cloudflare prepends managed robots rules on the landing zones. For Recetas,
-   the injected `Allow: /` conflicts with its own `Disallow: /`. Its HTML and
-   response header retain `noindex, nofollow`, and the sitemap is empty.
-   Disable only `is_robots_txt_managed` for the Recetas zone and verify the
-   final response. MCP rejected this update with error 10000; no bot-security
-   settings were changed. Retain the existing WoTEx/Reloved crawler policies.
+8. Cloudflare prepends managed robots rules on the landing zones. Recetas now
+   has approved descriptive copy and uses the same indexed policy as WoTEx and
+   Reloved, so its application `Allow: /` agrees with the managed directive.
+   Keep the HTML metadata, response headers, sitemap, and final robots response
+   aligned when changing any project's indexing policy.
 
 ## Cost boundary
 

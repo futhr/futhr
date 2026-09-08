@@ -38,19 +38,19 @@ placeholder label, dummy link, or “coming soon”.
 | Host | `wotex.io` | `reloved.eco` | `recetas.co.com` |
 | Name | WoTEx | Reloved | Recetas |
 | Mark | Existing `wotex.svelte` | Existing `reloved.svelte` | Approved `recetas.svelte` toast with transparent interior |
-| Statement | “One standard for Things, and a runtime built to keep them running.” | “Owned locally. Found together.” | None approved; omit |
-| Supporting line | “Open-source Web of Things libraries for Elixir and the BEAM.” | “Exploring household-owned resale networks.” | None approved; omit |
+| Statement | “One standard for Things, and a runtime built to keep them running.” | “Owned locally. Found together.” | “Plan meals. Keep the kitchen in sync.” |
+| Supporting line | “Open-source Web of Things libraries for Elixir and the BEAM.” | “Exploring household-owned resale networks.” | “Pi-hosted kitchen automation with Home Assistant and Nx.” |
 | Primary link | `github.com/wotex-project` | `github.com/reloved-eco` | None approved; omit |
 | Link kind | Open source | Organization | None |
-| Indexing | Index | Index | Noindex until public descriptive copy is approved |
+| Indexing | Index | Index | Index |
 
 The supplied Reloved wording and existing WoTEx wording are approved inputs.
 The Recetas checkout and private `futhr/recetas` repository were inspected on
 8 September 2026. Its README supports the conceptual showcase entry about
-household recipes, meal planning, shopping, and pantry state. Its repository is
-not linked from the public showcase or landing. The initial landing remains
-identity-only and noindex until its descriptive copy is approved explicitly.
-Adding that copy is a content change, not a component change.
+household recipes, meal planning, home automation, and Raspberry Pi hosting.
+The approved landing copy focuses on that local kitchen system and names Home
+Assistant and Nx without linking the private repository. Adding or revising
+copy remains a content change, not a component change.
 
 The user-approved toast replaces the temporary `R` in
 `src/lib/components/logos/recetas.svelte`. Its four paths use `currentColor`; an
@@ -67,8 +67,10 @@ two labels and two values, not arbitrary rich text. Reloved initially uses:
 | From | Local ownership | Household storefronts |
 | To | Shared reach | Network discovery |
 
-WoTEx and Recetas omit the row until exact public language is approved. The
-divider and arrow disappear with it, leaving no empty space.
+WoTEx omits the row until exact public language is approved. Recetas connects
+“Kitchen planning / Recipes & meal plans” to “Home automation / Timers &
+displays”. The divider and arrow disappear when the data is absent, leaving no
+empty space.
 
 ## Composition
 
@@ -182,9 +184,8 @@ environment retains HTTP for development.
 
 Every indexed page has a self-referencing apex canonical URL, title,
 description, Open Graph metadata, and a generated 1200 × 630 social image. The
-`www` host never has separate metadata because it redirects. Recetas emits
-`noindex, nofollow` and is absent from its sitemap until approved descriptive
-copy exists.
+`www` host never has separate metadata because it redirects. All three initial
+projects now have approved descriptive copy and are included in their sitemap.
 
 The root HTML contains the complete visible content, so an agent does not need
 JavaScript. `robots.txt` and `sitemap.xml` are sufficient for the holding
@@ -352,7 +353,8 @@ At 1440px, the shared frame is 1240px wide with its left edge at x=100; the copy
 column starts at x=516. The 107px title and Reloved's statement, supporting line,
 rules, and destination were compared with the supplied 1280px composition at
 the corresponding scale. WoTEx's longer statement occupies two lines; its
-supporting description remains one line. Recetas omits all unapproved regions.
+supporting description remains one line. Recetas uses the same complete copy,
+relationship, and destination rhythm as the other project variants.
 The footer's eight venture marks have approximately 42.5px SVG boxes, down
 from 49.3px, with their previous order preserved.
 
@@ -385,13 +387,11 @@ to their current authoritative addresses inside Chromium only. Certificate
 verification remained enabled. This evidence establishes the live origin,
 TLS, and layout; it does not claim worldwide cache propagation is complete.
 
-One edge-policy gap remains: Cloudflare prepends managed robots directives,
-including `User-agent: *` / `Allow: /`. On Recetas this conflicts with the
-application's `Disallow: /`; its HTML and `X-Robots-Tag` still explicitly say
-`noindex, nofollow`, and its sitemap is empty. The attempted MCP update of
-`is_robots_txt_managed=false` for Recetas was rejected with error 10000.
-Disable that prepend for Recetas with Bot Management edit access, leaving
-the other bot-protection settings unchanged, then recheck `/robots.txt`.
+Cloudflare prepends managed robots directives to each zone. Recetas now has
+approved descriptive copy and the application also emits `Allow: /`, so the
+previous conflict between the managed `Allow: /` and application `Disallow: /`
+no longer exists. Its root metadata, response headers, sitemap, and robots file
+must all remain aligned with the indexed policy.
 
 ## Acceptance criteria
 
@@ -403,8 +403,8 @@ The feature is complete when:
   invitation;
 - WoTEx clearly identifies the open-source project and links to its public
   GitHub organisation while reserving paths for later documentation;
-- Recetas uses the approved toast mark with no invented
-  purpose, destination, or availability claim;
+- Recetas uses the approved toast mark, kitchen-automation positioning, and
+  relationship row without exposing or linking its private repository;
 - every `www` hostname redirects to its matching apex;
 - no hostname belongs to both the landing and waitlist Workers;
 - mail continues to resolve after both DNS cutovers;

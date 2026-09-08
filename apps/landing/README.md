@@ -32,8 +32,8 @@ release checks must use the built Worker.
 
 Edit `src/lib/projects.ts` for page content and the shared components under
 `../../src/lib/components/logos` for marks. Regenerate icons after mark or
-content changes. Recetas is identity-only and noindex until its landing copy
-is approved; its private repository is not a public destination.
+content changes. Recetas uses its approved public positioning and is indexed;
+its private repository is not a public destination.
 
 ## Build and routing
 

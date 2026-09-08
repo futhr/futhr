@@ -38,7 +38,13 @@ const projects: Readonly<Record<Project['id'], Project>> = {
     host: 'recetas.co.com',
     name: 'Recetas',
     mark: 'recetas',
-    indexed: false
+    indexed: true,
+    statement: 'Plan meals. Keep the kitchen in sync.',
+    description: 'Pi-hosted kitchen automation with Home Assistant and Nx.',
+    relationship: {
+      from: { label: 'Kitchen planning', value: 'Recipes & meal plans' },
+      to: { label: 'Home automation', value: 'Timers & displays' }
+    }
   }
 }
 
