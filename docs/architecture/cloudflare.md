@@ -37,6 +37,7 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | Showcase | Production Pages deployment `2515bacf` is live with Recetas, the eight-mark footer, and “Visit Reloved” |
 | Legacy domains | Bohwalli and Entvue apex and `www` hostnames permanently redirect to the equivalent path on `futhr.io` |
 | Bohwalli security | Host-only HSTS with a one-year maximum age, a TLS 1.2 minimum, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC are live and independently verified |
+| Futhr and Entvue security | Both zones now have a TLS 1.2 minimum, host-only one-year HSTS with `nosniff`, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC; old `www` Netlify addresses are replaced with proxied originless records |
 | `www.futhr.io` | The redirect Worker returns `301` to the equivalent path and query on `futhr.io`; requests no longer reach the previous Netlify origin |
 | Storybook | Updated Worker `futhr-ui` is live on `ui.futhr.io`; noindex is verified, and both `workers.dev` and versioned previews are disabled |
 | D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
@@ -45,6 +46,7 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | Venture zones | Account read on 8 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, and `reloved.eco` are active Cloudflare zones |
 | Landing Worker | Version `e26a788f-1328-4520-ae52-e0a31cfe7dc9` is deployed with all six intended Custom Domains; HTTPS, redirects, and complete live desktop/mobile layouts verified |
 | WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the landing deploy added apex/`www` web records without changing mail DNS |
+| Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the landing Worker continues to supply its application-level host-only HSTS and security headers |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
 | Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
 | Access | API reports `access.api.error.not_enabled`; no admin hostname or collection Worker has been exposed |
@@ -89,6 +91,31 @@ The stale `www.bohwalli.se` Netlify address was also replaced with proxied
 originless `A 192.0.2.1`. The redirect Worker still preserves path and query,
 so the change removes the dangling-origin finding without changing the public
 response. The apex CNAME remains unchanged.
+
+The follow-up Security Insights exports for Futhr and Entvue duplicated each
+missing SPF condition once per Google Workspace MX host. Each zone now has one
+apex SPF policy, `v=spf1 include:_spf.google.com ~all`, and one monitoring-only
+DMARC policy, `v=DMARC1; p=none`. Their existing MX records were not changed;
+Futhr's existing Google DKIM selector was also preserved. Both zones now
+require TLS 1.2 and use zone-level host-only HSTS for one year with `nosniff`,
+without preload or `includeSubDomains`. Cloudflare-managed disclosure files
+use `mailto:hi@futhr.io`, the matching apex canonical URL, English, and an
+8 August 2027 expiry.
+
+Recetas already had Hostinger SPF, DKIM, DMARC, and mail routing. Its only
+actionable finding was the missing disclosure file, which now uses the same
+managed contact, language, and expiry policy with a Recetas canonical URL.
+Public checks confirmed the three disclosure files, Futhr and Entvue mail TXT
+records, the two TLS 1.2 minimums, HSTS headers, and path/query-preserving
+redirects. A full account Security Insights rescan was started after these
+checks; stale export rows can remain visible until that scan completes.
+
+Bot Fight Mode remains disabled on Futhr, Entvue, and Recetas. These public,
+indexable surfaces have no exposed login or collection form, while the
+free-plan switch is zone-wide and can challenge legitimate agents and search
+crawlers. AI Labyrinth also remains disabled on all exported zones because it
+injects decoy crawler content and is a content-policy choice, not remediation
+for a transport, mail, or application defect.
 
 ## Authentication
 
@@ -188,11 +215,12 @@ The public DNS baseline checked on 7 September 2026 is:
 
 1. The redirect Worker already handles `www.futhr.io`, `bohwalli.se`,
    `www.bohwalli.se`, `entvue.com`, and `www.entvue.com`.
-   `www.bohwalli.se` now uses proxied originless `A 192.0.2.1`; the other four
-   underlying Netlify web records remain stale. With DNS-edit access, replace
-   only those four records with an equivalent proxied originless record. Keep
-   all mail records. MCP rejected the attempted `www.futhr.io` update; the
-   existing redirect remains operational and preserves path/query.
+   All three `www` hostnames now use proxied originless `A 192.0.2.1` records.
+   The Bohwalli and Entvue apexes still use legacy proxied Netlify CNAMEs; the
+   Worker intercepts them, but replacing either with an originless A record is
+   a record-type change that deletes and recreates the existing record. Keep
+   all mail records. The existing redirects remain operational and preserve
+   path/query.
    [Pages www redirect](https://developers.cloudflare.com/pages/how-to/www-redirect/)
 2. `futhr.pages.dev` still serves the default Pages copy. Do not delete the
    Pages project or its apex CNAME: it hosts `futhr.io`. The documented fix is
@@ -212,7 +240,11 @@ The public DNS baseline checked on 7 September 2026 is:
    coordinated task with publishing each assigned DS record at Namecheap and
    verifying the resulting chain. No DNSSEC or registrar changes were made.
    [Cloudflare DNSSEC](https://developers.cloudflare.com/dns/dnssec/)
-5. Access is not enabled. Set up Zero Trust and independent MFA, then create
+5. Entvue uses Google Workspace MX records but has no published DKIM selector.
+   Generate or retrieve the exact selector and public key in Google Admin,
+   publish it as instructed there, then activate and verify signing. Do not
+   invent or copy Futhr's selector because DKIM keys are domain-specific.
+6. Access is not enabled. Set up Zero Trust and independent MFA, then create
    a self-hosted application for `lists.futhr.io` restricted to the exact
    approved operator/reviewer identities. Do not use “Everyone” or a
    login-method-only rule. Add Service Auth only for an explicitly approved
@@ -335,9 +367,10 @@ Worker. The Worker name must match the config's `name`.
 ## Response headers
 
 `static/_headers` covers the showcase. It sets content-type protection,
-referrer policy, frame policy, permissions policy, and asset caching. The
-current file does not set CSP or HSTS. Storybook has its own `_headers` and
-`robots.txt` excluding it from indexing.
+referrer policy, frame policy, permissions policy, and asset caching. The file
+does not set CSP or HSTS; Futhr's HSTS and `nosniff` are now also enforced at
+the zone edge. Storybook has its own `_headers` and `robots.txt` excluding it
+from indexing.
 
 For the waitlists, `kit.csp` generates the HTML nonce policy.
 `src/hooks.server.ts` applies headers to rendered pages, documents, icons,
@@ -365,10 +398,10 @@ the outer gate alone sets the public page cache policy, avoiding stale HTML
 after a build changes the stylesheet hash. Server `app.js` is excluded from
 the asset upload.
 
-The Bohwalli redirect receives zone-level host-only HSTS and `nosniff` at the
-edge. The one-year HSTS maximum applies to apex and `www`; subdomains and
-preload remain excluded until every hostname on the registrable domain has
-been inventoried.
+The Bohwalli and Entvue redirects and the Futhr showcase receive zone-level
+host-only HSTS and `nosniff` at the edge. The one-year HSTS maximum applies to
+each requested hostname; `includeSubDomains` and preload remain excluded until
+every hostname on each registrable domain has been inventoried.
 
 Cloudflare adds Network Error Logging (`NEL`/`Report-To`) headers at the edge.
 These are separate from application analytics: no analytics script, cookie,
