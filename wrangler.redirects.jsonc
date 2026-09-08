@@ -1,0 +1,42 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "bohwalli-redirect",
+  "main": "src/lib/server/domain-redirect.ts",
+  "compatibility_date": "2026-09-07",
+  "workers_dev": false,
+  "preview_urls": false,
+  "observability": {
+    "enabled": true,
+    "redact_query_string": true,
+    "logs": {
+      "enabled": true,
+      "head_sampling_rate": 1
+    },
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.01
+    }
+  },
+  "routes": [
+    {
+      "pattern": "bohwalli.se/*",
+      "zone_id": "5c500d6a58a6c1b3287ea9ddec0987e7"
+    },
+    {
+      "pattern": "www.bohwalli.se/*",
+      "zone_id": "5c500d6a58a6c1b3287ea9ddec0987e7"
+    },
+    {
+      "pattern": "entvue.com/*",
+      "zone_id": "f25f9f98402a7eec368b9f865885b3df"
+    },
+    {
+      "pattern": "www.entvue.com/*",
+      "zone_id": "f25f9f98402a7eec368b9f865885b3df"
+    },
+    {
+      "pattern": "www.futhr.io/*",
+      "zone_id": "55a42d1542c1e27656a5edf75175e20c"
+    }
+  ]
+}
