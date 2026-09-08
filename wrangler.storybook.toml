@@ -1,7 +1,7 @@
 name = "futhr-ui"
 compatibility_date = "2026-09-04"
 workers_dev = false
-preview_urls = true
+preview_urls = false
 
 [[routes]]
 pattern = "ui.futhr.io"
