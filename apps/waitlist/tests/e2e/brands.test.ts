@@ -130,11 +130,11 @@ test('fails closed for foreign brand paths', async ({ page }) => {
 test('renders the complete page and form without JavaScript', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false })
   const page = await context.newPage()
-  await page.goto(`${origin('reloved.eco')}/`)
-  await expect(page.locator('h1')).toHaveText('Reloved')
+  await page.goto(`${origin('orvane.io')}/`)
+  await expect(page.locator('h1')).toHaveText('Orvane')
   await expect(page.getByLabel('Email address')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Notify me' })).toBeEnabled()
-  await expect(page.locator('svg[aria-label="Reloved mark"]').first()).toBeVisible()
+  await expect(page.locator('svg[aria-label="Orvane mark"]').first()).toBeVisible()
   await context.close()
 })
 

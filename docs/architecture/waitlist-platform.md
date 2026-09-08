@@ -14,8 +14,10 @@ deletes, and operator resolution. These are application
 boundaries: both Workers' D1 bindings have database access, not SQL-level
 read-only or write-only grants.
 
-The public brand map in `src/lib/brands/brands.ts` names five apexes:
-`rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, and `orvane.io`.
+The public brand map in `src/lib/brands/brands.ts` names four apexes:
+`rivure.com`, `diggymon.com`, `refpath.io`, and `orvane.io`.
+Reloved belongs to the separate [project landings](project-landings.md) application,
+which has no collection form or database binding.
 Their `www` hosts redirect to the matching apex with path and query intact.
 Unknown hosts redirect to `https://futhr.io/`. Local development also accepts
 `<brand>.localhost` and provides a brand index on the loopback hostname.
@@ -162,7 +164,7 @@ crypto, headers, and JWT rejection. Workers tests exercise the built public
 Worker and admin module against local D1, including concurrent duplicates,
 brand authorization, pagination, transactional rollback, reviewer permissions,
 inbox capacity, and protection of later re-subscriptions. Playwright checks
-all five brands on desktop and mobile Chromium, native and enhanced forms,
+all four brands on desktop and mobile Chromium, native and enhanced forms,
 metadata, and automated accessibility.
 
 These checks do not verify production DNS, Access policies, secrets, or D1

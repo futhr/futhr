@@ -84,7 +84,13 @@ describe('host routing', () => {
   })
 
   it('sends every other hostname to the portfolio without serving anything', async () => {
-    for (const host of ['futhr.io', 'rivure.com.evil.example', 'www.example.com']) {
+    for (const host of [
+      'futhr.io',
+      'rivure.com.evil.example',
+      'www.example.com',
+      'reloved.eco',
+      'www.reloved.eco'
+    ]) {
       const response = await call(`https://${host}/anything?x=1`, { redirect: 'manual' })
       expect(response.status, host).toBe(302)
       expect(response.headers.get('location')).toBe('https://futhr.io/')
@@ -138,7 +144,7 @@ describe('host routing', () => {
   })
 
   it('sets security headers on every response class', async () => {
-    const page = await call('https://reloved.eco/')
+    const page = await call('https://orvane.io/')
     expect(page.headers.get('referrer-policy')).toBe('same-origin')
     expect(page.headers.get('x-content-type-options')).toBe('nosniff')
     expect(page.headers.get('x-frame-options')).toBe('DENY')
@@ -147,9 +153,9 @@ describe('host routing', () => {
     expect(page.headers.get('content-security-policy')).toContain("frame-ancestors 'none'")
     expect(page.headers.get('content-security-policy')).not.toContain('cloudflare.com')
     expect(page.headers.get('content-security-policy')).not.toContain('unsafe-inline')
-    const plain = await call('http://reloved.eco/')
+    const plain = await call('http://orvane.io/')
     expect(plain.headers.get('strict-transport-security')).toBeNull()
-    const document = await call('https://reloved.eco/llms.txt')
+    const document = await call('https://orvane.io/llms.txt')
     expect(document.headers.get('cache-control')).toBe('public, max-age=3600')
     expect(document.headers.get('content-security-policy')).toBe(
       "default-src 'none'; frame-ancestors 'none'"

@@ -49,19 +49,6 @@ const brands: Readonly<Record<BrandId, Brand>> = {
     keywords: ['Refpath', 'agent runtime', 'durable execution', 'autonomous software', 'Elixir'],
     consentVersion
   },
-  reloved: {
-    id: 'reloved',
-    host: 'reloved.eco',
-    name: 'Reloved',
-    title: 'Reloved — every household an independent second-hand storefront',
-    description:
-      'Reloved is decentralized resale infrastructure that gives every household its own storefront, in development. Join the waitlist for launch updates.',
-    lede: 'Decentralized resale infrastructure that turns every household into an independent second-hand storefront.',
-    closing: 'Owned by the household, found by everyone.',
-    updates: 'launch updates',
-    keywords: ['Reloved', 'second-hand', 'resale', 'decentralized commerce', 'edge', 'open source'],
-    consentVersion
-  },
   orvane: {
     id: 'orvane',
     host: 'orvane.io',

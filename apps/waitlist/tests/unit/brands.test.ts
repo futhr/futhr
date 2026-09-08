@@ -13,12 +13,11 @@ const maxDescription = 160
 const unique = <T>(values: readonly T[]) => new Set(values).size === values.length
 
 describe('brand map', () => {
-  it('lists the five venture hosts, each keyed by its id', () => {
+  it('lists the four venture hosts, each keyed by its id', () => {
     expect(all.map(({ host }) => host)).toEqual([
       'rivure.com',
       'diggymon.com',
       'refpath.io',
-      'reloved.eco',
       'orvane.io'
     ])
     for (const [key, brand] of Object.entries(brands)) {
@@ -71,9 +70,11 @@ describe('brandForHost', () => {
     expect(brandForHost('Orvane.localhost:8787')?.id).toBe('orvane')
   })
 
-  it('fails closed for anything that is not one of the five apexes', () => {
+  it('fails closed for anything that is not one of the four apexes', () => {
     for (const host of [
       'www.rivure.com',
+      'reloved.eco',
+      'reloved.localhost',
       'futhr.io',
       'ui.futhr.io',
       'rivure.com.evil.example',
@@ -94,10 +95,11 @@ describe('brandForHost', () => {
 describe('apexForWww', () => {
   it('maps a www hostname to its brand and nothing else', () => {
     expect(apexForWww('www.rivure.com')?.id).toBe('rivure')
-    expect(apexForWww('WWW.Reloved.eco:8787')?.id).toBe('reloved')
+    expect(apexForWww('WWW.Orvane.io:8787')?.id).toBe('orvane')
     for (const host of [
       'rivure.com',
       'wwwrivure.com',
+      'www.reloved.eco',
       'www.futhr.io',
       'www.www.rivure.com',
       '',

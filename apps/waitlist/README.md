@@ -1,6 +1,6 @@
 # Waitlist Workers
 
-The venture waitlists: one public Worker that serves five exact hostnames and
+The venture waitlists: one public Worker that serves four exact hostnames and
 collects addresses and withdrawal requests, and one private Worker for
 administration. The reasoning is in
 [docs/architecture/waitlist-platform.md](../../docs/architecture/waitlist-platform.md).
@@ -16,7 +16,7 @@ with it. A hidden honeypot and a per-client rate limit reduce automated submissi
 
 | Worker | Config | Hostnames | Capability |
 | --- | --- | --- | --- |
-| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `reloved.eco`, `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
+| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
 | `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete, review and resolve withdrawal requests |
 
 The brand is derived from the request hostname in `src/lib/brands/host.ts`. A `www`
@@ -61,7 +61,7 @@ this directory.
 | `icons` | Regenerate `static/brands/*/icons` from the mark components with Chromium |
 | `test:unit` | Brand map, documents, icons, crypto, email syntax, headers, Access |
 | `test:workers` | Both Workers in workerd with D1 and rate limiting, the public one as built |
-| `test:e2e` | Playwright against `wrangler dev` on the five hostnames |
+| `test:e2e` | Playwright against `wrangler dev` on the four hostnames |
 
 ## Viewing it locally
 
@@ -73,10 +73,10 @@ environment, which has the same bindings but no Custom Domains. It reads
 Open `http://127.0.0.1:8787/`. Each brand answers on its own hostname, so that
 page lists the local stand-ins: `http://rivure.localhost:8787/`,
 `http://diggymon.localhost:8787/`, `http://refpath.localhost:8787/`,
-`http://reloved.localhost:8787/`, and `http://orvane.localhost:8787/`, each with
+and `http://orvane.localhost:8787/`, each with
 `/privacy`. Chrome and Firefox resolve every `.localhost` name to this machine
 without configuration; Safari does not, so there add
-`127.0.0.1 rivure.com diggymon.com refpath.io reloved.eco orvane.io` to
+`127.0.0.1 rivure.com diggymon.com refpath.io orvane.io` to
 `/etc/hosts` for the session and open the real hostnames on port 8787. The
 showcase on `:5173` has no `/waitlist` route. A join lands in the local D1 and
 shows the on-page confirmation.

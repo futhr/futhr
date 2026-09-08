@@ -46,7 +46,8 @@ const applyHeaders = (headers: Headers, { kind, secure }: HeaderInput): Headers 
     headers.set('X-Robots-Tag', 'noindex, nofollow')
   }
   if (secure) {
-    headers.set('Strict-Transport-Security', `max-age=${yearSeconds}; includeSubDomains`)
+    // The Worker owns this hostname, not every mail or unrelated subdomain.
+    headers.set('Strict-Transport-Security', `max-age=${yearSeconds}`)
   }
   return headers
 }

@@ -11,7 +11,7 @@ describe('applyHeaders', () => {
     expect(page.get('Referrer-Policy')).toBe('same-origin')
     expect(page.get('X-Content-Type-Options')).toBe('nosniff')
     expect(page.get('X-Frame-Options')).toBe('DENY')
-    expect(page.get('Strict-Transport-Security')).toContain('max-age=31536000')
+    expect(page.get('Strict-Transport-Security')).toBe('max-age=31536000')
     expect(page.get('Cache-Control')).toBe('no-cache')
     expect(page.get('X-Robots-Tag')).toBeNull()
 

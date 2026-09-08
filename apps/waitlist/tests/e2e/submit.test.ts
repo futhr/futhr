@@ -18,11 +18,11 @@ test('joins from the keyboard and lands on the joined state without leaving the 
 test('joins without JavaScript through a plain form post', async ({ browser }) => {
   const context = await browser.newContext({ javaScriptEnabled: false })
   const page = await context.newPage()
-  await page.goto(`${origin('reloved.eco')}/`)
+  await page.goto(`${origin('orvane.io')}/`)
   await expect(page.getByRole('button', { name: 'Notify me' })).toBeEnabled()
   await page.getByLabel('Email address').fill(`nojs-${Date.now()}@example.com`)
   await page.getByRole('button', { name: 'Notify me' }).click()
   await expect(page.getByRole('heading', { name: 'You are on the list' })).toBeVisible()
-  await expect(page.locator('h1')).toHaveText('Reloved')
+  await expect(page.locator('h1')).toHaveText('Orvane')
   await context.close()
 })

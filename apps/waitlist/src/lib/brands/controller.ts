@@ -1,5 +1,5 @@
 /**
- * Who answers for the data. One controller for all five waitlists. Confirm the
+ * Who answers for the data. One controller for all four waitlists. Confirm the
  * operational details before launch; see docs/legal/waitlist-operations.md.
  * The contact mailbox is the one already published on futhr.io because the
  * venture mailboxes are not yet provisioned.

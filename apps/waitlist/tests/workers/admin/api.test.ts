@@ -154,7 +154,7 @@ describe('admin API', () => {
   it('scopes every operation to the granted brands', async () => {
     stubCertificates()
     const owner = await as('owner@example.com', '/v1/brands')
-    expect(((await owner.json()) as unknown[]).length).toBe(5)
+    expect(((await owner.json()) as unknown[]).length).toBe(4)
     expect(owner.headers.get('cache-control')).toBe('no-store')
     const bot = await as('rivure-bot', '/v1/brands')
     expect(await bot.json()).toEqual([{ id: 'rivure', host: 'rivure.com', name: 'Rivure' }])

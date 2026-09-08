@@ -2,16 +2,9 @@ import { defineConfig, devices } from '@playwright/test'
 import { port } from './tests/e2e/hosts.ts'
 import { localSecrets } from './tests/local-secrets.ts'
 
-const hosts = [
-  'rivure.com',
-  'www.rivure.com',
-  'diggymon.com',
-  'refpath.io',
-  'reloved.eco',
-  'orvane.io'
-]
+const hosts = ['rivure.com', 'www.rivure.com', 'diggymon.com', 'refpath.io', 'orvane.io']
 
-// Chromium resolves the five venture hostnames to the local Worker, so pages
+// Chromium resolves the four venture hostnames to the local Worker, so pages
 // load from their real hosts and the Worker's exact-host routing is exercised.
 const resolverRules = hosts.map((host) => `MAP ${host} 127.0.0.1`).join(', ')
 

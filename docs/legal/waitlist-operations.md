@@ -2,7 +2,7 @@
 
 Owner: Tobias Bohwalli. Contact: hi@futhr.io. Updated 6 September 2026.
 
-This is the handling procedure for the five venture waitlists. Public notices
+This is the handling procedure for the four venture waitlists. Public notices
 come from `apps/waitlist/src/lib/brands/privacy.ts`; the static showcase has its
 own [privacy information](privacy.md). The procedure depends on the operator
 monitoring requests and carrying out the scheduled work below. The repository

@@ -15,7 +15,7 @@ maintainer means the address, message, and headers are processed to answer the
 message and kept as ordinary correspondence.
 
 The separate venture waitlist app is intended for `rivure.com`, `diggymon.com`,
-`refpath.io`, `reloved.eco`, and `orvane.io`. It serves its own notice at `/privacy`
+`refpath.io`, and `orvane.io`. It serves its own notice at `/privacy`
 on each configured host, with `/withdraw` for manually handled removal requests.
 futhr.io does not collect or hold those lists. The shared operator mailbox handles
 waitlist rights requests under the separate
