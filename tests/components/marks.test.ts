@@ -2,6 +2,7 @@ import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
 import Ager from '$lib/components/logos/ager.svelte'
 import Futhr from '$lib/components/logos/futhr.svelte'
+import Recetas from '$lib/components/logos/recetas.svelte'
 import Wotex from '$lib/components/logos/wotex.svelte'
 import Marks from '$lib/components/marks.svelte'
 
@@ -33,15 +34,24 @@ test('renders the WoTEx library mark as an accessible image', async () => {
   await expect.element(screen.getByRole('img', { name: 'WoTEx mark' })).toBeVisible()
 })
 
+test('renders the approved Recetas toast with a transparent counterform', async () => {
+  const screen = await render(Recetas)
+
+  await expect.element(screen.getByRole('img', { name: 'Recetas mark' })).toBeVisible()
+  expect(screen.container.querySelectorAll('path')).toHaveLength(4)
+  expect(screen.container.querySelector('path')?.getAttribute('fill-rule')).toBe('evenodd')
+  expect(screen.container.querySelector('[fill="white"]')).toBeNull()
+})
+
 test('renders every venture mark in footer order', async () => {
   const screen = await render(Marks)
 
   await Promise.all(
-    ['Refpath', 'Bytly', 'Diggymon', 'Orvane', 'Reloved', 'Rivure', 'Äger'].map((name) =>
+    ['Refpath', 'Bytly', 'Diggymon', 'Orvane', 'Reloved', 'Rivure', 'Äger', 'Recetas'].map((name) =>
       expect.element(screen.getByRole('img', { name: `${name} mark` })).toBeVisible()
     )
   )
-  expect(screen.container.querySelectorAll('svg')).toHaveLength(7)
+  expect(screen.container.querySelectorAll('svg')).toHaveLength(8)
 
   for (const [name, selector, count] of markShapes) {
     const mark = screen.container.querySelector(`svg[aria-label="${name} mark"]`)

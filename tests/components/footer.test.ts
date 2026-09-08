@@ -35,5 +35,5 @@ test('renders every identity, social destination and footer group', async () => 
     )
   )
 
-  expect(screen.container.querySelectorAll('svg')).toHaveLength(12)
+  expect(screen.container.querySelectorAll('svg')).toHaveLength(13)
 })
