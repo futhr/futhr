@@ -11,7 +11,7 @@
     "icons": "node scripts/icons.ts",
     "test": "pnpm test:unit && pnpm test:components && pnpm test:workers && pnpm test:e2e",
     "test:unit": "vitest run --config vitest.unit.config.ts",
-    "test:components": "vitest run --config vitest.browser.config.ts",
+    "test:components": "vitest run --config vitest.browser.config.ts --configLoader runner",
     "test:workers": "pnpm build && vitest run --config vitest.workers.config.ts",
     "test:e2e": "playwright test"
   },
