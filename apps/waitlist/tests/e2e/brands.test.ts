@@ -122,7 +122,7 @@ test('lists the local stand-ins on the loopback host and redirects www to the ap
     maxRedirects: 0
   })
   expect(alias.status()).toBe(308)
-  expect(alias.headers().location).toBe('https://orvane.io/privacy?x=1')
+  expect(alias.headers()).toMatchObject({ location: 'https://orvane.io/privacy?x=1' })
 })
 
 test('fails closed for foreign brand paths', async ({ page }) => {
