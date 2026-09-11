@@ -1,9 +1,9 @@
 # Cloudflare deployment
 
-Checked against the repository and Cloudflare account on 8 September 2026.
+Checked against the repository and Cloudflare account on 11 September 2026.
 Configuration in Git records deployment intent; registrar settings, mail DNS,
 Access identities, secret values, billing plans, and deployed versions still
-need an account-side check before a release.
+need an account-side check before later releases.
 
 ## Current configuration
 
@@ -22,9 +22,9 @@ brand icons. The admin Worker lists records and resolves withdrawal requests. Ne
 
 The production waitlist configs bind the EU-jurisdiction `waitlist` D1 database.
 The local development environment retains a non-production placeholder ID because
-Wrangler uses a local database there. The waitlist configs declare eight public Custom
-Domains and `lists.futhr.io`, but that does not establish that those domains are
-provisioned. The Storybook config declares `ui.futhr.io` as a Custom Domain.
+Wrangler uses a local database there. The ten declared public Custom Domains
+and the Access-protected `lists.futhr.io` admin hostname are attached to the
+live Workers. The Storybook config declares `ui.futhr.io` as a Custom Domain.
 The landing Worker declares six separate Custom Domains: apex and `www` for
 `wotex.io`, `reloved.eco`, and `recetas.co.com`. It collects nothing, binds only
 static assets, and serves no client JavaScript. Reloved no longer belongs to
@@ -41,25 +41,26 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | `www.futhr.io` | The redirect Worker returns `301` to the equivalent path and query on `futhr.io`; requests no longer reach the previous Netlify origin |
 | Storybook | Updated Worker `futhr-ui` is live on `ui.futhr.io`; noindex is verified, and both `workers.dev` and versioned previews are disabled |
 | D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
-| Workers plan | Last checked 7 September: Workers Free active, no payment method attached; recheck before release |
-| Waitlist Workers | `waitlist-web` and `waitlist-admin` are not deployed |
-| Venture zones | Account read on 8 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, and `reloved.eco` are active Cloudflare zones |
+| Workers plan | Workers Free remains active. A payment method is now attached for Zero Trust onboarding, but no paid Workers plan or metered add-on was enabled |
+| Waitlist Workers | `waitlist-admin` is deployed and `waitlist-web` version `e3ed6dc1-d7ad-485a-b1f8-e8f838d3f798` serves all four brands and the Orvane aliases |
+| Venture zones | Account read on 11 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `orvane.ai`, and `reloved.eco` are active Cloudflare zones |
 | Landing Worker | Version `e26a788f-1328-4520-ae52-e0a31cfe7dc9` is deployed with all six intended Custom Domains; HTTPS, redirects, and complete live desktop/mobile layouts verified |
 | WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the landing deploy added apex/`www` web records without changing mail DNS |
 | Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the landing Worker continues to supply its application-level host-only HSTS and security headers |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
 | Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
-| Access | API reports `access.api.error.not_enabled`; no admin hostname or collection Worker has been exposed |
-| Other pending zone | `orvane.ai` remains pending and is not declared in either application; its mail-provider discrepancy needs a separate decision |
+| Waitlist domains | `lists.futhr.io`; the apex and `www` hostnames for Rivure, Diggymon, Refpath, and Orvane; plus `orvane.ai` and `www.orvane.ai` are attached Custom Domains |
+| Access | Zero Trust Free at `$0/month`; team domain `futhr.cloudflareaccess.com`; `lists.futhr.io` allows only `hi@futhr.io`, inherits independent MFA, and uses HTTP-only, binding, SameSite Strict cookies |
+| Orvane alias | `orvane.ai` and `www.orvane.ai` return `308` to `https://orvane.io` with path and query intact; existing Hostinger MX, SPF, and DKIM records are unchanged |
 
 The authenticated Wrangler session can deploy Pages, Workers, and D1, but its
 OAuth grant cannot create zones, edit DNS, inspect billing, or administer
-Access. The connected Cloudflare MCP was used for read-only zone, Worker, and
-Custom Domain inventory on 8 September. DNS updates and Bulk Redirect list
-creation were attempted through MCP and rejected with API error 10000; neither
-attempt changed state. Wrangler successfully deployed the landing, redirect,
-Storybook, and Pages artifacts. No permissions, credentials, billing plan, or
-repository visibility were changed.
+Access. The authenticated dashboard was therefore used on 11 September to
+activate Zero Trust Free, configure independent MFA, and create the exact-email
+Access rule. The connected Cloudflare MCP remains read-only for Access and was
+used to verify the resulting application and policy. Wrangler uploaded the
+Worker secrets and deployed the two waitlist Workers. Repository visibility was
+not changed.
 
 The restored WoTEx mail records are three DNS-only CNAMEs named
 `hostingermail-{a,b,c}._domainkey`, pointing to the matching
@@ -231,11 +232,10 @@ The public DNS baseline checked on 7 September 2026 is:
    Edit; a domain-based rule in Pages `_redirects` is not supported.
    [Pages canonical-domain redirect](https://developers.cloudflare.com/pages/how-to/redirect-to-custom-domain/),
    [Bulk Redirect API](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/create-api/)
-3. All seven application zones are active: the four waitlist zones plus WoTEx,
-   Reloved, and Recetas. No further nameserver change is needed for them.
-   `orvane.ai` is a separate pending zone, outside the current application
-   configs; reconcile its Namecheap forwarding versus staged Hostinger mail
-   records before any cutover. Do not substitute it for `orvane.io`.
+3. All eight application zones are active: the four canonical waitlist zones,
+   Orvane's `.ai` alias zone, plus WoTEx, Reloved, and Recetas. No further
+   nameserver change is needed for them. `orvane.ai` is an explicit redirecting
+   alias and does not replace `orvane.io` as the canonical waitlist host.
 4. DNSSEC is still disabled on the three landing zones. Enable it only as a
    coordinated task with publishing each assigned DS record at Namecheap and
    verifying the resulting chain. No DNSSEC or registrar changes were made.
@@ -244,26 +244,25 @@ The public DNS baseline checked on 7 September 2026 is:
    Generate or retrieve the exact selector and public key in Google Admin,
    publish it as instructed there, then activate and verify signing. Do not
    invent or copy Futhr's selector because DKIM keys are domain-specific.
-6. Access is not enabled. Set up Zero Trust and independent MFA, then create
-   a self-hosted application for `lists.futhr.io` restricted to the exact
-   approved operator/reviewer identities. Do not use “Everyone” or a
-   login-method-only rule. Add Service Auth only for an explicitly approved
-   automation identity with its own service token.
+6. Access is enabled for `lists.futhr.io`. The self-hosted application has one
+   exact-email allow rule for `hi@futhr.io`, one Cloudflare identity provider,
+   instant authentication, and organization-level independent MFA. There is no
+   Everyone rule, reviewer grant, Service Auth policy, or automation identity.
    [Access application](https://developers.cloudflare.com/cloudflare-one/access-controls/applications/http-apps/self-hosted-public-app/),
    [independent MFA](https://developers.cloudflare.com/cloudflare-one/access-controls/access-settings/independent-mfa/)
-6. Record the Access team domain and application audience. Generate and store
-   the waitlist encryption and digest keys in the team's secret manager, then
-   set each Worker's runtime secrets. Both Workers need the same active keys.
-   Fill operator and reviewer grants with exact identities and brand IDs.
-   Do not invent grants or expose the admin hostname before these are ready.
-7. Recheck the Workers Free/D1 Free plan, monitored contact mailbox, and
-   retention operations. Deploy `waitlist-admin` only after Access and secrets
-   are ready, then `waitlist-web`. The four waitlist apexes/`www` have no web
-   records yet; their deploy will attach eight Custom Domains. Recheck for
-   conflicts immediately before that deploy. Run every release check and the
-   receipt-to-resolution test before opening collection. No test subscribers
-   were inserted into production during this audit.
-8. Cloudflare prepends managed robots rules on the landing zones. Recetas now
+7. The Access team domain and audience are set on the admin Worker. Matching
+   production encryption and digest keys are stored in the maintainer's macOS
+   Keychain and uploaded as Worker secrets. `ADMIN_BRAND_GRANTS` grants
+   `hi@futhr.io` access to Rivure, Diggymon, Refpath, and Orvane explicitly; no
+   wildcard or reviewer grant is configured.
+8. `waitlist-admin` was deployed first and its unauthenticated redirect to
+   Access was verified before `waitlist-web` was deployed. The public deployment
+   serves the apex and `www` hostnames for Rivure, Diggymon, Refpath, and Orvane,
+   and redirects both Orvane `.ai` aliases to `orvane.io`. Every apex page and
+   path-preserving canonical and alias redirect was verified live. No test
+   subscriber was inserted into production. Recheck DNS, secrets, the monitored
+   mailbox, and retention operations before later releases.
+9. Cloudflare prepends managed robots rules on the landing zones. Recetas now
    has approved descriptive copy and uses the same indexed policy as WoTEx and
    Reloved, so its application `Allow: /` agrees with the managed directive.
    Keep the HTML metadata, response headers, sitemap, and final robots response

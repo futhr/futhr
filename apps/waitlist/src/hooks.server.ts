@@ -1,4 +1,5 @@
 import type { Handle, HandleServerError } from '@sveltejs/kit'
+import { brandForAliasHost } from '$lib/brands/alias'
 import { brands } from '$lib/brands/brands'
 import { controller } from '$lib/brands/controller'
 import { brandForHost } from '$lib/brands/host'
@@ -14,18 +15,25 @@ const notFound = 404
 const loopback = new Set(['localhost', '127.0.0.1', '[::1]'])
 
 /**
- * A `www` hostname goes to its apex with scheme, port, path, and query kept;
- * any other unknown hostname goes to the portfolio. Nothing is served either way.
+ * An alias goes to its canonical venture hostname over HTTPS. A canonical
+ * `www` hostname goes to its apex with scheme, port, path, and query kept; any
+ * other unknown hostname goes to the portfolio. Nothing is served either way.
  */
 const redirectAway = (url: URL): Response => {
+  const alias = brandForAliasHost(url.hostname)
   const apex = apexForWww(url.hostname)
   const target = new URL(url.href)
-  if (apex) {
+  if (alias) {
+    target.protocol = 'https:'
+    target.hostname = alias.host
+    target.port = ''
+  } else if (apex) {
     target.hostname = apex.host
   }
+  const canonical = alias ?? apex
   return new Response(null, {
-    status: apex ? permanentRedirect : temporaryRedirect,
-    headers: { location: apex ? target.href : controller.parent.url }
+    status: canonical ? permanentRedirect : temporaryRedirect,
+    headers: { location: canonical ? target.href : controller.parent.url }
   })
 }
 

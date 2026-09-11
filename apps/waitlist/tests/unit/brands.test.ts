@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import { brandForAliasHost } from '../../src/lib/brands/alias.ts'
 import { brands } from '../../src/lib/brands/brands.ts'
 import { brandForHost } from '../../src/lib/brands/host.ts'
 import { strings } from '../../src/lib/brands/strings.ts'
@@ -73,6 +74,8 @@ describe('brandForHost', () => {
   it('fails closed for anything that is not one of the four apexes', () => {
     for (const host of [
       'www.rivure.com',
+      'orvane.ai',
+      'www.orvane.ai',
       'reloved.eco',
       'reloved.localhost',
       'futhr.io',
@@ -88,6 +91,19 @@ describe('brandForHost', () => {
       undefined
     ]) {
       expect(brandForHost(host)).toBeUndefined()
+    }
+  })
+})
+
+describe('brandForAliasHost', () => {
+  it('maps both Orvane alias hostnames to its canonical brand', () => {
+    expect(brandForAliasHost('orvane.ai')?.host).toBe('orvane.io')
+    expect(brandForAliasHost('WWW.ORVANE.AI.:8787')?.host).toBe('orvane.io')
+  })
+
+  it('does not treat canonical or unrelated hosts as aliases', () => {
+    for (const host of ['orvane.io', 'www.orvane.io', 'not-orvane.ai', '', null, undefined]) {
+      expect(brandForAliasHost(host)).toBeUndefined()
     }
   })
 })

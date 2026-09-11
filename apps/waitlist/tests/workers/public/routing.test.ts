@@ -70,6 +70,16 @@ describe('host routing', () => {
     expect(local.headers.get('location')).toBe('http://orvane.io:8787/privacy')
   })
 
+  it('redirects both Orvane alias hostnames to the canonical HTTPS origin', async () => {
+    for (const host of ['orvane.ai', 'www.orvane.ai']) {
+      const response = await call(`http://${host}:8787/privacy?x=1`, { redirect: 'manual' })
+      expect(response.status).toBe(308)
+      expect(response.headers.get('location')).toBe('https://orvane.io/privacy?x=1')
+      expect(response.headers.get('cache-control')).toBe('no-store')
+      expect(await response.text()).toBe('')
+    }
+  })
+
   it('serves a brand on its .localhost stand-in and lists them on the bare loopback host', async () => {
     const page = await call('http://rivure.localhost:8787/')
     expect(page.status).toBe(200)

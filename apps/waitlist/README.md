@@ -1,8 +1,8 @@
 # Waitlist Workers
 
-The venture waitlists: one public Worker that serves four exact hostnames and
-collects addresses and withdrawal requests, and one private Worker for
-administration. The reasoning is in
+The venture waitlists: one public Worker that serves four canonical hostnames,
+redirects Orvane's two `.ai` aliases, and collects addresses and withdrawal
+requests, plus one private Worker for administration. The reasoning is in
 [docs/architecture/waitlist-platform.md](../../docs/architecture/waitlist-platform.md).
 This file is the operating guide.
 
@@ -16,12 +16,14 @@ with it. A hidden honeypot and a per-client rate limit reduce automated submissi
 
 | Worker | Config | Hostnames | Capability |
 | --- | --- | --- | --- |
-| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
+| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`; `orvane.ai` redirects to `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
 | `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete, review and resolve withdrawal requests |
 
-The brand is derived from the request hostname in `src/lib/brands/host.ts`. A `www`
-hostname gets a permanent redirect to its apex; any other hostname gets a
-temporary redirect to `https://futhr.io/`. Nothing here is served from `futhr.io`.
+The brand is derived from the request hostname in `src/lib/brands/host.ts`. A
+canonical `www` hostname gets a permanent redirect to its apex. `orvane.ai` and
+`www.orvane.ai` permanently redirect to `https://orvane.io`, preserving the path
+and query. Any other hostname gets a temporary redirect to `https://futhr.io/`.
+Nothing here is served from `futhr.io`.
 
 ## Layout
 

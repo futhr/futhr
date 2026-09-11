@@ -1,7 +1,8 @@
-# Public waitlist Worker. One deployment serves the four venture hostnames; the
-# brand is derived from the exact request hostname in src/lib/brands/host.ts; a www
-# hostname redirects to its apex and any other hostname to futhr.io. Secrets are
-# listed in .dev.vars.example and are set with `wrangler secret put`, never here.
+# Public waitlist Worker. One deployment serves the four canonical venture
+# hostnames and redirects Orvane's .ai aliases. The brand is derived from the
+# exact request hostname in src/lib/brands/host.ts; a canonical www hostname
+# redirects to its apex and any other hostname to futhr.io. Secrets are listed
+# in .dev.vars.example and are set with `wrangler secret put`, never here.
 name = "waitlist-web"
 main = ".svelte-kit/cloudflare/_worker.js"
 compatibility_date = "2026-09-03"
@@ -71,6 +72,16 @@ custom_domain = true
 
 [[routes]]
 pattern = "www.orvane.io"
+custom_domain = true
+
+# Orvane's .ai domain is an alias. The Worker permanently redirects both
+# hostnames to orvane.io with the path and query intact.
+[[routes]]
+pattern = "orvane.ai"
+custom_domain = true
+
+[[routes]]
+pattern = "www.orvane.ai"
 custom_domain = true
 
 # Local development and end-to-end tests. Same bindings, no Custom Domains:

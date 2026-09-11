@@ -159,9 +159,10 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 
 - `src/lib/brands/brands.ts` is a closed map keyed by brand id. Hosts are exact
   apexes; the Worker resolves the brand from the hostname, redirects `www` to
-  the apex, and sends any other hostname to futhr.io without serving anything.
-  Adding a brand means a mark component, icons from `pnpm waitlist:icons`, and
-  a Custom Domain, in that order.
+  the apex, redirects the explicit `orvane.ai` and `www.orvane.ai` aliases to
+  `orvane.io`, and sends any other hostname to futhr.io without serving
+  anything. Adding a brand means a mark component, icons from
+  `pnpm waitlist:icons`, and a Custom Domain, in that order.
 - Copy follows `showcase-voice`. Write "waitlist" as one word everywhere.
 - Icons under `apps/waitlist/static/brands/` are generated and committed;
   regenerate them when a mark changes. The unit tests compare the SVGs to the

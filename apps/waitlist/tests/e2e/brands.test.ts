@@ -116,6 +116,13 @@ test('lists the local stand-ins on the loopback host and redirects www to the ap
   await page.goto(`${origin('www.rivure.com')}/privacy`)
   expect(page.url()).toBe(`${origin('rivure.com')}/privacy`)
   await expect(page.locator('h1')).toHaveText('Rivure')
+
+  const alias = await page.request.get(`http://127.0.0.1:${port}/privacy?x=1`, {
+    headers: { host: 'orvane.ai' },
+    maxRedirects: 0
+  })
+  expect(alias.status()).toBe(308)
+  expect(alias.headers().location).toBe('https://orvane.io/privacy?x=1')
 })
 
 test('fails closed for foreign brand paths', async ({ page }) => {
