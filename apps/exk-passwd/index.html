@@ -19,17 +19,7 @@
         <span class="wordmark-mark" aria-hidden="true"></span>
         <span>futhr<span class="wordmark-qualifier">:lab</span></span>
       </a>
-      <div class="header-status">
-        <section class="entropy-summary" aria-labelledby="entropy-summary-label">
-          <h2 id="entropy-summary-label" class="entropy-summary-label">Entropy</h2>
-          <span class="entropy-stat"><span>Seen</span><strong id="seen-entropy">—</strong></span>
-          <span class="entropy-stat"><span>Blind</span><strong id="blind-entropy">—</strong></span>
-          <span id="entropy-note" class="visually-hidden">Entropy appears after generation.</span>
-        </section>
-        <span id="runtime-status" class="runtime-status" data-state="booting"
-          >Starting Elixir…</span
-        >
-      </div>
+      <span id="runtime-status" class="runtime-status" data-state="booting">Starting Elixir…</span>
     </header>
 
     <main id="generator" class="generator-shell">
@@ -39,7 +29,7 @@
           <h1 id="page-title">Words you can remember.<br>Rules you can read.</h1>
           <p class="intro">
             ExkPasswd runs here through AtomVM. Passwords are made on this device with Web Crypto
-            and are never sent to Futhr.
+            and are never sent to a server.
           </p>
         </section>
 
@@ -83,8 +73,50 @@
         <div class="generator-column">
           <form id="settings" class="settings" aria-labelledby="settings-heading">
             <div class="section-heading">
-              <p class="eyebrow">Generator</p>
-              <h2 id="settings-heading">Password options</h2>
+              <p class="eyebrow">Entropy</p>
+              <section class="entropy-summary" aria-labelledby="settings-heading">
+                <h2 id="settings-heading" class="visually-hidden">Password entropy</h2>
+                <span class="entropy-stat"
+                  ><span>Seen</span><strong id="seen-entropy">—</strong></span
+                >
+                <span class="entropy-stat"
+                  ><span>Blind</span><strong id="blind-entropy">—</strong></span
+                >
+                <button
+                  class="entropy-help-button"
+                  type="button"
+                  popovertarget="entropy-explainer"
+                  aria-label="Explain entropy estimates"
+                >
+                  ?
+                </button>
+                <aside id="entropy-explainer" class="entropy-popover" popover>
+                  <p class="entropy-popover-eyebrow">Entropy estimates</p>
+                  <h3>Two views of the same password</h3>
+                  <dl>
+                    <div>
+                      <dt>Seen</dt>
+                      <dd>
+                        Assumes the generation method, preset, wordlist, and rules are known. This
+                        is the conservative estimate.
+                      </dd>
+                    </div>
+                    <div>
+                      <dt>Blind</dt>
+                      <dd>
+                        Uses only the password’s length and character classes, without its
+                        generation method. This estimate is usually much higher.
+                      </dd>
+                    </div>
+                  </dl>
+                  <p class="entropy-popover-note">
+                    One additional bit doubles the number of possible guesses.
+                  </p>
+                </aside>
+                <span id="entropy-note" class="visually-hidden"
+                  >Entropy appears after generation.</span
+                >
+              </section>
             </div>
 
             <div class="select-field">
@@ -162,13 +194,15 @@
             <h2 id="password-heading" class="password-label">Generated password</h2>
 
             <div class="password-field">
-              <output id="password" class="password" aria-label="Generated password">—</output>
+              <!-- biome-ignore lint/a11y/noNoninteractiveTabindex: Safari requires keyboard focus on this horizontal scroll region. -->
+              <output id="password" class="password" aria-label="Generated password" tabindex="0"
+                >—</output
+              >
               <button
                 id="copy"
                 class="copy-button"
                 type="button"
                 aria-label="Copy generated password"
-                title="Copy generated password"
                 disabled
               >
                 <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -193,19 +227,39 @@
     </main>
 
     <footer>
-      <p>ExkPasswd is open source. PWA and extensions share one attested core.</p>
-      <a
-        class="github-link"
-        href="https://github.com/futhr/exk_passwd"
-        aria-label="ExkPasswd repository on GitHub"
-        title="ExkPasswd repository on GitHub"
-      >
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <path
-            d="M12 .5C5.6.5.5 5.7.5 12.1c0 5.1 3.3 9.5 7.9 11 .6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.9 7.9-11C23.5 5.7 18.4.5 12 .5Z"
-          ></path>
-        </svg>
-      </a>
+      <p>ExkPasswd is open source. The PWA and Chrome extension share one attested core.</p>
+      <div class="footer-actions">
+        <div class="extension-platforms">
+          <span class="extension-platforms-label">Browser extension</span>
+          <a
+            id="chromium-extension-link"
+            class="extension-platform"
+            href="https://chromewebstore.google.com/search/ExkPasswd"
+            aria-label="Install ExkPasswd for Chrome"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <path
+                d="M12 0C8.21 0 4.831 1.757 2.632 4.501l3.953 6.848A5.454 5.454 0 0 1 12 6.545h10.691A12 12 0 0 0 12 0zM1.931 5.47A11.943 11.943 0 0 0 0 12c0 6.012 4.42 10.991 10.189 11.864l3.953-6.847a5.45 5.45 0 0 1-6.865-2.29zm13.342 2.166a5.446 5.446 0 0 1 1.45 7.09l.002.001h-.002l-5.344 9.257c.206.01.413.016.621.016 6.627 0 12-5.373 12-12 0-1.54-.29-3.011-.818-4.364zM12 16.364a4.364 4.364 0 1 1 0-8.728 4.364 4.364 0 0 1 0 8.728Z"
+              ></path>
+            </svg>
+            Chrome
+          </a>
+        </div>
+        <a
+          class="github-link"
+          href="https://github.com/futhr/exk_passwd"
+          aria-label="ExkPasswd repository on GitHub"
+        >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path
+              d="M12 .5C5.6.5.5 5.7.5 12.1c0 5.1 3.3 9.5 7.9 11 .6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.9 7.9-11C23.5 5.7 18.4.5 12 .5Z"
+            ></path>
+          </svg>
+          <span class="visually-hidden">ExkPasswd repository on GitHub</span>
+        </a>
+      </div>
     </footer>
 
     <div id="fatal-error" class="fatal-error" role="alert" hidden></div>

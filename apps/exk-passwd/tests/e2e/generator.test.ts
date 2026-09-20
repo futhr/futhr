@@ -8,9 +8,12 @@ const entropyPattern = /\d+\.\d bits/
 type BrowserPage = ConstructorParameters<typeof AxeBuilder>[0]['page']
 
 const generatedPassword = async (page: BrowserPage) => {
-  await expect(page.locator('#feedback')).toHaveText('Generated on this device.', {
-    timeout: 45_000
-  })
+  await expect(page.locator('#feedback')).toHaveText(
+    'Generated only on this device. Never sent over the network.',
+    {
+      timeout: 45_000
+    }
+  )
   const password = (await page.locator('#password').textContent()) ?? ''
   expect(password.length).toBeGreaterThan(10)
   return password
@@ -34,6 +37,14 @@ test('boots the real core, generates locally, and exposes audited runtime identi
   })
   expect(response?.headers()['content-security-policy']).toContain(
     "script-src 'self' 'wasm-unsafe-eval'"
+  )
+  await expect(page.locator('#chromium-extension-link')).toHaveAttribute(
+    'aria-label',
+    'Install ExkPasswd for Chrome'
+  )
+  await expect(page.locator('#chromium-extension-link')).toHaveAttribute(
+    'href',
+    'https://chromewebstore.google.com/search/ExkPasswd'
   )
 
   const password = await generatedPassword(page)
@@ -122,9 +133,12 @@ ${runtimeSource}`
   })
 
   await page.goto(appPath)
-  await expect(page.locator('#feedback')).toHaveText('Generated on this device.', {
-    timeout: 45_000
-  })
+  await expect(page.locator('#feedback')).toHaveText(
+    'Generated only on this device. Never sent over the network.',
+    {
+      timeout: 45_000
+    }
+  )
   await expect(page.locator('#password')).toHaveText('++07!most!EVOKE!think!08++')
   await expect(page.locator('#seen-entropy')).toHaveText('59.4 bits')
   await expect(page.locator('#blind-entropy')).toHaveText('170.8 bits')
@@ -169,9 +183,12 @@ test('supports every option, regeneration, and copy', async ({ browserName, cont
   await page.locator('#preset-options [role="option"]', { hasText: 'xkcd' }).click()
   await expect(presetTrigger).toHaveAttribute('aria-expanded', 'false')
   await expect(presetTrigger).toContainText('xkcd')
-  await expect(page.locator('#feedback')).toHaveText('Generated on this device.', {
-    timeout: 30_000
-  })
+  await expect(page.locator('#feedback')).toHaveText(
+    'Generated only on this device. Never sent over the network.',
+    {
+      timeout: 30_000
+    }
+  )
   const xkcd = (await page.locator('#password').textContent()) ?? ''
   expect(xkcd).not.toBe(first)
   expect(xkcd.split('-')).toHaveLength(5)
@@ -181,9 +198,12 @@ test('supports every option, regeneration, and copy', async ({ browserName, cont
   await page.locator('#digits-before').fill('1')
   await page.locator('#digits-after').fill('1')
   await page.locator('#settings').evaluate((form: HTMLFormElement) => form.requestSubmit())
-  await expect(page.locator('#feedback')).toHaveText('Generated on this device.', {
-    timeout: 30_000
-  })
+  await expect(page.locator('#feedback')).toHaveText(
+    'Generated only on this device. Never sent over the network.',
+    {
+      timeout: 30_000
+    }
+  )
   const customized = (await page.locator('#password').textContent()) ?? ''
   expect(customized).not.toBe(xkcd)
   expect(await page.locator('#settings').evaluate((element) => element.clientWidth)).toBe(
@@ -235,7 +255,9 @@ test('remains usable offline and cold boots the Chromium PWA cache', async ({
   const previous = (await page.locator('#password').textContent()) ?? ''
   await page.locator('#regenerate').click()
   await expect(page.locator('#password')).not.toHaveText(previous)
-  await expect(page.locator('#feedback')).toHaveText('Generated on this device.')
+  await expect(page.locator('#feedback')).toHaveText(
+    'Generated only on this device. Never sent over the network.'
+  )
   await expect(page.locator('#runtime-status')).toHaveText('Elixir ready · offline capable')
 })
 

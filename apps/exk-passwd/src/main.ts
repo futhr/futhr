@@ -5,8 +5,9 @@ import './styles.css'
 import { BrowserCore } from './browser-core'
 import { createDropdown } from './dropdown'
 import { fillActiveField } from './extension-fill'
+import { resolveExtensionStoreLinks } from './extension-store-links'
 
-type ConfigDescription = {
+interface ConfigDescription {
   case_mode: string
   digits_after: number
   digits_before: number
@@ -50,8 +51,14 @@ const seenEntropy = required<HTMLElement>('#seen-entropy')
 const blindEntropy = required<HTMLElement>('#blind-entropy')
 const entropyNote = required<HTMLElement>('#entropy-note')
 const runtimeInfo = required<HTMLDListElement>('#runtime-info')
+const chromiumExtensionLink = required<HTMLAnchorElement>('#chromium-extension-link')
 
 document.documentElement.dataset.day = String(new Date().getDay())
+
+const extensionStoreLinks = resolveExtensionStoreLinks(import.meta.env)
+if (extensionStoreLinks.chromium) {
+  chromiumExtensionLink.href = extensionStoreLinks.chromium
+}
 
 let currentPassword = ''
 let generation = 0
@@ -123,7 +130,7 @@ const generate = async (): Promise<void> => {
     seenEntropy.textContent = formatBits(result.entropy.seen)
     blindEntropy.textContent = formatBits(result.entropy.blind)
     entropyNote.textContent = `${result.entropy.status} · seen estimate ${result.entropy.seen_crack_time} at the comparison rate.`
-    announce('Generated on this device.')
+    announce('Generated only on this device. Never sent over the network.')
   } catch (error) {
     if (thisGeneration !== generation) {
       return
@@ -236,7 +243,7 @@ copy.addEventListener('click', () => {
     .catch(() => announce('Copy failed. Select the password and copy it manually.'))
 })
 
-const extensionProtocol = /^(chrome|moz)-extension:$/.test(globalThis.location.protocol)
+const extensionProtocol = globalThis.location.protocol === 'chrome-extension:'
 if (extensionProtocol) {
   fill.hidden = false
   fill.addEventListener('click', () => {
