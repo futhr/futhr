@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "browser_core_version": "0.1.0",
+  "futhr_source_commit": "a1b648a54c61474cfb3dd0c46c907be105204a70",
+  "futhr_source_dirty": true,
+  "exk_passwd": {
+    "version": "0.3.2",
+    "commit": "6be2b6964430aedd7231f45b63d836b4707156ff",
+    "dirty": false
+  },
+  "runtime": {
+    "popcorn_version": "0.3.3",
+    "popcorn_commit": "bcb675badf61e428b2c8466f3fbd2bcb587b2d5d",
+    "fission_vm_commit": "6c3208c7b3dbc7dacc35a19f8de1fa80b358ac73",
+    "fission_vm_patch_sha256": "00b93b8741e267d25737666bf5ee785e77d4514349ba3ead30aaf1e53389b7f5",
+    "elixir_version": "1.17.3",
+    "otp_version": "26.0.2",
+    "emscripten_version": "4.0.8"
+  },
+  "dictionary": {
+    "sha256": "18586c092f641ecd1a471dd6ab35618ab69f0aa7483486424f7caf0996d06259",
+    "words": 7772
+  },
+  "files": {
+    "core/AtomVM.mjs": {
+      "bytes": 156785,
+      "sha256": "26e936c2aadad3b9403d6023e789face5404fdd904947745814b6ad8c6f4dc5b"
+    },
+    "core/AtomVM.wasm": {
+      "bytes": 986353,
+      "sha256": "453828665de9e41312fe397ee246cb176460769bba182c30fa6f8a4bb3248ee0"
+    },
+    "core/exk_passwd.avm": {
+      "bytes": 7273704,
+      "sha256": "a31a97e3e32793352388bd12b4761079db5e0107ffbf221fafd19a8d2143b175"
+    },
+    "licenses/ExkPasswd-BSD-2-Clause.md": {
+      "bytes": 1350,
+      "sha256": "3fe019359bc77d3fa7d14bf57263cdf23dbcfc02565f18553f0658291d571a40"
+    },
+    "licenses/FissionVM-Apache-2.0.txt": {
+      "bytes": 11358,
+      "sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
+    },
+    "licenses/Popcorn-Apache-2.0.txt": {
+      "bytes": 11320,
+      "sha256": "063973468d356691445b06f430a0466bec59924e6791b7c09b28ab72231a813b"
+    }
+  }
+}

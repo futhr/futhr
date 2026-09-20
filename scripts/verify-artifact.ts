@@ -36,7 +36,13 @@ const collectFiles = async (directory: string): Promise<string[]> => {
 /** The prerendered site: a home page and no story files. */
 const verifyWeb = async () => {
   const directory = 'build'
-  await requireFile(join(directory, 'index.html'))
+  await Promise.all([
+    requireFile(join(directory, 'index.html')),
+    requireFile(join(directory, 'exk-passwd/index.html')),
+    requireFile(join(directory, 'exk-passwd/runtime.html')),
+    requireFile(join(directory, 'exk-passwd/service-worker.js')),
+    requireFile(join(directory, 'exk-passwd/browser-core/manifest.json'))
+  ])
   const stories = (await collectFiles(directory)).filter((file) => storyFilePattern.test(file))
   if (stories.length > 0) {
     throw new Error(`Story files leaked into the web artifact: ${stories.join(', ')}`)

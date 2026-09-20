@@ -1,0 +1,42 @@
+{
+  "spdxVersion": "SPDX-2.3",
+  "dataLicense": "CC0-1.0",
+  "SPDXID": "SPDXRef-DOCUMENT",
+  "name": "exk-passwd-browser-core-0.1.0",
+  "documentNamespace": "https://futhr.io/exk-passwd/sbom/a1b648a54c61474cfb3dd0c46c907be105204a70",
+  "creationInfo": {
+    "created": "2026-09-20T00:00:00Z",
+    "creators": [
+      "Organization: Futhr"
+    ]
+  },
+  "packages": [
+    {
+      "SPDXID": "SPDXRef-ExkPasswd",
+      "name": "exk_passwd",
+      "versionInfo": "0.3.2",
+      "downloadLocation": "https://github.com/futhr/exk_passwd",
+      "licenseConcluded": "BSD-2-Clause",
+      "licenseDeclared": "BSD-2-Clause",
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-FissionVM",
+      "name": "FissionVM",
+      "versionInfo": "6c3208c7b3dbc7dacc35a19f8de1fa80b358ac73",
+      "downloadLocation": "https://github.com/software-mansion-labs/FissionVM",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "filesAnalyzed": false
+    },
+    {
+      "SPDXID": "SPDXRef-Popcorn",
+      "name": "@swmansion/popcorn",
+      "versionInfo": "0.3.3",
+      "downloadLocation": "https://github.com/software-mansion/popcorn",
+      "licenseConcluded": "Apache-2.0",
+      "licenseDeclared": "Apache-2.0",
+      "filesAnalyzed": false
+    }
+  ]
+}

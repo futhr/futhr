@@ -1,0 +1,80 @@
+diff --git a/src/libAtomVM/otp_crypto.c b/src/libAtomVM/otp_crypto.c
+index 224c93a4..8526e3a4 100644
+--- a/src/libAtomVM/otp_crypto.c
++++ b/src/libAtomVM/otp_crypto.c
+@@ -63,6 +63,26 @@
+ #include <sodium.h>
+ #endif
+ 
++#ifdef __EMSCRIPTEN__
++#include <emscripten.h>
++
++EM_JS(int, webcrypto_strong_rand_bytes, (unsigned char *buf, size_t size), {
++    try {
++        const maximumChunk = 65536;
++        for (let offset = 0; offset < size; offset += maximumChunk) {
++            const length = Math.min(maximumChunk, size - offset);
++            const target = new Uint8Array(length);
++            globalThis.crypto.getRandomValues(target);
++            HEAPU8.set(target, buf + offset);
++            target.fill(0);
++        }
++        return 0;
++    } catch (_error) {
++        return -1;
++    }
++});
++#endif
++
+ // mbedtls_ct_memcmp is available in 2.28.x+ and 3.1.x+ (absent in 3.0.x)
+ #if (MBEDTLS_VERSION_NUMBER >= 0x021C0000 && MBEDTLS_VERSION_NUMBER < 0x03000000) \
+     || MBEDTLS_VERSION_NUMBER >= 0x03010000
+@@ -3231,6 +3251,14 @@ term nif_crypto_strong_rand_bytes(Context *ctx, int argc, term argv[])
+         RAISE_ERROR(OUT_OF_MEMORY_ATOM);
+     }
+ 
++#ifdef __EMSCRIPTEN__
++    term out_bin = term_create_uninitialized_binary(out_len, &ctx->heap, ctx->global);
++    unsigned char *out = (unsigned char *) term_binary_data(out_bin);
++
++    if (UNLIKELY(webcrypto_strong_rand_bytes(out, out_len) != 0)) {
++        RAISE_ERROR(make_crypto_error(__FILE__, __LINE__, "Web Crypto random failed", ctx));
++    }
++#else
+     mbedtls_ctr_drbg_context *rnd_ctx = sys_mbedtls_get_ctr_drbg_context_lock(ctx->global);
+     if (IS_NULL_PTR(rnd_ctx)) {
+         RAISE_ERROR(make_crypto_error(__FILE__, __LINE__, "Failed CTR_DRBG init", ctx));
+@@ -3244,6 +3272,7 @@ term nif_crypto_strong_rand_bytes(Context *ctx, int argc, term argv[])
+     if (UNLIKELY(err != 0)) {
+         RAISE_ERROR(make_crypto_error(__FILE__, __LINE__, "Failed random", ctx));
+     }
++#endif
+ 
+     return out_bin;
+ }
+diff --git a/src/platforms/emscripten/src/atomvm.pre.js b/src/platforms/emscripten/src/atomvm.pre.js
+index af0b1504..c58a282b 100644
+--- a/src/platforms/emscripten/src/atomvm.pre.js
++++ b/src/platforms/emscripten/src/atomvm.pre.js
+@@ -40,7 +40,7 @@ Module["onGetTrackedObjects"] = (keys) => {
+   const getTrackedObject = (key) => Module["trackedObjectsMap"].get(key);
+   return keys.map(getTrackedObject);
+ };
+-Module["onRunTrackedJs"] = (scriptString, isDebug) => {
++Module["onRunTrackedJs"] ??= (scriptString, isDebug) => {
+   const trackValue = (value) => {
+     const key = Module["nextTrackedObjectKey"]();
+     Module["trackedObjectsMap"].set(key, value);
+diff --git a/src/platforms/emscripten/src/CMakeLists.txt b/src/platforms/emscripten/src/CMakeLists.txt
+index 027f4748..40dcea26 100644
+--- a/src/platforms/emscripten/src/CMakeLists.txt
++++ b/src/platforms/emscripten/src/CMakeLists.txt
+@@ -28,7 +28,7 @@ add_subdirectory(../../../libAtomVM libAtomVM)
+ target_link_libraries(AtomVM PUBLIC libAtomVM)
+ target_compile_options(libAtomVM PUBLIC -O3 -fno-exceptions -fno-rtti -pthread -sINLINING_LIMIT -sUSE_ZLIB=1)
+ target_compile_definitions(libAtomVM PRIVATE WITH_ZLIB)
+-target_link_options(AtomVM PRIVATE -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,stringToNewUTF8,FS -sEMULATE_FUNCTION_POINTER_CASTS=1 -sEXPORTED_FUNCTIONS=_malloc,_cast,_call,_next_tracked_object_key,_main -sEXPORT_ES6=1 -sUSE_ZLIB=1 -O3 -pthread -sFETCH -lwebsocket.js --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/atomvm.pre.js)
++target_link_options(AtomVM PRIVATE -sEXPORTED_RUNTIME_METHODS=ccall,cwrap,stringToNewUTF8,FS -sEMULATE_FUNCTION_POINTER_CASTS=1 -sEXPORTED_FUNCTIONS=_malloc,_cast,_call,_next_tracked_object_key,_main -sEXPORT_ES6=1 -sUSE_ZLIB=1 -sINITIAL_MEMORY=67108864 -O3 -pthread -sFETCH -lwebsocket.js --pre-js ${CMAKE_CURRENT_SOURCE_DIR}/atomvm.pre.js)
+ set(CMAKE_EXECUTABLE_SUFFIX ".mjs")
+ if (CMAKE_BUILD_TYPE STREQUAL "Debug")
+     target_link_options(AtomVM PRIVATE -sASSERTIONS=2 -sSAFE_HEAP -sSTACK_OVERFLOW_CHECK)

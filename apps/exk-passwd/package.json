@@ -1,0 +1,31 @@
+{
+  "name": "exk-passwd-browser",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "license": "SEE LICENSE IN ../../LICENSE.md",
+  "scripts": {
+    "build": "pnpm core:verify && vite build && node scripts/finalize-build.ts && node scripts/package-extensions.ts && node scripts/verify-artifact.ts",
+    "check": "tsc --noEmit",
+    "core:import": "node scripts/import-browser-core.ts",
+    "core:runtime": "sh scripts/build-runtime.sh",
+    "core:verify": "node scripts/verify-browser-core.ts",
+    "dev": "vite dev --host 127.0.0.1",
+    "preview": "vite preview --host 127.0.0.1",
+    "test": "pnpm test:unit && pnpm test:e2e",
+    "test:e2e": "playwright test",
+    "test:unit": "vitest run --config vitest.config.ts"
+  },
+  "dependencies": {
+    "@fontsource-variable/archivo": "5.3.0"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "4.13.0",
+    "@playwright/test": "1.63.0",
+    "@swmansion/popcorn": "0.3.3",
+    "@types/node": "24.13.3",
+    "typescript": "6.0.3",
+    "vite": "8.2.2",
+    "vitest": "4.1.11"
+  }
+}

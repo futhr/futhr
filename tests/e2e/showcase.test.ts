@@ -211,3 +211,17 @@ test('preserves other applications caches when a service worker activates', asyn
   expect(await page.evaluate(() => caches.has('another-app'))).toBe(true)
   await context.close()
 })
+
+test('serves the integrated ExkPasswd runtime with isolation headers', async ({ page }) => {
+  const response = await page.goto('/exk-passwd/')
+
+  expect(response?.headers()).toMatchObject({
+    'cross-origin-embedder-policy': 'require-corp',
+    'cross-origin-opener-policy': 'same-origin',
+    'cross-origin-resource-policy': 'same-origin'
+  })
+  await expect(page.locator('#runtime-status')).toHaveText('Elixir ready · offline capable', {
+    timeout: 45_000
+  })
+  await expect(page.locator('#password')).not.toHaveText('—')
+})

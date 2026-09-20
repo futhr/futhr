@@ -10,12 +10,19 @@ import { afterEach, expect, it } from 'vitest'
 const exec = promisify(execFile)
 const script = fileURLToPath(new URL('../scripts/verify-artifact.ts', import.meta.url))
 const temporary: string[] = []
+const requiredWebFiles = {
+  'build/index.html': '<!doctype html>',
+  'build/exk-passwd/index.html': '<!doctype html>',
+  'build/exk-passwd/runtime.html': '<!doctype html>',
+  'build/exk-passwd/service-worker.js': '',
+  'build/exk-passwd/browser-core/manifest.json': '{}'
+}
 
 const artifact = async (files: Record<string, string>) => {
   const cwd = await mkdtemp(join(tmpdir(), 'futhr-artifact-'))
   temporary.push(cwd)
   await Promise.all(
-    Object.entries(files).map(async ([path, contents]) => {
+    Object.entries({ ...requiredWebFiles, ...files }).map(async ([path, contents]) => {
       const file = join(cwd, path)
       await mkdir(join(file, '..'), { recursive: true })
       await writeFile(file, contents)

@@ -20,12 +20,16 @@
   "scripts": {
     "dev": "vite dev",
     "build": "pnpm build:web",
-    "build:web": "vite build && node scripts/verify-artifact.ts web",
+    "build:web": "vite build && pnpm --filter exk-passwd-browser build && node scripts/integrate-exk-passwd.ts && node scripts/verify-artifact.ts web",
+    "build:exk-passwd": "pnpm --filter exk-passwd-browser build",
     "build:waitlist": "pnpm --filter waitlist build",
     "build:landing": "pnpm --filter landing build",
+    "check:exk-passwd": "pnpm --filter exk-passwd-browser check",
     "check:landing": "pnpm --filter landing check",
+    "test:exk-passwd": "pnpm --filter exk-passwd-browser test",
     "test:landing": "pnpm --filter landing test",
     "landing:icons": "pnpm --filter landing icons",
+    "site:icons": "node scripts/generate-site-icons.ts",
     "preview": "vite preview",
     "storybook": "storybook dev --port 6006 --no-open",
     "storybook:build": "storybook build --output-dir storybook-static && node scripts/verify-artifact.ts storybook",
@@ -44,7 +48,7 @@
     "test:storybook:e2e": "playwright test --config playwright.storybook.config.ts",
     "test:e2e": "playwright test",
     "test:waitlist": "pnpm --filter waitlist test",
-    "test:all": "pnpm quality && pnpm check && pnpm check:waitlist && pnpm check:landing && pnpm test:unit && pnpm test:components && pnpm test:storybook && pnpm test:e2e && pnpm test:storybook:e2e && pnpm test:waitlist && pnpm test:landing",
+    "test:all": "pnpm quality && pnpm check && pnpm check:exk-passwd && pnpm check:waitlist && pnpm check:landing && pnpm test:unit && pnpm test:components && pnpm test:storybook && pnpm test:e2e && pnpm test:storybook:e2e && pnpm test:exk-passwd && pnpm test:waitlist && pnpm test:landing",
     "waitlist:icons": "pnpm --filter waitlist icons"
   },
   "devDependencies": {

@@ -127,6 +127,9 @@
           "performance": {
             "noAwaitInLoops": "off"
           },
+          "security": {
+            "noSecrets": "off"
+          },
           "style": {
             "noProcessEnv": "off"
           }
@@ -193,6 +196,7 @@
             "noExcessiveLinesPerFunction": "off"
           },
           "correctness": {
+            "noNodejsModules": "off",
             "useQwikValidLexicalScope": "off"
           },
           "performance": {
@@ -220,6 +224,16 @@
       }
     },
     {
+      "includes": ["apps/exk-passwd/src/styles.css"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noExcessiveLinesPerFile": "off"
+          }
+        }
+      }
+    },
+    {
       "includes": ["apps/*/tests/workers/**/*.ts"],
       "linter": {
         "rules": {
@@ -231,6 +245,11 @@
     }
   ],
   "files": {
-    "includes": ["**", "!apps/*/static"]
+    "includes": [
+      "**",
+      "!apps/*/static",
+      "!apps/exk-passwd/browser-core",
+      "!apps/exk-passwd/runtime"
+    ]
   }
 }

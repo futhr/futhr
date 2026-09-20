@@ -1,0 +1,214 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#1b1b1b">
+    <meta
+      name="description"
+      content="Generate memorable ExkPasswd passphrases locally with Elixir, AtomVM, and Web Crypto."
+    >
+    <link rel="icon" href="/icons/favicon.svg">
+    <link rel="manifest" href="./manifest.webmanifest">
+    <title>ExkPasswd generator — Futhr</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#generator">Skip to generator</a>
+    <header class="masthead">
+      <a class="wordmark" href="/" aria-label="futhr:lab home">
+        <span class="wordmark-mark" aria-hidden="true"></span>
+        <span>futhr<span class="wordmark-qualifier">:lab</span></span>
+      </a>
+      <div class="header-status">
+        <section class="entropy-summary" aria-labelledby="entropy-summary-label">
+          <h2 id="entropy-summary-label" class="entropy-summary-label">Entropy</h2>
+          <span class="entropy-stat"><span>Seen</span><strong id="seen-entropy">—</strong></span>
+          <span class="entropy-stat"><span>Blind</span><strong id="blind-entropy">—</strong></span>
+          <span id="entropy-note" class="visually-hidden">Entropy appears after generation.</span>
+        </section>
+        <span id="runtime-status" class="runtime-status" data-state="booting"
+          >Starting Elixir…</span
+        >
+      </div>
+    </header>
+
+    <main id="generator" class="generator-shell">
+      <div class="generator-layout">
+        <section class="hero" aria-labelledby="page-title">
+          <p class="eyebrow">Elixir in your browser</p>
+          <h1 id="page-title">Words you can remember.<br>Rules you can read.</h1>
+          <p class="intro">
+            ExkPasswd runs here through AtomVM. Passwords are made on this device with Web Crypto
+            and are never sent to Futhr.
+          </p>
+        </section>
+
+        <section id="technical" class="trust" aria-labelledby="trust-heading">
+          <div class="section-heading">
+            <p class="eyebrow">Local execution</p>
+            <h2 id="trust-heading" class="visually-hidden">Runtime facts</h2>
+          </div>
+          <dl id="runtime-info">
+            <div>
+              <dt>ExkPasswd</dt>
+              <dd>Starting…</dd>
+            </div>
+            <div>
+              <dt>Browser core</dt>
+              <dd>Starting…</dd>
+            </div>
+            <div>
+              <dt>AtomVM runtime</dt>
+              <dd>Starting…</dd>
+            </div>
+            <div>
+              <dt>Randomness</dt>
+              <dd>Web Crypto required</dd>
+            </div>
+            <div>
+              <dt>Isolation</dt>
+              <dd>Checking…</dd>
+            </div>
+            <div>
+              <dt>Dictionary</dt>
+              <dd>Checking…</dd>
+            </div>
+          </dl>
+          <p class="trust-copy">
+            Generated values remain in page memory until pagehide. Copying or filling hands them to
+            the operating system or destination page.
+          </p>
+        </section>
+
+        <div class="generator-column">
+          <form id="settings" class="settings" aria-labelledby="settings-heading">
+            <div class="section-heading">
+              <p class="eyebrow">Generator</p>
+              <h2 id="settings-heading">Password options</h2>
+            </div>
+
+            <div class="select-field">
+              <span id="preset-label">Preset</span>
+              <select
+                id="preset"
+                name="preset"
+                aria-labelledby="preset-label"
+                hidden
+                disabled
+              ></select>
+            </div>
+
+            <div class="field-grid">
+              <label>
+                <span>Words</span>
+                <input id="num-words" name="num_words" type="number" min="1" max="10" value="3">
+              </label>
+              <label>
+                <span>Separator</span>
+                <input id="separator" name="separator" type="text" maxlength="20" value="-">
+              </label>
+            </div>
+
+            <div class="select-field">
+              <span id="case-mode-label">Case</span>
+              <select id="case-mode" name="case_mode" aria-labelledby="case-mode-label" hidden>
+                <option value="alternate">Alternating</option>
+                <option value="random">Random per word</option>
+                <option value="capitalize">Capitalized</option>
+                <option value="lower">Lowercase</option>
+                <option value="upper">Uppercase</option>
+                <option value="invert">Inverted first letter</option>
+                <option value="none">Dictionary case</option>
+              </select>
+            </div>
+
+            <div class="option-grid">
+              <label>
+                <span>Digits before</span>
+                <input id="digits-before" type="number" min="0" max="5" value="0">
+              </label>
+              <label>
+                <span>Digits after</span>
+                <input id="digits-after" type="number" min="0" max="5" value="0">
+              </label>
+              <label>
+                <span>Pad character</span>
+                <input id="padding-char" type="text" maxlength="20">
+              </label>
+              <label>
+                <span>Pad before</span>
+                <input id="padding-before" type="number" min="0" max="5" value="0">
+              </label>
+              <label>
+                <span>Pad after</span>
+                <input id="padding-after" type="number" min="0" max="5" value="0">
+              </label>
+              <label>
+                <span>Pad to length</span>
+                <input id="padding-length" type="number" min="0" max="999" value="0">
+              </label>
+              <div class="select-field">
+                <span id="substitution-mode-label">Substitution</span>
+                <select id="substitution-mode" aria-labelledby="substitution-mode-label" hidden>
+                  <option value="none">None</option>
+                  <option value="always">Always</option>
+                  <option value="random">Random</option>
+                </select>
+              </div>
+            </div>
+          </form>
+
+          <section class="password-panel" aria-labelledby="password-heading">
+            <h2 id="password-heading" class="password-label">Generated password</h2>
+
+            <div class="password-field">
+              <output id="password" class="password" aria-label="Generated password">—</output>
+              <button
+                id="copy"
+                class="copy-button"
+                type="button"
+                aria-label="Copy generated password"
+                title="Copy generated password"
+                disabled
+              >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="8" y="8" width="11" height="11" rx="1"></rect>
+                  <path d="M16 8V5H5v11h3"></path>
+                </svg>
+              </button>
+            </div>
+
+            <div class="primary-actions">
+              <button id="regenerate" class="button button-primary" type="button" disabled>
+                Regenerate
+              </button>
+              <button id="fill" class="button" type="button" hidden disabled>
+                Fill current field
+              </button>
+              <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+            </div>
+          </section>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <p>ExkPasswd is open source. PWA and extensions share one attested core.</p>
+      <a
+        class="github-link"
+        href="https://github.com/futhr/exk_passwd"
+        aria-label="ExkPasswd repository on GitHub"
+        title="ExkPasswd repository on GitHub"
+      >
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path
+            d="M12 .5C5.6.5.5 5.7.5 12.1c0 5.1 3.3 9.5 7.9 11 .6.1.8-.3.8-.6v-2.1c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.8 0-1.3.5-2.3 1.2-3.2-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.2 1.2a11 11 0 0 1 5.8 0c2.2-1.5 3.2-1.2 3.2-1.2.6 1.6.2 2.8.1 3.1.8.9 1.2 1.9 1.2 3.2 0 4.5-2.7 5.5-5.3 5.8.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.9 7.9-11C23.5 5.7 18.4.5 12 .5Z"
+          ></path>
+        </svg>
+      </a>
+    </footer>
+
+    <div id="fatal-error" class="fatal-error" role="alert" hidden></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

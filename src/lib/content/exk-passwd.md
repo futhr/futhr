@@ -6,6 +6,8 @@ lede: Memorable passphrases from independently chosen words, shaped by configura
 repositories:
   - futhr/exk_passwd
 links:
+  - label: Generate passwords
+    href: /exk-passwd/
   - label: Repository
     href: https://github.com/futhr/exk_passwd
   - label: HexDocs
