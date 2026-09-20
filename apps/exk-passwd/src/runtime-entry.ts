@@ -5,22 +5,22 @@ const runtimeBootTimeoutMs = 30_000
 const bootAttempts = 80
 const bootRetryMs = 100
 
-type CoreFile = {
+interface CoreFile {
   bytes: number
   sha256: string
 }
 
-type CoreManifest = {
+interface CoreManifest {
   browser_core_version: string
   files: Record<string, CoreFile>
 }
 
-type AtomVmModule = {
+interface AtomVmModule {
   FS: {
-    mkdir(path: string): void
-    writeFile(path: string, bytes: Int8Array | Uint8Array): void
+    mkdir: (path: string) => void
+    writeFile: (path: string, bytes: Int8Array | Uint8Array) => void
   }
-  call(process: string, message: string): Promise<string>
+  call: (process: string, message: string) => Promise<string>
 }
 
 type AtomVmInit = (options: Record<string, unknown>) => Promise<AtomVmModule>
@@ -29,13 +29,13 @@ type CoreReply =
   | { ok: true; data: Record<string, unknown> }
   | { ok: false; error: { code: string; message: string } }
 
-type RequestMessage = {
+interface RequestMessage {
   type: 'request'
   requestId: number
   command: Record<string, unknown>
 }
 
-type VerifiedCore = {
+interface VerifiedCore {
   moduleUrl: URL
   bundle: Uint8Array<ArrayBuffer>
 }
@@ -64,7 +64,9 @@ const verifyCore = async (): Promise<VerifiedCore> => {
   }
 
   const coreRoot = new URL('browser-core/', globalThis.location.href)
-  const manifestResponse = await fetch(new URL('manifest.json', coreRoot), {
+  const manifestName =
+    globalThis.location.protocol === 'chrome-extension:' ? 'core-metadata.json' : 'manifest.json'
+  const manifestResponse = await fetch(new URL(manifestName, coreRoot), {
     cache: 'no-store',
     credentials: 'same-origin'
   })

@@ -131,8 +131,12 @@ jobs:
         run: pnpm check:exk-passwd
       - name: Run browser-core and packaging tests
         run: pnpm --filter exk-passwd-browser test:unit
+      - name: Check Chrome Web Store publish readiness
+        run: pnpm --filter exk-passwd-browser stores:verify
+        env:
+          VITE_EXK_PASSWD_CHROMIUM_STORE_URL: ${{ vars.VITE_EXK_PASSWD_CHROMIUM_STORE_URL }}
       - name: Install browser engines
-        run: pnpm exec playwright install --with-deps chromium firefox webkit
+        run: pnpm exec playwright install --with-deps chromium webkit
       - name: Run browser generator end-to-end tests
         run: pnpm --filter exk-passwd-browser test:e2e
 

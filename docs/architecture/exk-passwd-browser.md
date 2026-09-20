@@ -22,8 +22,8 @@ The browser product must:
   `crypto.getRandomValues()`;
 - preserve ExkPasswd's rejection sampling and generator-aware entropy model;
 - ship as static Cloudflare-hosted assets with no password-generation backend;
-- support an installable PWA and browser-extension wrappers around the same
-  versioned browser core;
+- support an installable PWA and Chrome extension around the same versioned
+  browser core;
 - request the minimum possible browser-extension permissions;
 - work offline once installed;
 - make the browser runtime and release provenance auditable;
@@ -58,7 +58,7 @@ Owns:
 
 - the public generator page;
 - the PWA;
-- the browser-extension user interface;
+- the Chrome extension user interface;
 - AtomVM browser packaging;
 - Cloudflare deployment;
 - browser and extension end-to-end tests;
@@ -75,8 +75,8 @@ The current ExkPasswd showcase record is:
 `src/lib/content/exk-passwd.md`
 
 It currently links to the repository and HexDocs. The browser work should add a
-prominent generator link and, once extension distribution is live, extension
-install links.
+prominent generator link and, once extension distribution is live, a Chrome
+extension install link.
 
 The architectural convention already used by this repository is
 `docs/architecture/`, so this document lives there.
@@ -280,7 +280,7 @@ The browser and native library must use the same canonical dictionary data.
 ## Browser core artifact
 
 Build a single versioned browser-core release artifact and reuse those exact
-bytes in the site, PWA, and browser extensions.
+bytes in the site, PWA, and Chrome extension.
 
 Example shape:
 
@@ -530,36 +530,10 @@ The Chromium extension release gate must prove:
 - explicit fill works on a disposable test page;
 - no unexpected network request leaves the extension.
 
-## Firefox
-
-Firefox must be treated as a compatibility gate, not an assumption.
-
-AtomVM's normal Emscripten profile may require SharedArrayBuffer/cross-origin
-isolation in a way that is not equivalent to Chromium extension-page manifest
-support.
-
-Keep a Firefox package in-tree and test it continuously, but publish it only
-after automated real-browser tests prove:
-
-- cross-origin isolation;
-- SharedArrayBuffer availability where required;
-- AtomVM boot;
-- WebCrypto random generation;
-- ExkPasswd semantic conformance;
-- strict CSP.
-
-If the standard AtomVM profile cannot satisfy this in Firefox extension pages,
-prefer an AtomVM no-SAB/single-scheduler browser profile or an upstream fix.
-Do not fall back to a JavaScript password generator.
-
-Mozilla extension signing/validation remains part of release distribution:
-
-- <https://extensionworkshop.com/documentation/publish/signing-and-distribution-overview/>
-
 ## Extension-store distribution
 
-Site and extension release packages should embed the exact same attested
-browser-core files.
+The site and Chrome extension release package should embed the exact same
+attested browser-core files.
 
 Packaging must verify this byte-for-byte before publication.
 
@@ -575,6 +549,153 @@ Store disclosures should be simple and accurate:
 - sold/shared data: none;
 - remote code: none;
 - remote password generation: none.
+
+### Publisher identity and EEA trader declaration
+
+The Chrome Web Store account owner must make an accurate self-declaration. Free
+or open-source distribution does not by itself determine trader status.
+
+For this project, select **trader** when the publisher account represents Futhr,
+a registered business, self-employment, or professional software work. Select
+**non-trader** only when the extension is published strictly as a private hobby,
+outside any trade, business, craft, or profession. If that distinction is not
+clear for the account owner, obtain legal advice before submitting the form.
+
+Do not commit addresses, identity documents, payment details, or other account
+verification data to either repository.
+
+Chrome's current definition and disclosure requirements are documented at:
+
+- <https://developer.chrome.com/docs/webstore/program-policies/trader-disclosure>
+
+### Store upload packages
+
+Build the browser application and Chrome extension directory from the repository
+root:
+
+```bash
+pnpm build:exk-passwd
+```
+
+The upload roots are:
+
+```text
+apps/exk-passwd/dist-extensions/chromium/
+```
+
+Create the upload archive with the extension files, including `manifest.json`,
+at the archive root:
+
+```bash
+(cd apps/exk-passwd/dist-extensions/chromium && \
+  zip -rFS ../exk-passwd-chromium-0.1.0.zip .)
+```
+
+Use the manifest version in each archive name. Test the exact built directories
+before packaging them. Do not upload the source directory or a ZIP containing an
+extra parent directory.
+
+The upload archive must contain exactly one file named `manifest.json`, at its
+root. The browser-core release metadata is named
+`browser-core/core-metadata.json` inside the Chrome package. Its bytes must match
+the website's `browser-core/manifest.json`; only the package filename differs.
+
+Packaging references:
+
+- <https://developer.chrome.com/docs/webstore/prepare>
+
+### Chrome Web Store first publication
+
+1. Register a Chrome Web Store developer account, pay the one-time registration
+   fee, enable two-step verification, and complete the developer profile,
+   contact verification, and trader declaration.
+2. Choose **New item** in the developer dashboard and upload the Chromium ZIP.
+3. Complete **Store Listing**, **Privacy**, **Distribution**, and **Test
+   instructions**.
+4. Describe the single purpose as local password generation with optional fill
+   on explicit user request.
+5. Declare that the extension collects no data, sells or shares no data, loads
+   no remote code, and performs no remote password generation.
+6. Explain that `activeTab` and `scripting` are used only to fill the currently
+   selected password field after an explicit action. The manifest requests no
+   persistent host permissions.
+7. Use controlled Futhr URLs for the support and official website fields.
+8. Copy the canonical public listing URL once Google assigns the item ID.
+9. Submit for review. Use deferred publishing if the website and extension must
+   launch together.
+
+Future uploads must use the existing item and a higher manifest version. Do not
+create another store item for an update.
+
+Chrome references:
+
+- <https://developer.chrome.com/docs/webstore/register>
+- <https://developer.chrome.com/docs/webstore/publish>
+- <https://developer.chrome.com/docs/webstore/cws-dashboard-listing>
+- <https://developer.chrome.com/docs/webstore/cws-dashboard-distribution>
+
+### Store URL configuration
+
+The website footer is the installation surface. Local and test builds may link
+to the official store search. A release build must use the direct listing URL
+through this public build input:
+
+```text
+VITE_EXK_PASSWD_CHROMIUM_STORE_URL
+```
+
+The URL is public configuration, not a secret. Configure it as a repository or
+deployment environment variable and expose it to the build. Store API
+credentials, signing material, account recovery data, and publisher identity
+documents remain secrets.
+
+Example release build:
+
+```bash
+export VITE_EXK_PASSWD_CHROMIUM_STORE_URL='https://chromewebstore.google.com/detail/<name>/<extension-id>'
+
+pnpm build:exk-passwd:release
+pnpm build:web
+```
+
+`build:exk-passwd:release` runs the non-blocking `stores:verify` gate. While
+publisher verification is pending, a missing value produces a CI warning and
+the build keeps the official store-search fallback. A supplied value is always
+validated; non-HTTPS URLs, embedded credentials, custom ports, unofficial hosts,
+search pages, and malformed listing paths fail the build.
+
+The actual store-publish job must run the strict gate:
+
+```bash
+pnpm build:exk-passwd:publish
+```
+
+This command runs `stores:verify:strict` and fails when the canonical listing URL
+is missing. Run `build:web` with the same verified value so the deployed footer
+links to the reviewed item.
+
+### First-release sequence
+
+The permanent listing URL does not exist until the store item has been created,
+so the first release is a two-pass process:
+
+1. Build without the store URL variable. This produces a testable package and
+   uses official store-search links on the website.
+2. Create the Chrome Web Store draft item by uploading the `0.1.0` package.
+3. Copy the canonical listing URL from the dashboard.
+4. Set `VITE_EXK_PASSWD_CHROMIUM_STORE_URL` in the release environment.
+5. If the store requires a replacement package, increment the extension manifest
+   version.
+6. Run the release build and recreate the ZIP file.
+7. Upload the replacement ZIP to the existing store item.
+8. Submit the item for review.
+9. After approval or scheduled publication, run `pnpm build:web` with the same
+   URL and deploy the site.
+10. Verify the production footer link and install the extension into a clean
+    Chrome profile.
+
+Later releases reuse the same Chrome item and listing URL. Increment the package
+version and upload updates to the existing item.
 
 ## Threat model
 
@@ -704,7 +825,7 @@ the code it supports.
 
 ### Playwright
 
-Run Chromium, Firefox and WebKit engine coverage in CI.
+Run Chromium and WebKit engine coverage in CI.
 
 Use Playwright for:
 
@@ -810,7 +931,7 @@ Using deterministic injected bytes:
 
 ### Browser application
 
-For Chromium, Firefox and WebKit engines:
+For Chromium and WebKit engines:
 
 - runtime boots;
 - password generation works;
@@ -834,16 +955,6 @@ For Chromium, Firefox and WebKit engines:
 - no unexpected network request;
 - strict CSP;
 - packaged browser core matches release hashes.
-
-### Firefox extension
-
-- package validation;
-- runtime isolation;
-- AtomVM boot;
-- generation;
-- explicit fill;
-- same browser-core hash;
-- publication blocked until isolation/runtime tests pass.
 
 ### Reproducibility
 
@@ -876,6 +987,12 @@ Cloudflare should deploy only a previously tested release artifact.
 
 Store-upload jobs must verify the embedded browser core against the attested
 artifact before upload.
+
+The store listing URL is a public build input. CI runs `stores:verify` and emits
+a warning while publisher verification is pending. Store-upload jobs must run
+`stores:verify:strict` before publishing. A configured but invalid URL fails in
+both modes. Store API credentials, signing material, and publisher identity
+documents must be isolated from pull-request jobs and untrusted code.
 
 ## Proposed Futhr repository layout
 
@@ -910,8 +1027,6 @@ apps/
     extensions/
       chromium/
         manifest.json
-      firefox/
-        manifest.json
     tests/
       e2e/
       extension/
@@ -920,7 +1035,6 @@ apps/
       fetch-browser-core.ts
       verify-browser-core.ts
       package-chromium.ts
-      package-firefox.ts
       verify-network.ts
 ```
 
@@ -987,8 +1101,6 @@ immutable browser-core artifact
     +--> Futhr static site/PWA
     |
     +--> Chromium extension
-    |
-    +--> Firefox extension
 ```
 
 The browser core is built once.
@@ -997,6 +1109,26 @@ The site and extension jobs may not rebuild it.
 
 Cloudflare deployment and extension-store upload happen only after all
 release-gating tests pass.
+
+The first store release has one additional bootstrap edge:
+
+```text
+generic store-search build
+    |
+create Chrome Web Store draft item
+    |
+canonical listing URL
+    |
+stores:verify:strict
+    |
+direct-link site and extension build
+    |
+store review + production deployment
+```
+
+This bootstrap does not create duplicate listings or change extension identity.
+Before the URL exists, CI reports publish readiness as a warning. Later publish
+jobs start at `stores:verify:strict` with the existing URL.
 
 ## Production-readiness checklist
 
@@ -1011,7 +1143,7 @@ release-gating tests pass.
 - [ ] All supported presets pass browser conformance.
 - [ ] Supported transforms pass browser conformance.
 - [ ] Browser core is built once per release.
-- [ ] Site/PWA/extensions consume identical core bytes.
+- [ ] Site, PWA, and Chrome extension consume identical core bytes.
 - [ ] Strict CSP is enforced.
 - [ ] No remote runtime code is loaded.
 - [ ] No third-party analytics runs on the generator.
@@ -1023,8 +1155,14 @@ release-gating tests pass.
 - [ ] PWA updates are atomic.
 - [ ] Chromium extension uses least privilege.
 - [ ] Chromium MV3/AtomVM integration passes.
-- [ ] Firefox runtime/isolation gate passes before publication.
-- [ ] Extension packages contain the attested browser core unchanged.
+- [ ] Chrome publisher account, two-step verification, contact verification,
+      and accurate EEA trader status are complete.
+- [ ] Chrome Store Listing, Privacy, Distribution, and reviewer information are
+      complete and consistent with the implementation.
+- [ ] The extension package contains the attested browser core unchanged.
+- [ ] The direct Chrome listing URL passes `stores:verify:strict`.
+- [ ] The production footer link installs the Chrome extension.
+- [ ] The Chrome item identity remains stable across updates.
 - [ ] Browser core ships with checksums, SBOM and licence metadata.
 - [ ] GitHub artifact provenance is generated and verifiable.
 - [ ] Reproducibility is measured and accurately described.
@@ -1042,12 +1180,6 @@ These are unresolved platform questions, not reasons to reduce product scope.
 
 Prove the cleanest implementation of `:crypto.strong_rand_bytes/1` for the
 Emscripten target and upstream it where appropriate.
-
-### Firefox extension isolation
-
-Prove whether current Firefox extension pages can satisfy AtomVM's runtime
-requirements. If not, establish a no-SAB/single-scheduler AtomVM browser profile
-rather than introducing a JavaScript generator.
 
 ### Popcorn host CSP
 
@@ -1088,8 +1220,12 @@ Primary references used for this architecture:
   <https://developer.chrome.com/docs/extensions/develop/concepts/declare-permissions>
 - Chrome Web Store publishing:
   <https://developer.chrome.com/docs/webstore/publish>
-- Mozilla extension signing:
-  <https://extensionworkshop.com/documentation/publish/signing-and-distribution-overview/>
+- Chrome Web Store package preparation:
+  <https://developer.chrome.com/docs/webstore/prepare>
+- Chrome Web Store developer registration:
+  <https://developer.chrome.com/docs/webstore/register>
+- Chrome Web Store trader disclosure:
+  <https://developer.chrome.com/docs/webstore/program-policies/trader-disclosure>
 - GitHub Actions billing/public-repository behaviour:
   <https://docs.github.com/en/billing/concepts/product-billing/github-actions>
 - GitHub CodeQL:

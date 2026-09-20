@@ -2,6 +2,7 @@ import { createHash } from 'node:crypto'
 import { readFile } from 'node:fs/promises'
 import { resolve } from 'node:path'
 import { describe, expect, it } from 'vitest'
+import { resolveExtensionStoreLinks } from '../../src/extension-store-links.ts'
 
 const appDirectory = resolve(import.meta.dirname, '../..')
 const repositoryDirectory = resolve(appDirectory, '../..')
@@ -70,25 +71,62 @@ describe('browser-core release controls', () => {
 })
 
 describe('extension and host policy', () => {
-  it.each(['chromium', 'firefox'])(
-    '%s requests only explicit active-tab filling',
-    async (browser) => {
-      const manifest = await readJson<{
-        content_security_policy: { extension_pages: string }
-        host_permissions?: string[]
-        manifest_version: number
-        permissions: string[]
-      }>(resolve(appDirectory, `extensions/${browser}/manifest.json`))
-
-      expect(manifest.manifest_version).toBe(3)
-      expect(manifest.permissions).toEqual(['activeTab', 'scripting'])
-      expect(manifest.host_permissions).toBeUndefined()
-      expect(manifest.content_security_policy.extension_pages).toContain(
-        "script-src 'self' 'wasm-unsafe-eval'"
+  it('accepts only official extension store listing URLs', () => {
+    expect(
+      resolveExtensionStoreLinks(
+        {
+          VITE_EXK_PASSWD_CHROMIUM_STORE_URL:
+            'https://chromewebstore.google.com/detail/exkpasswd/abcdefghijklmnopabcdefghijklmnop'
+        },
+        true
       )
-      expect(manifest.content_security_policy.extension_pages).not.toContain("'unsafe-eval'")
-    }
-  )
+    ).toEqual({
+      chromium:
+        'https://chromewebstore.google.com/detail/exkpasswd/abcdefghijklmnopabcdefghijklmnop'
+    })
+
+    expect(() =>
+      resolveExtensionStoreLinks(
+        {
+          VITE_EXK_PASSWD_CHROMIUM_STORE_URL: 'https://example.com/detail/exkpasswd'
+        },
+        true
+      )
+    ).toThrow('must be an HTTPS listing URL on chromewebstore.google.com')
+
+    expect(() =>
+      resolveExtensionStoreLinks(
+        {
+          VITE_EXK_PASSWD_CHROMIUM_STORE_URL: 'https://chromewebstore.google.com/search/ExkPasswd'
+        },
+        true
+      )
+    ).toThrow('must be an HTTPS listing URL on chromewebstore.google.com')
+  })
+
+  it('allows a pending listing but requires it in strict publish mode', () => {
+    expect(resolveExtensionStoreLinks({})).toEqual({})
+    expect(() => resolveExtensionStoreLinks({}, true)).toThrow(
+      'VITE_EXK_PASSWD_CHROMIUM_STORE_URL is required'
+    )
+  })
+
+  it('requests only explicit active-tab filling', async () => {
+    const manifest = await readJson<{
+      content_security_policy: { extension_pages: string }
+      host_permissions?: string[]
+      manifest_version: number
+      permissions: string[]
+    }>(resolve(appDirectory, 'extensions/chromium/manifest.json'))
+
+    expect(manifest.manifest_version).toBe(3)
+    expect(manifest.permissions).toEqual(['activeTab', 'scripting'])
+    expect(manifest.host_permissions).toBeUndefined()
+    expect(manifest.content_security_policy.extension_pages).toContain(
+      "script-src 'self' 'wasm-unsafe-eval'"
+    )
+    expect(manifest.content_security_policy.extension_pages).not.toContain("'unsafe-eval'")
+  })
 
   it('serves a strict isolated browser path', async () => {
     const headers = await readFile(resolve(repositoryDirectory, 'static/_headers'), 'utf8')
@@ -103,9 +141,13 @@ describe('extension and host policy', () => {
 
   it('contains no password persistence or logging path', async () => {
     const sources = await Promise.all(
-      ['src/main.ts', 'src/browser-core.ts', 'src/runtime-entry.ts', 'src/extension-fill.ts'].map(
-        (path) => readFile(resolve(appDirectory, path), 'utf8')
-      )
+      [
+        'src/main.ts',
+        'src/browser-core.ts',
+        'src/runtime-entry.ts',
+        'src/extension-fill.ts',
+        'src/extension-store-links.ts'
+      ].map((path) => readFile(resolve(appDirectory, path), 'utf8'))
     )
     const source = sources.join('\n')
 

@@ -22,6 +22,8 @@
     "build": "pnpm build:web",
     "build:web": "vite build && pnpm --filter exk-passwd-browser build && node scripts/integrate-exk-passwd.ts && node scripts/verify-artifact.ts web",
     "build:exk-passwd": "pnpm --filter exk-passwd-browser build",
+    "build:exk-passwd:release": "pnpm --filter exk-passwd-browser build:release",
+    "build:exk-passwd:publish": "pnpm --filter exk-passwd-browser build:publish",
     "build:waitlist": "pnpm --filter waitlist build",
     "build:landing": "pnpm --filter landing build",
     "check:exk-passwd": "pnpm --filter exk-passwd-browser check",

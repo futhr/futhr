@@ -6,14 +6,18 @@
   "license": "SEE LICENSE IN ../../LICENSE.md",
   "scripts": {
     "build": "pnpm core:verify && vite build && node scripts/finalize-build.ts && node scripts/package-extensions.ts && node scripts/verify-artifact.ts",
+    "build:release": "pnpm stores:verify && pnpm build",
+    "build:publish": "pnpm stores:verify:strict && pnpm build",
     "check": "tsc --noEmit",
     "core:import": "node scripts/import-browser-core.ts",
     "core:runtime": "sh scripts/build-runtime.sh",
     "core:verify": "node scripts/verify-browser-core.ts",
     "dev": "vite dev --host 127.0.0.1",
     "preview": "vite preview --host 127.0.0.1",
+    "stores:verify": "node scripts/verify-extension-store-links.ts",
+    "stores:verify:strict": "node scripts/verify-extension-store-links.ts --strict",
     "test": "pnpm test:unit && pnpm test:e2e",
-    "test:e2e": "playwright test",
+    "test:e2e": "env -u NO_COLOR playwright test",
     "test:unit": "vitest run --config vitest.config.ts"
   },
   "dependencies": {

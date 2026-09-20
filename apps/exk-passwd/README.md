@@ -1,10 +1,10 @@
 # ExkPasswd browser product
 
-This package builds the static ExkPasswd generator, installable PWA, and the
-Chromium and Firefox Manifest V3 extension packages. All three consume the same
-checked-in `browser-core/` bytes. Password generation and entropy calculations
-remain in the canonical Elixir library running on AtomVM; TypeScript owns only
-the browser shell and message bridge.
+This package builds the static ExkPasswd generator, installable PWA, and Chrome
+Manifest V3 extension. Both products consume the same checked-in
+`browser-core/` bytes. Password generation and entropy calculations remain in
+the canonical Elixir library running on AtomVM; TypeScript owns only the browser
+shell and message bridge.
 
 ## Commands
 
@@ -15,9 +15,35 @@ pnpm --filter exk-passwd-browser test:e2e
 pnpm build:exk-passwd
 ```
 
+## Extension store link
+
+The footer becomes the extension install surface when the public Chrome listing
+URL is supplied at build time:
+
+```bash
+VITE_EXK_PASSWD_CHROMIUM_STORE_URL=https://chromewebstore.google.com/detail/... \
+pnpm build:exk-passwd:release
+```
+
+While publisher verification is pending, the release build emits a warning for
+a missing URL and continues with the official store search. A supplied URL must
+still be a valid HTTPS listing on the official Chrome Web Store host.
+
+The store-publish job must use the strict gate:
+
+```bash
+VITE_EXK_PASSWD_CHROMIUM_STORE_URL=https://chromewebstore.google.com/detail/... \
+pnpm build:exk-passwd:publish
+```
+
+The strict publish build fails when the listing URL is missing or invalid.
+
 `pnpm build` integrates `dist/` at `/exk-passwd/` in the main static artifact.
-The standalone extension directories are written to `dist-extensions/` and are
-verified to embed byte-identical browser-core files.
+The standalone Chrome extension directory is written to
+`dist-extensions/chromium/` and is verified to embed byte-identical browser-core
+files. Packaging renames the internal browser-core metadata to
+`browser-core/core-metadata.json`, leaving `manifest.json` exclusively at the
+extension root as required by the Chrome Web Store.
 
 ## Refreshing the browser core
 
@@ -46,7 +72,7 @@ exact shipped bytes without claiming reproducibility.
   no fallback.
 - The UI never sends, logs, or persists generated passwords.
 - The PWA may cache immutable program assets, never password values.
-- Extensions request only `activeTab` and `scripting`, and fill only the active
+- The extension requests only `activeTab` and `scripting`, and fills only the active
   editable field after an explicit click.
 - The runtime requires cross-origin isolation and a CSP that permits WebAssembly
   but not JavaScript `eval`.

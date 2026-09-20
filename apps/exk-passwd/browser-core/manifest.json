@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
   "browser_core_version": "0.1.0",
-  "futhr_source_commit": "a1b648a54c61474cfb3dd0c46c907be105204a70",
-  "futhr_source_dirty": true,
+  "futhr_source_commit": "e0cae7e65de4b610bd6312b73630ef1cdfc573c6",
+  "futhr_source_dirty": false,
   "exk_passwd": {
     "version": "0.3.2",
-    "commit": "6be2b6964430aedd7231f45b63d836b4707156ff",
+    "commit": "e1720f537f05afcf9c31be7aa9b99d50227f90db",
     "dirty": false
   },
   "runtime": {
@@ -32,7 +32,7 @@
     },
     "core/exk_passwd.avm": {
       "bytes": 7273704,
-      "sha256": "a31a97e3e32793352388bd12b4761079db5e0107ffbf221fafd19a8d2143b175"
+      "sha256": "9055b531ba16aaf6b3ea43bbb9ffbd3a0cdea68d199712b0ed9644d5638ddc6e"
     },
     "licenses/ExkPasswd-BSD-2-Clause.md": {
       "bytes": 1350,
