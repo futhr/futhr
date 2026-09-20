@@ -17,6 +17,9 @@ const runtimeDirectory =
 const sourceBundle =
   process.env.EXK_PASSWD_BROWSER_BUNDLE ??
   resolve(exkPasswdDirectory, 'browser/_release/core/bundle.avm')
+const supportedExkPasswdVersion = '0.4.0'
+const exkPasswdLockPattern =
+  /"exk_passwd": \{:hex, :exk_passwd, "([^"]+)", "([0-9a-f]{64})", \[:mix\], \[\], "hexpm", "([0-9a-f]{64})"\}/
 
 const sha256 = (bytes: Uint8Array): string => createHash('sha256').update(bytes).digest('hex')
 
@@ -41,11 +44,23 @@ if (sha256(dictionary) !== expectedDictionary) {
   throw new Error('The ExkPasswd dictionary checksum does not match the browser-core lock.')
 }
 
-const [futhrSourceCommit, futhrSourceDirty, exkPasswdCommit, exkPasswdDirty] = await Promise.all([
+const browserMixLock = await readFile(resolve(exkPasswdDirectory, 'browser/mix.lock'), 'utf8')
+const exkPasswdLock = exkPasswdLockPattern.exec(browserMixLock)
+const exkPasswdVersion = exkPasswdLock?.[1]
+const exkPasswdChecksum = exkPasswdLock?.[2]
+const exkPasswdOuterChecksum = exkPasswdLock?.[3]
+if (!(exkPasswdVersion && exkPasswdChecksum && exkPasswdOuterChecksum)) {
+  throw new Error('The browser project must lock exk_passwd to a Hex package release.')
+}
+if (exkPasswdVersion !== supportedExkPasswdVersion) {
+  throw new Error(
+    `The browser project locks exk_passwd ${exkPasswdVersion}; expected ${supportedExkPasswdVersion}.`
+  )
+}
+
+const [futhrSourceCommit, futhrSourceDirty] = await Promise.all([
   gitCommit(repositoryDirectory),
-  gitDirty(repositoryDirectory),
-  gitCommit(exkPasswdDirectory),
-  gitDirty(exkPasswdDirectory)
+  gitDirty(repositoryDirectory)
 ])
 
 await rm(targetDirectory, { force: true, recursive: true })
@@ -94,9 +109,10 @@ const manifest = {
   futhr_source_commit: futhrSourceCommit,
   futhr_source_dirty: futhrSourceDirty,
   exk_passwd: {
-    version: '0.3.2',
-    commit: exkPasswdCommit,
-    dirty: exkPasswdDirty
+    version: exkPasswdVersion,
+    source: 'hexpm',
+    checksum: exkPasswdChecksum,
+    outer_checksum: exkPasswdOuterChecksum
   },
   runtime: {
     popcorn_version: '0.3.3',
@@ -138,7 +154,7 @@ const sbom = {
       SPDXID: 'SPDXRef-ExkPasswd',
       name: 'exk_passwd',
       versionInfo: manifest.exk_passwd.version,
-      downloadLocation: 'https://github.com/futhr/exk_passwd',
+      downloadLocation: `https://repo.hex.pm/tarballs/exk_passwd-${manifest.exk_passwd.version}.tar`,
       licenseConcluded: 'BSD-2-Clause',
       licenseDeclared: 'BSD-2-Clause',
       filesAnalyzed: false

@@ -270,7 +270,7 @@ versioned, integrity-checked first-party asset.
 
 The browser release manifest must record:
 
-- ExkPasswd version/commit;
+- exact ExkPasswd Hex package version and lock checksums;
 - dictionary checksum;
 - word count;
 - browser-core version.
@@ -303,7 +303,7 @@ The manifest should include at least:
 
 - browser-core version;
 - Futhr source commit;
-- ExkPasswd version and commit;
+- ExkPasswd Hex package version and lock checksums;
 - AtomVM commit;
 - Popcorn version;
 - Elixir/OTP versions;

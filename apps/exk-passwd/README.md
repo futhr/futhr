@@ -47,9 +47,10 @@ extension root as required by the Chrome Web Store.
 
 ## Refreshing the browser core
 
-The sibling `futhr/exk_passwd` checkout owns the AtomVM bundle. From that
-repository, run `browser/scripts/build-core.sh`. In this repository, build the
-pinned FissionVM runtime and import both artifacts:
+The sibling `futhr/exk_passwd` checkout owns the AtomVM browser build. Its
+browser project must depend on the exact published Hex release, not the sibling
+library source. From that repository, run `browser/scripts/build-core.sh`. In
+this repository, build the pinned FissionVM runtime and import both artifacts:
 
 ```bash
 pnpm --filter exk-passwd-browser core:runtime
@@ -57,9 +58,10 @@ pnpm --filter exk-passwd-browser core:import
 pnpm --filter exk-passwd-browser core:verify
 ```
 
-The importer verifies the canonical dictionary checksum and records source,
-runtime, patch, toolchain, licence, and file identities in the release manifest
-and SPDX SBOM. Do not hand-edit anything under `browser-core/`.
+The importer verifies the exact Hex package version and lock checksums plus the
+canonical dictionary checksum. It records package, runtime, patch, toolchain,
+licence, and file identities in the release manifest and SPDX SBOM. Do not
+hand-edit anything under `browser-core/`.
 
 The current clean-room measurement is documented in
 [`runtime/reproducibility.md`](runtime/reproducibility.md). The AVM output is
