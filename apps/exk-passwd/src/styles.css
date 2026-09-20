@@ -859,7 +859,7 @@ footer {
 
   .generator-layout {
     gap: 1.5rem clamp(3rem, 6cqw, 5rem);
-    padding-block: 1.25rem;
+    padding-block: 0.5rem;
   }
 
   .hero h1 {
