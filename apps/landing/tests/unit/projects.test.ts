@@ -48,8 +48,8 @@ describe('closed project map', () => {
     'generates each $id icon and social image at the expected size',
     async (project) => {
       const svg = await readFile(`static/projects/${project.id}/favicon.svg`, 'utf8')
-      const mark = await readFile(`../../src/lib/components/logos/${project.id}.svelte`, 'utf8')
-      expect(svg).toContain(mark.replace('<svg ', '<svg x="92" y="92" width="328" height="328" '))
+      const mark = await readFile(`../../src/lib/marks/${project.id}.svg`, 'utf8')
+      expect(svg).toContain(mark.replace('<svg', '<svg x="92" y="92" width="328" height="328"'))
       for (const [file, width, height] of [
         ['favicon-48.png', 48, 48],
         ['apple-touch-icon.png', 180, 180],

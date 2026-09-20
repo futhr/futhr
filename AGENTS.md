@@ -68,7 +68,8 @@ suites that touch what you changed before saying a task is done.
 ## Structure
 
 ```
-src/lib/components/        production components; logos/ holds the SVG marks
+src/lib/marks/             standalone monochrome project marks
+src/lib/components/        production components; marks/ and icons/ hold adapters
 src/lib/client/            browser-only integrations (WebMCP tools), feature-detected
 src/lib/config/site.ts     identity, strings, links, and generated documents
 src/lib/content/*.md       ordered showcase entries (frontmatter + Markdown)
@@ -123,8 +124,8 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   seven values, `site.css` declares them, and the inline script in `app.html`
   sets `data-day` before first paint. `tests/palette.test.ts` keeps the three in
   sync and checks contrast. Preview them in the Brand/Weekly colours story.
-- Marks use `currentColor`; an inverse area uses `var(--mark-contrast)`, which
-  defaults to ink. Set it to paper in a paper-coloured context.
+- Project marks are standalone monochrome SVGs in `src/lib/marks/`, using a
+  narrow warm-gray palette with transparent counterforms for ink backgrounds.
 - Favicon and app icons carry their own ink background; never rely on
   `prefers-color-scheme` inside an icon, browsers cache one render. Regenerate
   PNGs from the SVG when the mark changes; `/icons/*` is cached for a day, not

@@ -8,13 +8,13 @@ import { composeIcon } from '../src/lib/brands/icons.ts'
 import type { Brand } from '../src/lib/types/brand.ts'
 
 /**
- * Regenerates every brand icon and social image from the mark components.
+ * Regenerates every brand icon and social image from the standalone marks.
  * Run after a mark changes and commit the output under static/brands/. The
  * SVGs are deterministic text; the PNGs are Chromium renders of the same
  * markup so browsers and icon files agree pixel for pixel.
  */
 const root = fileURLToPath(new URL('..', import.meta.url))
-const logos = join(root, '..', '..', 'src', 'lib', 'components', 'logos')
+const marks = join(root, '..', '..', 'src', 'lib', 'marks')
 const fontFile = join(
   root,
   'node_modules',
@@ -43,7 +43,7 @@ const socialMarkup = (brand: Brand, mark: string, fontData: string) => `<!doctyp
   html, body { margin: 0; }
   body { width: ${social.width}px; height: ${social.height}px; background: ${ink}; color: ${paper}; font-family: Archivo, Helvetica, Arial, sans-serif; -webkit-font-smoothing: antialiased; }
   .card { box-sizing: border-box; height: 100%; padding: 72px; display: grid; grid-template-columns: 240px 1fr; grid-template-rows: 1fr auto; column-gap: 72px; }
-  .mark { width: 240px; color: ${paper}; --mark-contrast: ${ink}; }
+  .mark { width: 240px; }
   .mark svg { display: block; width: 100%; height: auto; }
   h1 { margin: -0.08em 0 0; font-size: 128px; line-height: 0.85; font-weight: 900; letter-spacing: -0.04em; }
   p { margin: 28px 0 0; max-width: 20em; font-size: 38px; line-height: 1.25; font-weight: 500; letter-spacing: -0.015em; text-wrap: balance; }
@@ -68,7 +68,7 @@ const renderPng = async (
 }
 
 const renderBrand = async (browser: Browser, brand: Brand, fontData: string) => {
-  const markSource = await readFile(join(logos, `${brand.id}.svelte`), 'utf8')
+  const markSource = await readFile(join(marks, `${brand.id}.svg`), 'utf8')
   const directory = join(root, 'static', 'brands', brand.id, 'icons')
   await mkdir(directory, { recursive: true })
   const svgs = {

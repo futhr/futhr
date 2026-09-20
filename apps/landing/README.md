@@ -30,10 +30,11 @@ release checks must use the built Worker.
 | `pnpm landing:icons` | Regenerate committed icons and 1200×630 social images |
 | `pnpm --filter landing exec wrangler deploy --env="" --dry-run` | Validate the production bundle and config without publishing |
 
-Edit `src/lib/projects.ts` for page content and the shared components under
-`../../src/lib/components/logos` for marks. Regenerate icons after mark or
-content changes. Recetas uses its approved public positioning and is indexed;
-its private repository is not a public destination.
+Edit `src/lib/projects.ts` for page content and the standalone SVGs under
+`../../src/lib/marks` for marks. The shared Svelte adapters live under
+`../../src/lib/components/marks`. Regenerate icons after mark or content changes.
+Recetas uses its approved public positioning and is indexed; its private repository
+is not a public destination.
 
 ## Build and routing
 

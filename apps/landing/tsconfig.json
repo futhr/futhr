@@ -19,7 +19,7 @@
     "worker-configuration.d.ts",
     "src/**/*.ts",
     "src/**/*.svelte",
-    "../../src/lib/components/logos/*.svelte",
+    "../../src/lib/components/marks/*.svelte",
     "scripts/**/*.ts",
     "tests/unit/**/*.ts",
     "tests/e2e/**/*.ts",

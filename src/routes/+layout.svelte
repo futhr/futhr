@@ -13,8 +13,34 @@
   <meta name="color-scheme" content="dark light">
   <link rel="preload" href={archivoLatin} as="font" type="font/woff2" crossorigin="anonymous">
   <link rel="preload" href={archivoLatinItalic} as="font" type="font/woff2" crossorigin="anonymous">
-  <link rel="icon" type="image/svg+xml" href={site.images.favicon}>
   <link rel="icon" type="image/png" sizes="48x48" href={site.images.faviconPng}>
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="48x48"
+    href={site.images.faviconPngLight}
+    media="(prefers-color-scheme: light)"
+  >
+  <link
+    rel="icon"
+    type="image/png"
+    sizes="48x48"
+    href={site.images.faviconPngDark}
+    media="(prefers-color-scheme: dark)"
+  >
+  <link rel="icon" type="image/svg+xml" href={site.images.favicon}>
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href={site.images.faviconLight}
+    media="(prefers-color-scheme: light)"
+  >
+  <link
+    rel="icon"
+    type="image/svg+xml"
+    href={site.images.faviconDark}
+    media="(prefers-color-scheme: dark)"
+  >
   <link rel="apple-touch-icon" href={site.images.touchIcon}>
   <link rel="manifest" href="/manifest.webmanifest">
 </svelte:head>

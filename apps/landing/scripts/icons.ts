@@ -23,14 +23,11 @@ const browser = await chromium.launch()
 try {
   await Promise.all(
     Object.values(projects).map(async (project) => {
-      const mark = await readFile(
-        join(root, `../../src/lib/components/logos/${project.id}.svelte`),
-        'utf8'
-      )
+      const mark = await readFile(join(root, `../../src/lib/marks/${project.id}.svg`), 'utf8')
       if (!viewBoxPattern.test(mark)) {
-        throw new Error('Logo viewBox missing')
+        throw new Error('Mark viewBox missing')
       }
-      const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"><title>${project.name}</title><rect width="512" height="512" fill="#1b1b1b"/><g color="#dcdbd6" style="--mark-contrast:#1b1b1b">${mark.replace('<svg ', '<svg x="92" y="92" width="328" height="328" ')}</g></svg>`
+      const icon = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img"><title>${project.name}</title><rect width="512" height="512" fill="#1b1b1b"/>${mark.replace('<svg', '<svg x="92" y="92" width="328" height="328"')}</svg>`
       const destination = join(root, `static/projects/${project.id}`)
       await mkdir(destination, { recursive: true })
       await writeFile(join(destination, 'favicon.svg'), icon)

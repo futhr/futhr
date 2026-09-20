@@ -10,8 +10,9 @@
     'Orvane',
     'Reloved',
     'Rivure',
-    'Äger',
-    'Recetas'
+    'ÄGR',
+    'Recetas',
+    'WoTEx'
   ]
   const { Story } = defineMeta({
     title: 'Brand/Venture marks',
@@ -22,8 +23,7 @@
     parameters: {
       docs: {
         description: {
-          component:
-            'The eight venture marks on ink, in footer order. Each is its own Svelte component drawn in currentColor.'
+          component: 'The nine approved monochrome venture marks on ink, in footer order.'
         }
       }
     }
@@ -39,7 +39,7 @@
         expect(canvas.getByRole('img', { name: `${name} mark` })).toBeVisible()
       )
     )
-    await expect(canvas.getAllByRole('img')).toHaveLength(8)
+    await expect(canvas.getAllByRole('img')).toHaveLength(9)
   }}
 >
   <div class="grid min-h-dvh place-items-center bg-ink p-12 text-paper">

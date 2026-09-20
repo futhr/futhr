@@ -52,11 +52,12 @@ The approved landing copy focuses on that local kitchen system and names Home
 Assistant and Nx without linking the private repository. Adding or revising
 copy remains a content change, not a component change.
 
-The user-approved toast replaces the temporary `R` in
-`src/lib/components/logos/recetas.svelte`. Its four paths use `currentColor`; an
-even-odd counterform makes the interior transparent. The flat mark has no
-shadow. The footer includes it as the eighth mark, preserving the preceding
-seven marks' order and reducing their common grid width slightly.
+The user-approved toast replaces the temporary `R` in `src/lib/marks/recetas.svg`;
+`src/lib/components/marks/recetas.svelte` is its reusable Svelte adapter. Its four
+paths use the shared monochrome warm-gray palette; an even-odd counterform makes
+the interior transparent. The flat mark has no shadow. The footer includes it as
+the eighth mark, preserving the preceding seven marks' order and reducing their
+common grid width slightly.
 
 An optional relationship row can express the project's two sides, as in the
 reference composition's “Local ownership → Shared reach” line. It is data with

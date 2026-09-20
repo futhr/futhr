@@ -3,6 +3,8 @@ import { expect, test } from '@playwright/test'
 
 const archivoLatinAsset = /archivo-latin-wght-normal.*\.woff2/
 const faviconAsset = /\/icons\/favicon\.svg$/
+const faviconLightAsset = /\/icons\/favicon-light\.svg$/
+const faviconDarkAsset = /\/icons\/favicon-dark\.svg$/
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/')
@@ -80,9 +82,15 @@ test('publishes install metadata, loadable icons and the primary font preload', 
   await expect(preloads.first()).toHaveAttribute('href', archivoLatinAsset)
   await expect(preloads.first()).toHaveAttribute('type', 'font/woff2')
 
-  const favicon = page.locator('link[rel="icon"][type="image/svg+xml"]')
+  const favicon = page.locator('link[rel="icon"][type="image/svg+xml"]:not([media])')
   await expect(favicon).toHaveAttribute('href', faviconAsset)
-  await expect(page.locator('link[rel="icon"]')).toHaveCount(2)
+  await expect(page.locator('link[rel="icon"]')).toHaveCount(6)
+  await expect(
+    page.locator('link[rel="icon"][media="(prefers-color-scheme: light)"][type="image/svg+xml"]')
+  ).toHaveAttribute('href', faviconLightAsset)
+  await expect(
+    page.locator('link[rel="icon"][media="(prefers-color-scheme: dark)"][type="image/svg+xml"]')
+  ).toHaveAttribute('href', faviconDarkAsset)
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#1b1b1b')
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(27, 27, 27)')
 
@@ -120,6 +128,49 @@ test('publishes install metadata, loadable icons and the primary font preload', 
   expect(await robotsResponse.text()).toContain('https://futhr.io/sitemap.xml')
   expect(sitemapResponse.ok()).toBe(true)
   expect(await sitemapResponse.text()).toContain('<loc>https://futhr.io/</loc>')
+})
+
+test('keeps all venture marks on one line without colour hover', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium')
+
+  const row = page.locator('footer .marks')
+  const marks = row.locator('.mark')
+  await expect(marks).toHaveCount(9)
+  await expect(row.locator('img')).toHaveCount(9)
+  const bounds = await marks.evaluateAll((elements) =>
+    elements.map((element) => {
+      const image = element.querySelector('img')
+      const rect = image?.getBoundingClientRect() ?? element.getBoundingClientRect()
+      return {
+        name: image?.alt,
+        top: rect.top,
+        bottom: rect.bottom,
+        right: rect.right,
+        height: rect.height,
+        loaded: Boolean(image?.complete && image.naturalWidth)
+      }
+    })
+  )
+  expect(bounds.every(({ loaded }) => loaded)).toBe(true)
+  const [first, , diggymon] = bounds
+  const last = bounds.at(-1)
+  if (!(first && diggymon && last)) {
+    throw new Error('Venture mark row is incomplete')
+  }
+  const center = (first.top + first.bottom) / 2
+  expect(bounds.every(({ top, bottom }) => Math.abs((top + bottom) / 2 - center) < 1)).toBe(true)
+  expect(last.name).toBe('WoTEx mark')
+  const rowRight = await row.evaluate((element) => element.getBoundingClientRect().right)
+  expect(last.right).toBeLessThanOrEqual(rowRight)
+  expect(diggymon.height).toBeLessThan(first.height)
+
+  await marks.nth(2).hover()
+  await expect(marks.nth(2).locator('img')).toHaveCSS('opacity', '1')
+
+  const socialLink = page.getByRole('link', { name: 'Mastodon' })
+  const socialColor = await socialLink.evaluate((element) => getComputedStyle(element).color)
+  await socialLink.hover()
+  await expect(socialLink).toHaveCSS('color', socialColor)
 })
 
 test('does not overflow a mobile viewport', async ({ page }) => {

@@ -27,7 +27,7 @@ validation.
 - **Ruby and Solidus:** payment and shipping extensions for existing shops.
 - **Rust:** NUIF research into interface interchange and measurable conversion
   loss.
-- **Ventures:** Refpath, Rivure, Diggymon, WoTEx, Orvane, Reloved, and Äger, all
+- **Ventures:** Refpath, Rivure, Diggymon, WoTEx, Orvane, Reloved, and ÄGR, all
   in development and described as direction rather than released solutions.
 
 ## Method
@@ -41,4 +41,3 @@ Documentation, contracts, and tests belong beside the implementation. Claims
 should name what was checked and where the evidence stops.
 
 *Bootstrapped by default, built for durable ownership.*
-

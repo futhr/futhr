@@ -1,0 +1,24 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="2048"
+  height="2048"
+  viewBox="0 0 300 300"
+  role="img"
+  aria-label="Refpath / Primary silver logo"
+>
+  <title>Refpath / Primary silver logo</title>
+  <defs>
+    <path id="source-face-a" d="M0 100 100 0v200L0 300Z" />
+    <path id="source-face-b" d="M100 0h200L200 100H100Z" />
+    <path id="source-face-c" d="m100 200 100-100h100L200 200Z" />
+    <path id="source-face-d" d="M300 100v100L200 300V200Z" />
+    <linearGradient id="fold-shared" gradientUnits="objectBoundingBox" x1="0" y1="1" x2="1" y2="0">
+      <stop offset="0" stop-color="#cac9c5" />
+      <stop offset="1" stop-color="#e4e3df" />
+    </linearGradient>
+  </defs>
+  <path id="refpath-shell-ab" d="M0 100 100 0H300L200 100H100V200L0 300Z" fill="#e4e3df" />
+  <path id="refpath-plane-b" d="M100 0h200L200 100H100Z" fill="url(#fold-shared)" />
+  <path id="refpath-shell-cd" d="M100 200 200 100H300V200L200 300V200Z" fill="#e4e3df" />
+  <path id="refpath-plane-d" d="M300 100v100L200 300V200Z" fill="url(#fold-shared)" />
+</svg>

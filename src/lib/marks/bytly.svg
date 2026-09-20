@@ -1,0 +1,25 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="95.35 80.3 168.35 181.4"
+  role="img"
+  aria-label="Bytly / editable"
+>
+  <title>Bytly / editable</title>
+  <g id="layer-backing" data-name="Backing">
+    <path id="bytly-backing" fill="#cac9c5" d="M170.22 176H263.7V261.7H170.22Z" />
+  </g>
+  <g id="layer-fold" data-name="Fold">
+    <path
+      id="bytly-fold"
+      fill="#e4e3df"
+      d="M263.7 176C263.7 212.12 220.64 261.7 174 261.7H170.22V208.3H214.5Z"
+    />
+  </g>
+  <g id="layer-front" data-name="Front">
+    <path
+      id="bytly-front"
+      fill="#d5d4d0"
+      d="M95.35 143.45L180.15 80.3L263.7 143.25V176C263.7 188.51 258.15 208.3 214.5 208.3C214.5 208.3 211.17 261.7 170.22 261.7H95.35Z"
+    />
+  </g>
+</svg>

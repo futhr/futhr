@@ -1,7 +1,6 @@
 const canvas = 560
 const roundedRadius = 112
 const ink = '#1b1b1b'
-const paper = '#dcdbd6'
 const rootTag = /^\s*<svg\b([^>]*)>/
 const closingTag = /<\/svg>\s*$/
 const viewBoxAttribute = /\bviewBox="([^"]+)"/
@@ -9,7 +8,7 @@ const viewBoxAttribute = /\bviewBox="([^"]+)"/
 type IconShape = 'rounded' | 'square' | 'maskable'
 
 interface IconSource {
-  /** Contents of a mark component from src/lib/components/logos, which is plain SVG. */
+  /** A standalone mark from src/lib/marks. */
   readonly markSource: string
   readonly title: string
   readonly shape: IconShape
@@ -33,10 +32,8 @@ const parseMark = (markSource: string) => {
 }
 
 /**
- * Composes a standalone icon from a mark component: an opaque ink background,
- * rounded for browser icons and full-bleed for Apple and maskable icons, with
- * the mark centred in paper. `currentColor` and the contrast token resolve to
- * fixed values, so the file never depends on the colour scheme.
+ * Composes a standalone icon from the approved monochrome mark, centred on
+ * an opaque ink background.
  */
 const composeIcon = ({ markSource, title, shape }: IconSource): string => {
   const { viewBox, inner } = parseMark(markSource)
@@ -46,7 +43,7 @@ const composeIcon = ({ markSource, title, shape }: IconSource): string => {
   return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${canvas} ${canvas}" role="img">
   <title>${title}</title>
   <rect width="${canvas}" height="${canvas}" rx="${radius}" fill="${ink}" />
-  <svg x="${offset}" y="${offset}" width="${size}" height="${size}" viewBox="${viewBox}" color="${paper}" style="--mark-contrast: ${ink}" aria-hidden="true">
+  <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" x="${offset}" y="${offset}" width="${size}" height="${size}" viewBox="${viewBox}" aria-hidden="true">
     ${inner.replaceAll('\n', '\n    ')}
   </svg>
 </svg>

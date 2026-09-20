@@ -1,0 +1,122 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+  width="800"
+  height="800"
+  viewBox="-260 -260 520 520"
+  data-state="insert"
+>
+  <title>Futhr / Blue Graphite / Dark / 06C Insert</title>
+  <desc>
+    Selected identity family. Original body and inlay geometry retained. Base and Insert states use
+    identical artwork; only the parent Insert layer opacity changes. Inlays remain at 10% fill
+    opacity. Transparent canvas and counter.
+  </desc>
+  <defs>
+    <linearGradient
+      id="gradient-right"
+      gradientUnits="userSpaceOnUse"
+      x1="136"
+      y1="-80"
+      x2="25"
+      y2="202"
+    >
+      <stop offset="0" stop-color="#e3e2de" />
+      <stop offset="0.3333333" stop-color="#e0dfdb" />
+      <stop offset="0.6666667" stop-color="#dddcd8" />
+      <stop offset="1" stop-color="#dad9d5" />
+    </linearGradient>
+    <linearGradient
+      id="gradient-left"
+      gradientUnits="userSpaceOnUse"
+      x1="-8"
+      y1="199"
+      x2="-173"
+      y2="-93"
+    >
+      <stop offset="0" stop-color="#e3e2de" />
+      <stop offset="0.3333333" stop-color="#e0dfdb" />
+      <stop offset="0.6666667" stop-color="#dddcd8" />
+      <stop offset="1" stop-color="#dad9d5" />
+    </linearGradient>
+    <linearGradient
+      id="gradient-upper"
+      gradientUnits="userSpaceOnUse"
+      x1="-166"
+      y1="-105"
+      x2="168"
+      y2="-109"
+    >
+      <stop offset="0" stop-color="#e3e2de" />
+      <stop offset="0.3333333" stop-color="#e0dfdb" />
+      <stop offset="0.6666667" stop-color="#dddcd8" />
+      <stop offset="1" stop-color="#dad9d5" />
+    </linearGradient>
+  </defs>
+  <g
+    id="base"
+    inkscape:groupmode="layer"
+    inkscape:label="06B Base — shared, fixed artwork"
+    data-layer="base"
+  >
+    <g
+      id="right-face"
+      inkscape:groupmode="layer"
+      inkscape:label="Right face — one continuous original piece"
+    >
+      <path
+        d="M0,0L97.86,-56.5L188.83,-109.021C192.78,-102.18 194.86,-94.419 194.86,-86.52L194.86,86.52C194.86,102.577 186.265,117.462 172.36,125.49L22.5,212.01C15.66,215.959 7.899,218.039 -0,218.039L0,0Z"
+        fill="url(#gradient-right)"
+        fill-rule="nonzero"
+      />
+    </g>
+    <g id="left-face" inkscape:groupmode="layer" inkscape:label="Left face — original">
+      <path
+        d="M-188.83,-109.021L-97.86,-56.5L-97.86,56.5L0,113L0,218.039C-7.899,218.039 -15.66,215.959 -22.5,212.01L-172.36,125.49C-186.265,117.462 -194.86,102.577 -194.86,86.52L-194.86,-86.52C-194.86,-94.419 -192.78,-102.18 -188.83,-109.021Z"
+        fill="url(#gradient-left)"
+        fill-rule="nonzero"
+      />
+    </g>
+    <g id="upper-face" inkscape:groupmode="layer" inkscape:label="Upper face — original">
+      <path
+        d="M-188.83,-109.021C-184.881,-115.86 -179.2,-121.541 -172.36,-125.49L-22.5,-212.01C-8.594,-220.038 8.594,-220.038 22.5,-212.01L172.36,-125.49C179.2,-121.541 184.881,-115.86 188.83,-109.021L97.86,-56.5L0,-113L-97.86,-56.5L-188.83,-109.021Z"
+        fill="url(#gradient-upper)"
+        fill-rule="nonzero"
+      />
+    </g>
+  </g>
+  <g
+    id="insert"
+    inkscape:groupmode="layer"
+    inkscape:label="06C Insert — animate ONLY this layer opacity"
+    data-layer="insert"
+    opacity="1"
+  >
+    <g
+      id="shade-inlay"
+      inkscape:groupmode="layer"
+      inkscape:label="Solid translucent shade — 16% fill"
+    >
+      <path
+        id="shade-shape"
+        d="M0,0l91.2716814,-52.6961987l24.5883186,14.1961987l-97.86,56.5v113l-97.86,-56.5l0,-7.6076027l79.86,46.1076027zM-172.36,125.49c-13.905,-8.028 -22.5,-22.913 -22.5,-38.97v-173.04c0,-7.899 2.08,-15.66 6.03,-22.501c3.949,-6.839 9.63,-12.52 16.47,-16.469l149.86,-86.52c13.906,-8.028 31.094,-8.028 45,0l149.86,86.52c6.84,3.949 12.521,9.63 16.47,16.469c0.1832797,0.3174219 0.3625334,0.6368246 0.5377401,0.9581298l-148.8677401,-85.9471298c-13.906,-8.028 -31.094,-8.028 -45,0l-149.86,86.52c-6.84,3.949 -12.521,9.63 -16.47,16.469c-3.95,6.841 -6.03,14.602 -6.03,22.501v173.04c0,7.6550175 1.9534821,15.0436614 5.5045032,21.5499387z"
+        fill="#cac9c5"
+        fill-opacity="0.1"
+        fill-rule="nonzero"
+      />
+    </g>
+    <g
+      id="light-inlay"
+      inkscape:groupmode="layer"
+      inkscape:label="Solid translucent light — 16% fill"
+    >
+      <path
+        id="light-shape"
+        d="M0,-113l-97.86,56.5l0,108.7735541l-10,-5.7735541v-113l97.86,-56.5l97.86,56.5l-3.660177,2.113223zM194.86,-86.52v173.04c0,16.057 -8.595,30.942 -22.5,38.97l-149.86,86.52c-6.84,3.949 -14.601,6.029 -22.5,6.029c-7.899,0 -15.66,-2.08 -22.5,-6.029l-149.86,-86.52c-5.552437,-3.2056788 -10.258193,-7.5047082 -13.9081105,-12.5351217c1.2503272,0.9065647 2.5540419,1.7533552 3.9081105,2.5351217l149.86,86.52c6.84,3.949 14.601,6.029 22.5,6.029c7.899,0 15.66,-2.08 22.5,-6.029l149.86,-86.52c13.905,-8.028 22.5,-22.913 22.5,-38.97v-173.04c0,-7.899 -2.08,-15.66 -6.03,-22.501c-0.7820205,-1.3543272 -1.6319629,-2.6632425 -2.5453774,-3.9222881c5.098508,3.6988637 9.378781,8.4382787 12.5453774,13.9222881c3.95,6.841 6.03,14.602 6.03,22.501z"
+        fill="#e4e3df"
+        fill-opacity="0.1"
+        fill-rule="nonzero"
+      />
+    </g>
+  </g>
+</svg>

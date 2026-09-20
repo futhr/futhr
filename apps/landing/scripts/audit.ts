@@ -154,7 +154,7 @@ try {
       await page.screenshot({ path: join(directory, `showcase-recetas-${view.width}.png`) })
       const footer = page.locator('footer')
       await footer.scrollIntoViewIfNeeded()
-      const marks = await footer.locator('svg[aria-label$=" mark"]').evaluateAll((elements) =>
+      const marks = await footer.locator('img[alt$=" mark"]').evaluateAll((elements) =>
         elements.map((element) => {
           const r = element.getBoundingClientRect()
           return {

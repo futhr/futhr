@@ -1,0 +1,46 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="108 56 441 441"
+  role="img"
+  aria-label="Äger / Grayscale / Night / Curves / curved eyes"
+>
+  <title>Äger / Grayscale / Night / Curves / curved eyes</title>
+  <defs>
+    <clipPath id="ager-219-outer-0"><circle cx="190" cy="168" r="55" /></clipPath>
+    <clipPath id="ager-219-outer-1"><circle cx="494" cy="168" r="55" /></clipPath>
+    <clipPath id="ager-219-outer-2">
+      <path d="M245 258A137 137 0 0 0 108 395a45 45 0 0 0 45 45h92Z" />
+    </clipPath>
+    <clipPath id="ager-219-outer-3">
+      <path d="M292 113a113 113 0 0 1 113 113v184a30 30 0 0 1-30 30h-83Z" />
+    </clipPath>
+    <clipPath id="ager-219-bowl-lens"><circle cx="245" cy="440" r="113" fill="#000000" /></clipPath>
+    <clipPath id="ager-219-stem-lens"><circle cx="405" cy="333" r="113" fill="#000000" /></clipPath>
+  </defs>
+  <g clip-path="url(#ager-219-outer-0)">
+    <circle cx="190" cy="168" r="55" fill="#e2e1dd" />
+    <circle cx="215" cy="180" r="55" fill="#dbdad6" />
+    <circle cx="174" cy="186" r="16" fill="#d8d7d3" />
+  </g>
+  <g clip-path="url(#ager-219-outer-1)">
+    <circle cx="494" cy="168" r="55" fill="#e2e1dd" />
+    <circle cx="519" cy="180" r="55" fill="#dbdad6" />
+    <circle cx="478" cy="186" r="16" fill="#d8d7d3" />
+  </g>
+  <g clip-path="url(#ager-219-outer-2)">
+    <rect x="100" y="100" width="460" height="350" fill="#dbdad6" />
+    <circle cx="245" cy="440" r="113" fill="#d5d4d0" />
+    <circle cx="245" cy="258" r="114" fill="#e0dfdb" />
+    <g clip-path="url(#ager-219-bowl-lens)"><circle cx="245" cy="258" r="114" fill="#deddd9" /></g>
+  </g>
+  <g transform="translate(-2.466426858513 0)">
+    <g clip-path="url(#ager-219-outer-3)">
+      <rect x="100" y="100" width="460" height="350" fill="#e2e1dd" />
+      <circle cx="405" cy="333" r="113" fill="#dcdbd7" />
+      <circle cx="292" cy="440" r="113" fill="#d6d5d1" />
+      <g clip-path="url(#ager-219-stem-lens)">
+        <circle cx="292" cy="440" r="113" fill="#d5d4d0" />
+      </g>
+    </g>
+  </g>
+</svg>

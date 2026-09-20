@@ -68,9 +68,10 @@ with 20 percent paper; text on paper keeps its ink colour. Focus outlines follow
 the text colour, with an explicit paper outline around the waitlist button.
 The Brand/Weekly colours story shows the seven hues.
 
-Marks are SVG components drawn in `currentColor`; an inverse area uses a contrast
-token that defaults to ink, so the same file works on either background and in
-the footer, in Storybook, and in exported profile images.
+Project marks are standalone monochrome SVGs in `src/lib/marks/`. They use a
+narrow warm-gray range for subtle dimensional cues, retain transparent
+counterforms, and are shared by the footer, Storybook, project pages, and
+generated icons.
 
 ## Offline and icons
 

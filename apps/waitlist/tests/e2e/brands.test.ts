@@ -4,7 +4,7 @@ import { brands } from '../../src/lib/brands/brands.ts'
 import { hosts, origin, port } from './hosts.ts'
 
 const imageType = /image\/(?:png|svg\+xml)/
-const markLabel = (name: string) => `svg[aria-label="${name} mark"]`
+const markLabel = (name: string) => `img[alt="${name} mark"]`
 
 const fetchJson = <T>(path: string) =>
   fetch(path).then(async (response) => ({
@@ -141,7 +141,7 @@ test('renders the complete page and form without JavaScript', async ({ browser }
   await expect(page.locator('h1')).toHaveText('Orvane')
   await expect(page.getByLabel('Email address')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Notify me' })).toBeEnabled()
-  await expect(page.locator('svg[aria-label="Orvane mark"]').first()).toBeVisible()
+  await expect(page.locator('img[alt="Orvane mark"]').first()).toBeVisible()
   await context.close()
 })
 

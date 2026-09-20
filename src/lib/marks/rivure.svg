@@ -1,0 +1,60 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+  width="800"
+  height="800"
+  viewBox="-52 -24 568 568"
+>
+  <title>Rivure 08 / Clay / Steel / dark</title>
+  <desc>
+    Exact geometry, transforms and stacking from retained Rivure 08. Quiet palette: Clay / Steel.
+    Whitish main body for dark surfaces. Opening and canvas remain transparent. Native vector fills
+    and gradients only.
+  </desc>
+  <g
+    id="cyan-offset"
+    inkscape:groupmode="layer"
+    inkscape:label="Colour layer — right"
+    transform="translate(12 0)"
+  >
+    <path
+      d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+      fill="#cac9c5"
+      fill-rule="nonzero"
+    />
+    <path
+      d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+      fill="#cac9c5"
+      fill-rule="nonzero"
+    />
+  </g>
+  <g
+    id="red-offset"
+    inkscape:groupmode="layer"
+    inkscape:label="Colour layer — left"
+    transform="translate(-12 0)"
+  >
+    <path
+      d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+      fill="#cdccc8"
+      fill-rule="nonzero"
+    />
+    <path
+      d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+      fill="#cdccc8"
+      fill-rule="nonzero"
+    />
+  </g>
+  <g id="core" inkscape:groupmode="layer" inkscape:label="Core — whitish">
+    <path
+      d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+      fill="#e4e3df"
+      fill-rule="nonzero"
+    />
+    <path
+      d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+      fill="#e4e3df"
+      fill-rule="nonzero"
+    />
+  </g>
+</svg>

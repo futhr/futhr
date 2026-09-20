@@ -1,11 +1,11 @@
 import type { Component } from 'svelte'
 import type { BrandId } from '$lib/types/brand-id'
-import Diggymon from '$site/components/logos/diggymon.svelte'
-import Orvane from '$site/components/logos/orvane.svelte'
-import Refpath from '$site/components/logos/refpath.svelte'
-import Rivure from '$site/components/logos/rivure.svelte'
+import Diggymon from '$site/components/marks/diggymon.svelte'
+import Orvane from '$site/components/marks/orvane.svelte'
+import Refpath from '$site/components/marks/refpath.svelte'
+import Rivure from '$site/components/marks/rivure.svelte'
 
-/** The reusable marks from the showcase are the single vector source. */
+/** Reusable adapters for the standalone showcase marks. */
 const marks: Readonly<Record<BrandId, Component>> = {
   rivure: Rivure,
   diggymon: Diggymon,

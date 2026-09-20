@@ -29,8 +29,8 @@ OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 The MIT License above does not apply to:
 
 - editorial copy and metadata in `src/lib/content/` and `apps/waitlist/src/lib/brands/`;
-- project and social marks in `src/lib/components/logos/` and the generated icons
-  under `apps/waitlist/static/brands/`;
+- project marks in `src/lib/marks/`, social marks in `src/lib/components/icons/`,
+  and the generated icons under `apps/waitlist/static/brands/`;
 - Futhr icons and visual assets in `static/icons/`; or
 - names, trademarks, trade dress and other brand identifiers described in
   [TRADEMARKS.md](TRADEMARKS.md).
@@ -46,6 +46,6 @@ The site and the waitlist pages serve the Archivo variable font from
 Authors and licensed under the SIL Open Font License 1.1; the licence text is served
 at <https://futhr.io/licenses/archivo.txt>. Every other dependency keeps its own
 licence, shipped inside the installed package; `pnpm licenses list` prints the set.
-The social icons in `src/lib/components/logos/` belong to their respective owners.
+The social icons in `src/lib/components/icons/` belong to their respective owners.
 
 For permission beyond these terms, contact [hi@futhr.io](mailto:hi@futhr.io).

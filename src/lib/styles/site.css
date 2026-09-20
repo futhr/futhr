@@ -29,7 +29,7 @@
  *   headline      144px  row headline, line-height 0.75
  *
  * The inset and the fold height sit 16px above the reference so an accented
- * title such as Äger clears the row edge: a diaeresis rises about 28px above
+ * title such as ÄGR clears the row edge: a diaeresis rises about 28px above
  * the cap line at this size. Both moved together, so a collapsed row still
  * shows the same 73px of every headline.
  *
@@ -55,7 +55,6 @@
   --brand-saturday: #e0409a;
   --brand-sunday: #1b9a9a;
   --brand: var(--brand-monday);
-  --mark-contrast: var(--color-ink);
   color: var(--color-ink);
   background: var(--color-ink);
   font-family: var(--font-display);

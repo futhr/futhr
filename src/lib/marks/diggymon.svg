@@ -1,0 +1,19 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="42 160 428 192"
+  role="img"
+  aria-label="Diggymon Original white"
+>
+  <title>Diggymon - Original - white</title>
+  <desc>
+    Exact letter geometry and transforms from the selected source. Transparent background. Approved
+    identity source.
+  </desc>
+  <g id="logo-artwork">
+    <path
+      d="M44.25 162.375L229.75 162.375L229.75 256.875L168.5 349.625L44.25 349.625ZM105.5 223.625L168.5 223.625L168.5 286.625L105.5 286.625ZM291 162.375L467.75 162.375L467.75 349.625L405.45 349.625L405.45 223.625L380.25 223.625L380.25 349.625L317.95 349.625L317.95 223.625L292.75 223.625L292.75 349.625L230.45 349.625L230.45 256.875Z"
+      fill="#e3e2de"
+      fill-rule="evenodd"
+    />
+  </g>
+</svg>

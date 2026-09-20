@@ -28,7 +28,7 @@
     "src/**/*.ts",
     "src/**/*.svelte",
     "src/**/*.d.ts",
-    "../../src/lib/components/logos/*.svelte",
+    "../../src/lib/components/marks/*.svelte",
     "scripts/**/*.ts",
     "tests/local-secrets.ts",
     "tests/unit/**/*.ts",

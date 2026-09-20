@@ -1,12 +1,58 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img">
   <title>Rivure</title>
   <rect width="560" height="560" rx="112" fill="#1b1b1b" />
-  <svg x="112" y="112" width="336" height="336" viewBox="-17 0 345 345" color="#dcdbd6" style="--mark-contrast: #1b1b1b" aria-hidden="true">
-    <path
-        d="M64 124a124 124 0 1 0 248 0 124 124 0 1 0-248 0Zm64 0a60 60 0 1 1 120 0 60 60 0 1 1-120 0Z"
-        fill="currentColor"
-        fill-rule="evenodd"
-      />
-      <path d="M0 124h64v221H0Zm64 51v-51l36 87 134 134 45-45-90-91Z" fill="currentColor" />
+  <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" x="112" y="112" width="336" height="336" viewBox="-52 -24 568 568" aria-hidden="true">
+    <title>Rivure 08 / Clay / Steel / dark</title>
+      <desc>
+        Exact geometry, transforms and stacking from retained Rivure 08. Quiet palette: Clay / Steel.
+        Whitish main body for dark surfaces. Opening and canvas remain transparent. Native vector fills
+        and gradients only.
+      </desc>
+      <g
+        id="cyan-offset"
+        inkscape:groupmode="layer"
+        inkscape:label="Colour layer — right"
+        transform="translate(12 0)"
+      >
+        <path
+          d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+          fill="#cac9c5"
+          fill-rule="nonzero"
+        />
+        <path
+          d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+          fill="#cac9c5"
+          fill-rule="nonzero"
+        />
+      </g>
+      <g
+        id="red-offset"
+        inkscape:groupmode="layer"
+        inkscape:label="Colour layer — left"
+        transform="translate(-12 0)"
+      >
+        <path
+          d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+          fill="#cdccc8"
+          fill-rule="nonzero"
+        />
+        <path
+          d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+          fill="#cdccc8"
+          fill-rule="nonzero"
+        />
+      </g>
+      <g id="core" inkscape:groupmode="layer" inkscape:label="Core — whitish">
+        <path
+          d="M464 184A184 184 0 1 1 96 184A184 184 0 1 1 464 184Z M368 184A88 88 0 1 0 192 184A88 88 0 1 0 368 184Z"
+          fill="#e4e3df"
+          fill-rule="nonzero"
+        />
+        <path
+          d="M0 184L155.54920651 184L415.66695552 444.11774901L347.78470452 512L96 260.21529548L96 448L0 448Z"
+          fill="#e4e3df"
+          fill-rule="nonzero"
+        />
+      </g>
   </svg>
 </svg>

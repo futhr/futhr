@@ -18,9 +18,13 @@ const identity = {
   },
   images: {
     favicon: '/icons/favicon.svg',
+    faviconLight: '/icons/favicon-light.svg',
+    faviconDark: '/icons/favicon-dark.svg',
     icon: '/icons/logo.svg',
     touchIcon: '/icons/apple-touch-icon.png',
     faviconPng: '/icons/favicon-48.png',
+    faviconPngLight: '/icons/favicon-light-48.png',
+    faviconPngDark: '/icons/favicon-dark-48.png',
     social: `${canonicalUrl}icons/logo-512.png`
   },
   links: {

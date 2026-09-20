@@ -1,20 +1,21 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img">
   <title>Refpath</title>
   <rect width="560" height="560" rx="112" fill="#1b1b1b" />
-  <svg x="112" y="112" width="336" height="336" viewBox="0 0 300 300" color="#dcdbd6" style="--mark-contrast: #1b1b1b" aria-hidden="true">
-    <defs>
-        <linearGradient id="refpath-fold-one" x1="1" y1="0" x2="0" y2="1">
-          <stop offset="0" stop-color="currentColor" />
-          <stop offset="1" stop-color="currentColor" stop-opacity="0.72" />
-        </linearGradient>
-        <linearGradient id="refpath-fold-two" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stop-color="currentColor" stop-opacity="0.92" />
-          <stop offset="1" stop-color="currentColor" stop-opacity="0.55" />
+  <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" x="112" y="112" width="336" height="336" viewBox="0 0 300 300" aria-hidden="true">
+    <title>Refpath / Primary silver logo</title>
+      <defs>
+        <path id="source-face-a" d="M0 100 100 0v200L0 300Z" />
+        <path id="source-face-b" d="M100 0h200L200 100H100Z" />
+        <path id="source-face-c" d="m100 200 100-100h100L200 200Z" />
+        <path id="source-face-d" d="M300 100v100L200 300V200Z" />
+        <linearGradient id="fold-shared" gradientUnits="objectBoundingBox" x1="0" y1="1" x2="1" y2="0">
+          <stop offset="0" stop-color="#cac9c5" />
+          <stop offset="1" stop-color="#e4e3df" />
         </linearGradient>
       </defs>
-      <path d="M0 100 100 0v200L0 300Z" fill="currentColor" />
-      <path d="M100 0h200L200 100H100Z" fill="url(#refpath-fold-one)" />
-      <path d="m100 200 100-100h100L200 200Z" fill="currentColor" />
-      <path d="M300 100v100L200 300V200Z" fill="url(#refpath-fold-two)" />
+      <path id="refpath-shell-ab" d="M0 100 100 0H300L200 100H100V200L0 300Z" fill="#e4e3df" />
+      <path id="refpath-plane-b" d="M100 0h200L200 100H100Z" fill="url(#fold-shared)" />
+      <path id="refpath-shell-cd" d="M100 200 200 100H300V200L200 300V200Z" fill="#e4e3df" />
+      <path id="refpath-plane-d" d="M300 100v100L200 300V200Z" fill="url(#fold-shared)" />
   </svg>
 </svg>
