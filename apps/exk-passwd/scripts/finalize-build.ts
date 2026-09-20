@@ -22,7 +22,10 @@ const collect = async (directory: string): Promise<string[]> => {
 const assetFiles = (await collect(outputDirectory))
   .filter((path) => !path.endsWith('/service-worker.js'))
   .sort()
-const assets = assetFiles.map((path) => `/exk-passwd/${relative(outputDirectory, path)}`)
+const assets = assetFiles.map((path) => {
+  const deployedPath = `/exk-passwd/${relative(outputDirectory, path)}`
+  return deployedPath === '/exk-passwd/index.html' ? '/exk-passwd/' : deployedPath
+})
 const cacheRevision = createHash('sha256')
 for (const path of assetFiles) {
   cacheRevision.update(relative(outputDirectory, path))
@@ -36,7 +39,7 @@ const cacheName = `exk-passwd-${manifest.browser_core_version}-${cacheRevision.d
 const serviceWorker = `const cacheName = ${JSON.stringify(cacheName)}
 const cachePrefix = 'exk-passwd-'
 const assets = ${JSON.stringify(assets, null, 2)}
-const shellPath = '/exk-passwd/index.html'
+const shellPath = '/exk-passwd/'
 const precached = new Set(assets)
 
 self.addEventListener('install', (event) => {
@@ -54,7 +57,7 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
   if (event.request.method !== 'GET' || url.origin !== self.location.origin) return
-  const path = url.pathname === '/exk-passwd/' ? shellPath : url.pathname
+  const path = url.pathname === '/exk-passwd/index.html' ? shellPath : url.pathname
   if (precached.has(path)) {
     event.respondWith(caches.match(path).then((cached) => cached || fetch(event.request)))
     return

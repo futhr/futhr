@@ -24,6 +24,14 @@ const required = [
 
 await Promise.all(required.map((path) => access(resolve(siteDirectory, path))))
 
+const serviceWorker = await readFile(resolve(siteDirectory, 'service-worker.js'), 'utf8')
+if (!serviceWorker.includes("const shellPath = '/exk-passwd/'")) {
+  throw new Error('Service worker must precache the canonical deployed app URL.')
+}
+if (serviceWorker.includes('"/exk-passwd/index.html"')) {
+  throw new Error('Service worker must not precache the Pages redirect for index.html.')
+}
+
 for (const [path, expected] of Object.entries(manifest.files)) {
   const bytes = await readFile(resolve(siteDirectory, 'browser-core', path))
   const digest = createHash('sha256').update(bytes).digest('hex')
