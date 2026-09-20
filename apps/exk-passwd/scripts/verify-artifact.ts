@@ -28,8 +28,14 @@ const serviceWorker = await readFile(resolve(siteDirectory, 'service-worker.js')
 if (!serviceWorker.includes("const shellPath = '/exk-passwd/'")) {
   throw new Error('Service worker must precache the canonical deployed app URL.')
 }
-if (serviceWorker.includes('"/exk-passwd/index.html"')) {
-  throw new Error('Service worker must not precache the Pages redirect for index.html.')
+if (
+  serviceWorker.includes('"/exk-passwd/index.html"') ||
+  serviceWorker.includes('"/exk-passwd/runtime.html"')
+) {
+  throw new Error('Service worker must not precache redirected Pages HTML paths.')
+}
+if (!serviceWorker.includes('"/exk-passwd/runtime"')) {
+  throw new Error('Service worker must precache the canonical deployed runtime URL.')
 }
 
 for (const [path, expected] of Object.entries(manifest.files)) {

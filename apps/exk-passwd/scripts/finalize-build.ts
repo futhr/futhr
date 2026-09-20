@@ -24,7 +24,10 @@ const assetFiles = (await collect(outputDirectory))
   .sort()
 const assets = assetFiles.map((path) => {
   const deployedPath = `/exk-passwd/${relative(outputDirectory, path)}`
-  return deployedPath === '/exk-passwd/index.html' ? '/exk-passwd/' : deployedPath
+  if (deployedPath === '/exk-passwd/index.html') {
+    return '/exk-passwd/'
+  }
+  return deployedPath === '/exk-passwd/runtime.html' ? '/exk-passwd/runtime' : deployedPath
 })
 const cacheRevision = createHash('sha256')
 for (const path of assetFiles) {
@@ -57,7 +60,8 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
   if (event.request.method !== 'GET' || url.origin !== self.location.origin) return
-  const path = url.pathname === '/exk-passwd/index.html' ? shellPath : url.pathname
+  let path = url.pathname === '/exk-passwd/index.html' ? shellPath : url.pathname
+  if (path === '/exk-passwd/runtime.html') path = '/exk-passwd/runtime'
   if (precached.has(path)) {
     event.respondWith(caches.match(path).then((cached) => cached || fetch(event.request)))
     return
