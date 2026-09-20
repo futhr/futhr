@@ -37,7 +37,7 @@ pnpm install
 pnpm exec playwright install --with-deps chromium   # first time only
 ```
 
-Node 24 is selected by `.nvmrc`; pnpm 11.24.0 is pinned in `package.json` and `.nvmrc`.
+Node 24 is selected by `.nvmrc`; pnpm 11.27.0 is pinned in `package.json`.
 
 ## Commands
 

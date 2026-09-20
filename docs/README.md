@@ -24,7 +24,7 @@ pnpm dev                                # http://127.0.0.1:5173
 pnpm storybook                          # http://127.0.0.1:6006
 ```
 
-Node 24 (`.nvmrc`) and pnpm 11.24.0 (`packageManager` in `package.json`).
+Node 24 (`.nvmrc`) and pnpm 11.27.0 (`packageManager` in `package.json`).
 
 The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
 them on `http://127.0.0.1:8787/`, which lists the four brands on their
