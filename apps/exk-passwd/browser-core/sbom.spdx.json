@@ -3,7 +3,7 @@
   "dataLicense": "CC0-1.0",
   "SPDXID": "SPDXRef-DOCUMENT",
   "name": "exk-passwd-browser-core-0.1.0",
-  "documentNamespace": "https://futhr.io/exk-passwd/sbom/e0cae7e65de4b610bd6312b73630ef1cdfc573c6",
+  "documentNamespace": "https://futhr.io/exk-passwd/sbom/d77d17db7a90c86de4532d97c21bdf1621311e14",
   "creationInfo": {
     "created": "2026-09-20T00:00:00Z",
     "creators": [
@@ -14,8 +14,8 @@
     {
       "SPDXID": "SPDXRef-ExkPasswd",
       "name": "exk_passwd",
-      "versionInfo": "0.3.2",
-      "downloadLocation": "https://github.com/futhr/exk_passwd",
+      "versionInfo": "0.4.0",
+      "downloadLocation": "https://repo.hex.pm/tarballs/exk_passwd-0.4.0.tar",
       "licenseConcluded": "BSD-2-Clause",
       "licenseDeclared": "BSD-2-Clause",
       "filesAnalyzed": false

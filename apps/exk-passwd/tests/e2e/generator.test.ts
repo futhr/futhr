@@ -49,7 +49,7 @@ test('boots the real core, generates locally, and exposes audited runtime identi
 
   const password = await generatedPassword(page)
   await expect(page.locator('#runtime-status')).toHaveText('Elixir ready · offline capable')
-  await expect(page.locator('#runtime-info')).toContainText('v0.3.2')
+  await expect(page.locator('#runtime-info')).toContainText('v0.4.0')
   await expect(page.locator('#runtime-info')).toContainText('Web Crypto getRandomValues')
   await expect(page.locator('#runtime-info')).toContainText('Cross-origin isolated')
   await expect(page.locator('#seen-entropy')).toHaveText(entropyPattern)

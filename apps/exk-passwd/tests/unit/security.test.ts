@@ -18,7 +18,12 @@ describe('browser-core release controls', () => {
     const coreDirectory = resolve(appDirectory, 'browser-core')
     const manifest = await readJson<{
       dictionary: { sha256: string; words: number }
-      exk_passwd: { commit: string; dirty: boolean; version: string }
+      exk_passwd: {
+        checksum: string
+        outer_checksum: string
+        source: string
+        version: string
+      }
       files: Record<string, { bytes: number; sha256: string }>
       futhr_source_commit: string
       futhr_source_dirty: boolean
@@ -45,9 +50,13 @@ describe('browser-core release controls', () => {
       popcorn_version: '0.3.3'
     })
     expect(manifest.futhr_source_commit).toMatch(commitPattern)
-    expect(manifest.exk_passwd.commit).toMatch(commitPattern)
     expect(typeof manifest.futhr_source_dirty).toBe('boolean')
-    expect(typeof manifest.exk_passwd.dirty).toBe('boolean')
+    expect(manifest.exk_passwd).toEqual({
+      checksum: '3d7e8e30dbd6cce680710dcf35286cf003008b2ce9cb2d793c28b1516a754fd8',
+      outer_checksum: '4e14d64aebfd43b12737b457dac20f702dc3e49a2f1cf592d40b30b24e6b5830',
+      source: 'hexpm',
+      version: '0.4.0'
+    })
 
     for (const [path, expected] of Object.entries(manifest.files)) {
       const bytes = await readFile(resolve(coreDirectory, path))
