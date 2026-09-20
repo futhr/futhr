@@ -49,16 +49,19 @@ them on `http://127.0.0.1:8787/`, which lists the four brands on their
 | `pnpm storybook:build` | Static Storybook to `storybook-static/` |
 | `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
 | `pnpm redirects:deploy` | Deploys the legacy-domain-to-Futhr redirect Worker |
-| `pnpm build:waitlist` | Builds the waitlist Worker and its assets to `apps/waitlist/.svelte-kit/cloudflare` |
+| `pnpm build:exk-passwd` | Builds the ExkPasswd PWA and Chromium/Firefox extensions |
+| `pnpm check:exk-passwd` | Type-checks the ExkPasswd browser package |
+| `pnpm test:exk-passwd` | Runs the ExkPasswd unit and cross-browser suites |
+| `pnpm build:waitlist` | Builds the waitlist Worker and its assets to `apps/waitlist/.svelte-kit/cloudflare/` |
 | `pnpm check:waitlist` | Runtime types, svelte-check, and TypeScript for the waitlist app |
 | `pnpm test:waitlist` | Waitlist unit, Workers runtime, and Playwright suites |
 | `pnpm waitlist:icons` | Regenerates the brand icons from the mark components |
 | `pnpm build:landing` | Builds the stateless landing Worker and checks its artifact |
 | `pnpm check:landing` | Generated runtime types and Svelte/TypeScript checks |
 | `pnpm test:landing` | Landing unit, component, Workers runtime, and browser tests |
-| `pnpm landing:icons` | Regenerates landing icons and social images |
+| `pnpm landing:icons` | Regenerates landing icons after mark/copy changes |
 
-CI checks all three workspace packages on pull requests and pushes to `main`, uploads
+CI checks all four workspace packages on pull requests and pushes to `main`, uploads
 showcase coverage to Codecov, and dry-runs the redirect, Storybook, and both
 waitlist Workers, plus the landing Worker. Nothing is deployed by CI.
 
@@ -99,6 +102,7 @@ a dependency before adding it and remove packages that stop being used.
 | --- | --- |
 | [architecture/showcase.md](architecture/showcase.md) | How the site works: composition, motion, content pipeline, colour, offline, icons, agent surface, verification |
 | [architecture/cloudflare.md](architecture/cloudflare.md) | Current Pages and Workers configurations, waitlist provisioning, DNS and mail, deployment commands, headers, and the optional Pages migration |
+| [architecture/exk-passwd-browser.md](architecture/exk-passwd-browser.md) | Production architecture for ExkPasswd in AtomVM/WebAssembly: WebCrypto, static Cloudflare hosting, PWA and browser extensions, security, testing, provenance, and OSS automation |
 | [architecture/project-landings.md](architecture/project-landings.md) | Deployed landing pages for WoTEx, Reloved, and Recetas; routing, Reloved migration, and local/live audit evidence |
 | [architecture/waitlist-platform.md](architecture/waitlist-platform.md) | Why the waitlists are a separate Worker: boundaries, request flow, data protection, consent, and the decisions still open |
 | [legal/accessibility.md](legal/accessibility.md) | Accessibility statement |

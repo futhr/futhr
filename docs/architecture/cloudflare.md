@@ -9,14 +9,17 @@ need an account-side check before later releases.
 
 | Deployable | Build command | Artifact | Config | Hosting model |
 | --- | --- | --- | --- | --- |
-| Showcase | `pnpm build` | `build/` | `wrangler.toml` | Pages (`pages_build_output_dir`) |
+| Showcase and ExkPasswd generator | `pnpm build` | `build/` | `wrangler.toml` | Pages (`pages_build_output_dir`) |
 | Domain redirects | bundled by Wrangler | Worker code | `wrangler.redirects.jsonc` | Module Worker, name `bohwalli-redirect` |
 | Storybook | `pnpm storybook:build` | `storybook-static/` | `wrangler.storybook.toml` | Workers static assets, name `futhr-ui` |
 | Public waitlists | `pnpm build:waitlist` | `apps/waitlist/.svelte-kit/cloudflare/` | `apps/waitlist/wrangler.toml` | SvelteKit Worker, name `waitlist-web` |
 | Project landings | `pnpm build:landing` | `apps/landing/.svelte-kit/cloudflare/` | `apps/landing/wrangler.toml` | SvelteKit Worker with a host gate, name `project-landings` |
 | List administration | bundled by Wrangler | Worker code | `apps/waitlist/wrangler.admin.toml` | Module Worker, name `waitlist-admin` |
 
-The showcase and Storybook serve static files. The waitlist public Worker
+The showcase, its `/exk-passwd/` AtomVM PWA, and Storybook serve static files.
+The generator is integrated from `apps/exk-passwd/dist/` during the showcase
+build, uses path-specific COOP/COEP and CSP headers, and has no generation
+endpoint or server-side state. The waitlist public Worker
 renders pages and accepts forms; its asset binding serves hashed files and
 brand icons. The admin Worker lists records and resolves withdrawal requests. Neither sends email.
 
