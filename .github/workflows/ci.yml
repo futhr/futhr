@@ -15,7 +15,7 @@ concurrency:
 
 jobs:
   verify:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Check out repository
@@ -80,7 +80,7 @@ jobs:
           WRANGLER_SEND_METRICS: 'false'
 
   landing:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
       - name: Check out repository
@@ -108,7 +108,7 @@ jobs:
           WRANGLER_SEND_METRICS: 'false'
 
   exk-passwd:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
       - name: Check out repository
@@ -138,7 +138,7 @@ jobs:
         run: pnpm --filter exk-passwd-browser test:e2e
 
   waitlist:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
       - name: Check out repository
