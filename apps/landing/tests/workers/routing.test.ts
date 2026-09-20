@@ -3,7 +3,7 @@ import { describe, expect, it } from 'vitest'
 import { projects } from '../../src/lib/projects.ts'
 
 const clientScript = /<script\b/i
-const stylesheet = /href="([^"]+\.css)"/
+const stylesheet = /href="([^"]+\.css)"/g
 
 describe('production Worker', () => {
   it.each(Object.values(projects))(
@@ -22,9 +22,9 @@ describe('production Worker', () => {
       expect(response.headers.get('cache-control')).toBe('public, max-age=3600')
       expect(response.headers.get('set-cookie')).toBeNull()
       expect(response.headers.get('strict-transport-security')).toBe('max-age=31536000')
-      const css = stylesheet.exec(html)?.[1]
+      const css = Array.from(html.matchAll(stylesheet))[0]?.[1] ?? ''
       expect(css).toBeTruthy()
-      const style = await SELF.fetch(new URL(css ?? '', `https://${project.host}/`).href)
+      const style = await SELF.fetch(new URL(css, `https://${project.host}/`).href)
       expect(style.status).toBe(200)
       expect(style.headers.get('content-type')).toContain('text/css')
       expect(style.headers.get('cache-control')).toBe('public, max-age=31536000, immutable')

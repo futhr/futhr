@@ -5,7 +5,7 @@ minimumReleaseAge: 1440
 saveExact: true
 
 overrides:
-  postcss: 8.5.26
+  postcss: 8.5.28
   '@sveltejs/kit>cookie': 0.7.2
 
 allowBuilds:

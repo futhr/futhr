@@ -17,7 +17,7 @@ export default defineConfig({
   webServer: {
     command:
       'pnpm build && pnpm exec wrangler dev --env local --ip 127.0.0.1 --port 24176 --persist-to test-results/worker-state --log-level error',
-    port: 24_176,
+    url: 'http://wotex.localhost:24176/',
     reuseExistingServer: false,
     timeout: 180_000
   }

@@ -5,7 +5,7 @@ import { helpers } from './helpers.ts'
 
 const { call } = helpers
 const hosts = Object.values(brands).map(({ host }) => host)
-const noncePattern = /'nonce-([^']+)'/
+const noncePattern = /'nonce-([^']+)'/g
 
 describe('host routing', () => {
   it.each(hosts)('serves %s its own page, documents, and icons', async (host) => {
@@ -23,7 +23,9 @@ describe('host routing', () => {
     expect(html).toContain('id="join-form-email"')
     expect(html).not.toContain('challenges.cloudflare.com')
     expect(html).toContain(brand.closing)
-    const nonce = noncePattern.exec(page.headers.get('content-security-policy') ?? '')?.[1]
+    const nonce = Array.from(
+      (page.headers.get('content-security-policy') ?? '').matchAll(noncePattern)
+    )[0]?.[1]
     expect(nonce).toBeTruthy()
     expect(html).toContain(`nonce="${nonce}"`)
     for (const other of Object.values(brands).filter((candidate) => candidate.id !== brand.id)) {

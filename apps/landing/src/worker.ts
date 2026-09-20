@@ -33,7 +33,9 @@ const worker = {
     }
     const immutable =
       url.pathname.startsWith('/_app/immutable/') &&
-      (url.pathname.endsWith('.css') || url.pathname.endsWith('.woff2'))
+      (url.pathname.endsWith('.css') ||
+        url.pathname.endsWith('.svg') ||
+        url.pathname.endsWith('.woff2'))
     if (immutable) {
       return applyHeaders(await env.ASSETS.fetch(request), 'public, max-age=31536000, immutable')
     }

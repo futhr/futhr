@@ -5,7 +5,13 @@ import { projects } from '../../src/lib/projects.ts'
 for (const project of Object.values(projects)) {
   test(`${project.name}: responsive, accessible and self-contained`, async ({ page }, info) => {
     const requests: string[] = []
+    const failedResponses: string[] = []
     page.on('request', (request) => requests.push(request.url()))
+    page.on('response', (response) => {
+      if (response.status() >= 400) {
+        failedResponses.push(`${response.status()} ${response.url()}`)
+      }
+    })
     await page.goto(`http://${project.id}.localhost:24176/`)
     await page.evaluate(() => document.fonts.ready)
     await expect(page.getByRole('heading', { level: 1, name: project.name })).toBeVisible()
@@ -29,5 +35,6 @@ for (const project of Object.values(projects)) {
       document.documentElement.style.fontSize = '200%'
     })
     expect(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth)).toBe(true)
+    expect(failedResponses).toEqual([])
   })
 }

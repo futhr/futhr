@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.12/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -131,7 +131,22 @@
             "noSecrets": "off"
           },
           "style": {
-            "noProcessEnv": "off"
+            "noProcessEnv": "off",
+            "useNamingConvention": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "apps/exk-passwd/src/browser-core.ts",
+        "apps/exk-passwd/src/main.ts",
+        "apps/exk-passwd/src/runtime-entry.ts"
+      ],
+      "linter": {
+        "rules": {
+          "style": {
+            "useNamingConvention": "off"
           }
         }
       }
@@ -225,6 +240,16 @@
     },
     {
       "includes": ["apps/exk-passwd/src/styles.css"],
+      "linter": {
+        "rules": {
+          "style": {
+            "noExcessiveLinesPerFile": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": ["src/lib/marks/*.svg"],
       "linter": {
         "rules": {
           "style": {

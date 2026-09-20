@@ -9,14 +9,7 @@ const config: Config = {
       fallback: '404.html'
     }),
     prerender: {
-      handleHttpError: ({ message, path }) => {
-        // The separately built static app is integrated immediately after the
-        // SvelteKit prerender completes.
-        if (path === '/exk-passwd/') {
-          return
-        }
-        throw new Error(message)
-      }
+      crawl: false
     },
     // The single stylesheet is about 6 KB gzipped; inlining it removes the only
     // render-blocking request on the critical path.

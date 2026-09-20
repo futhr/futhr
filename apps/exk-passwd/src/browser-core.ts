@@ -1,7 +1,7 @@
 const requestTimeoutMs = 15_000
 const bootTimeoutMs = 45_000
 
-type RuntimeInfo = {
+interface RuntimeInfo {
   browser_core_version: string
   dictionary_checksum: string
   dictionary_words: number
@@ -11,7 +11,7 @@ type RuntimeInfo = {
   random_source: string
 }
 
-type Settings = {
+interface Settings {
   preset: string
   num_words: number
   separator: string
@@ -25,7 +25,7 @@ type Settings = {
   substitution_mode: string
 }
 
-type Entropy = {
+interface Entropy {
   blind: number
   seen: number
   status: string
@@ -34,7 +34,7 @@ type Entropy = {
   details: Record<string, number>
 }
 
-type ConfigDescription = {
+interface ConfigDescription {
   case_mode: string
   digits_after: number
   digits_before: number
@@ -49,19 +49,19 @@ type ConfigDescription = {
   word_length_min: number
 }
 
-type Preset = {
+interface Preset {
   name: string
   description: string
   config: ConfigDescription
 }
 
-type GenerateResult = {
+interface GenerateResult {
   password: string
   entropy: Entropy
   config: ConfigDescription
 }
 
-type RuntimeError = {
+interface RuntimeError {
   code: string
   message: string
 }
@@ -73,7 +73,7 @@ type RuntimeMessage =
   | { type: 'response'; requestId: number; reply: CoreReply<unknown> }
   | { type: 'fatal'; message: string }
 
-type PendingRequest = {
+interface PendingRequest {
   resolve: (reply: CoreReply<unknown>) => void
   timeout: ReturnType<typeof setTimeout>
 }
@@ -183,7 +183,7 @@ export class BrowserCore {
     return reply.data as T
   }
 
-  #handleMessage = (event: MessageEvent<RuntimeMessage>): void => {
+  readonly #handleMessage = (event: MessageEvent<RuntimeMessage>): void => {
     const message = event.data
     if (message.type !== 'response') {
       return

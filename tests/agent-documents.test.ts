@@ -83,7 +83,7 @@ An embedded Elixir enforcement layer.
 
     const stack = agentDocuments.stackMatrix()
     expect(stack).toContain('| Runtime | Node.js | >=24 |')
-    expect(stack).toContain('| Package manager | pnpm | 11.24.0 |')
+    expect(stack).toContain('| Package manager | pnpm | 11.27.0 |')
     expect(stack).toMatch(frameworkRow)
     expect(stack).toContain('https://futhr.io/agents.md')
   })
