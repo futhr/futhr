@@ -1,5 +1,5 @@
 ---
-order: 17
+order: 18
 group: Venture
 title: Reloved
 lede: Decentralized resale infrastructure that turns every household into an independent second-hand storefront.

@@ -53,7 +53,7 @@ const rows: ShowcaseEntry[] = [
   {
     order: 3,
     slug: 'nuif',
-    group: 'Rust & Research',
+    group: 'Research',
     title: 'NUIF',
     lede: 'A third row for scroll settling.',
     repositories: ['refpath/nuif'],
@@ -67,7 +67,7 @@ const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms))
 
 test('animates the closing and opening rows together, then settles', async () => {
   const screen = await render(Showcase, { items: rows })
-  const nuif = screen.getByRole('button', { name: 'Rust & Research NUIF' })
+  const nuif = screen.getByRole('button', { name: 'Research NUIF' })
   const thesisRow = screen.container.querySelector('#showcase-row-thesis') as HTMLElement
   const nuifRow = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
 
@@ -87,7 +87,7 @@ test('applies the final state without animating under reduced motion', async () 
     (query) => ({ matches: query.includes('reduce') }) as MediaQueryList
   )
   const screen = await render(Showcase, { items: rows })
-  const nuif = screen.getByRole('button', { name: 'Rust & Research NUIF' })
+  const nuif = screen.getByRole('button', { name: 'Research NUIF' })
   const nuifRow = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
 
   await nuif.click()
@@ -105,7 +105,7 @@ test('renders an empty collection without a disclosure', async () => {
 
 test('cleans up an interrupted row animation on unmount', async () => {
   const screen = await render(Showcase, { items: rows })
-  await screen.getByRole('button', { name: 'Rust & Research NUIF' }).click()
+  await screen.getByRole('button', { name: 'Research NUIF' }).click()
   const row = screen.container.querySelector('#showcase-row-nuif') as HTMLElement
   const [animation] = row.getAnimations()
   expect(animation).toBeDefined()

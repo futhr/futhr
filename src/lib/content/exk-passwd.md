@@ -1,5 +1,5 @@
 ---
-order: 7
+order: 8
 group: Elixir & OTP
 title: ExkPasswd
 lede: Memorable passphrases from independently chosen words, shaped by configuration the host owns.

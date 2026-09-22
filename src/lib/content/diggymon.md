@@ -1,5 +1,5 @@
 ---
-order: 16
+order: 17
 group: Venture
 title: Diggymon
 lede: A local-first business platform for CGI creators, projects, and professional growth.

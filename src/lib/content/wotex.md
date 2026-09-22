@@ -1,5 +1,5 @@
 ---
-order: 9
+order: 2
 group: Elixir & OTP
 title: WoTEx
 lede: OTP-native Elixir libraries that bring the W3C Web of Things to the BEAM.

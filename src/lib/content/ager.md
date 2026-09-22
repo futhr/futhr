@@ -1,5 +1,5 @@
 ---
-order: 19
+order: 20
 group: Venture
 title: ÄGR
 lede: Coordination infrastructure that gives retail shareholders one verifiable voice at Swedish general meetings.

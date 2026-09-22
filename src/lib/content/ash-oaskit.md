@@ -1,5 +1,5 @@
 ---
-order: 6
+order: 7
 group: Elixir & OTP
 title: AshOaskit
 lede: OpenAPI 3.0 and 3.1 generated directly from the Ash domain model.

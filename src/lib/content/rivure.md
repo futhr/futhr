@@ -1,5 +1,5 @@
 ---
-order: 15
+order: 16
 group: Venture
 title: Rivure
 lede: Embedded billing infrastructure that keeps product state and financial state in one transaction.

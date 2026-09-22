@@ -1,5 +1,5 @@
 ---
-order: 8
+order: 9
 group: Elixir & OTP
 title: Phoenix Assets
 lede: A first-class SvelteKit frontend inside Phoenix, supervised and typed as one application.

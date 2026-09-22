@@ -1,5 +1,5 @@
 ---
-order: 20
+order: 21
 group: Venture
 title: Recetas
 lede: A local-first kitchen platform connecting meal planning and home automation through one household-owned system.
