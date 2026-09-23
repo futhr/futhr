@@ -38,7 +38,7 @@ Reloved and Recetas are waitlist brands. See [project-landings.md](project-landi
 
 | Resource | Latest verified status |
 | --- | --- |
-| Showcase | Production Pages deployment `2515bacf` is live with Recetas, the eight-mark footer, and “Visit Reloved” |
+| Showcase | Production Pages deployment `cff9aa93` is live; Reloved and Recetas now link to their waitlists |
 | Legacy domains | Bohwalli and Entvue apex and `www` hostnames permanently redirect to the equivalent path on `futhr.io` |
 | Bohwalli security | Host-only HSTS with a one-year maximum age, a TLS 1.2 minimum, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC are live and independently verified |
 | Futhr and Entvue security | Both zones now have a TLS 1.2 minimum, host-only one-year HSTS with `nosniff`, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC; old `www` Netlify addresses are replaced with proxied originless records |
@@ -47,10 +47,10 @@ Reloved and Recetas are waitlist brands. See [project-landings.md](project-landi
 | D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
 | Workers plan | Workers Free remains active. A payment method is now attached for Zero Trust onboarding, but no paid Workers plan or metered add-on was enabled |
 | Waitlist Workers | `waitlist-admin` is deployed and `waitlist-web` version `2c393feb-1ba8-4d2c-8f0b-74966c98981d` serves six brands and the Orvane aliases |
-| Venture zones | Account read on 11 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `orvane.ai`, and `reloved.eco` are active Cloudflare zones |
+| Venture zones | All six waitlist zones, the Orvane alias zone, and WoTEx are active Cloudflare zones |
 | Landing Worker | Version `f81debae-d570-4394-9c58-5da44cc8ce27` owns only the WoTEx apex and `www`; live HTTPS returned the stateless page |
-| WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the landing deploy added apex/`www` web records without changing mail DNS |
-| Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the landing Worker continues to supply its application-level host-only HSTS and security headers |
+| WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the web Worker transfer preserved their mail DNS |
+| Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the waitlist Worker supplies its application-level security headers |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
 | Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
 | Waitlist domains | `lists.futhr.io`; the apex and `www` hostnames for Rivure, Diggymon, Refpath, Orvane, Reloved, and Recetas; plus `orvane.ai` and `www.orvane.ai` are attached Custom Domains |
