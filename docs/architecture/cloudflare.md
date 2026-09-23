@@ -38,7 +38,7 @@ Reloved and Recetas are waitlist brands. See [project-landings.md](project-landi
 
 | Resource | Latest verified status |
 | --- | --- |
-| Showcase | Production Pages deployment `cff9aa93` is live; Reloved and Recetas now link to their waitlists |
+| Showcase | Production Pages deployment `62e23a5d` is live; Reloved and Recetas link to their waitlists, and ExkPasswd uses the shared weekday palette |
 | Legacy domains | Bohwalli and Entvue apex and `www` hostnames permanently redirect to the equivalent path on `futhr.io` |
 | Bohwalli security | Host-only HSTS with a one-year maximum age, a TLS 1.2 minimum, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC are live and independently verified |
 | Futhr and Entvue security | Both zones now have a TLS 1.2 minimum, host-only one-year HSTS with `nosniff`, managed `security.txt`, Google Workspace SPF, and monitoring-only DMARC; old `www` Netlify addresses are replaced with proxied originless records |
