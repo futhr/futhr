@@ -170,7 +170,7 @@ footer {
 }
 
 .runtime-status[data-state="ready"]::before {
-  background: var(--accent);
+  background: #55cf8a;
 }
 
 .runtime-status[data-state="failed"]::before {

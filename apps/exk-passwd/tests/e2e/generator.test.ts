@@ -49,6 +49,12 @@ test('boots the real core, generates locally, and exposes audited runtime identi
 
   const password = await generatedPassword(page)
   await expect(page.locator('#runtime-status')).toHaveText('Elixir ready · offline capable')
+  await expect(page.locator('#runtime-status')).toHaveAttribute('data-state', 'ready')
+  expect(
+    await page
+      .locator('#runtime-status')
+      .evaluate((element) => getComputedStyle(element, '::before').backgroundColor)
+  ).toBe('rgb(85, 207, 138)')
   await expect(page.locator('#runtime-info')).toContainText('v0.4.0')
   await expect(page.locator('#runtime-info')).toContainText('Web Crypto getRandomValues')
   await expect(page.locator('#runtime-info')).toContainText('Cross-origin isolated')
@@ -225,6 +231,12 @@ test('fails closed when Web Crypto is unavailable', async ({ page }) => {
 
   await page.goto(appPath)
   await expect(page.locator('#runtime-status')).toHaveText('Runtime unavailable')
+  await expect(page.locator('#runtime-status')).toHaveAttribute('data-state', 'failed')
+  expect(
+    await page
+      .locator('#runtime-status')
+      .evaluate((element) => getComputedStyle(element, '::before').backgroundColor)
+  ).toBe('rgb(255, 79, 79)')
   await expect(page.locator('#fatal-error')).toContainText('Web Crypto is required')
   await expect(page.locator('#password')).toHaveText('—')
 })
