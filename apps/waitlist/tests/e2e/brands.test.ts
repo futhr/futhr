@@ -4,8 +4,6 @@ import { brands } from '../../src/lib/brands/brands.ts'
 import { hosts, origin, port } from './hosts.ts'
 
 const imageType = /image\/(?:png|svg\+xml)/
-const markLabel = (name: string) => `img[alt="${name} mark"]`
-
 const fetchJson = <T>(path: string) =>
   fetch(path).then(async (response) => ({
     status: response.status,
@@ -31,7 +29,10 @@ for (const brand of hosts) {
         'href',
         '/manifest.webmanifest'
       )
-      await expect(page.locator(markLabel(brand.name)).first()).toBeVisible()
+      const mark = page.getByRole('img', { name: `${brand.name} mark` }).first()
+      await expect(mark).toBeVisible()
+      await expect(mark.locator('svg')).toBeVisible()
+      await expect(mark.locator('img')).toHaveCount(0)
       await expect(page.getByRole('heading', { name: 'Get notified' })).toBeVisible()
       await expect(page.getByText(brands[brand.id].closing)).toBeVisible()
 
@@ -141,7 +142,7 @@ test('renders the complete page and form without JavaScript', async ({ browser }
   await expect(page.locator('h1')).toHaveText('Orvane')
   await expect(page.getByLabel('Email address')).toBeVisible()
   await expect(page.getByRole('button', { name: 'Notify me' })).toBeEnabled()
-  await expect(page.locator('img[alt="Orvane mark"]').first()).toBeVisible()
+  await expect(page.getByRole('img', { name: 'Orvane mark' })).toBeVisible()
   await context.close()
 })
 

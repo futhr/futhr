@@ -3,9 +3,9 @@
   import Github from '$lib/components/icons/github.svelte'
   import Mastodon from '$lib/components/icons/mastodon.svelte'
   import X from '$lib/components/icons/x.svelte'
+  import Futhr from '$lib/components/marks/futhr.svelte'
   import Marks from '$lib/components/marks.svelte'
   import { site } from '$lib/config/site'
-  import futhrMark from '$lib/marks/futhr.svg?url'
 </script>
 
 <footer class="@container min-h-90 bg-ink font-system text-paper">
@@ -15,7 +15,7 @@
     <div class="flex flex-col @max-3xl:order-last">
       <div class="flex items-start gap-3 text-xl leading-5.5 font-bold whitespace-nowrap">
         <span class="brand-mark">
-          <img src={futhrMark} alt="Futhr mark">
+          <Futhr />
         </span>
         <span>{site.footer.brand}<span class="font-light">{site.footer.qualifier}</span></span>
       </div>
@@ -90,7 +90,7 @@
     flex: none;
   }
 
-  .brand-mark :global(img) {
+  .brand-mark :global(svg) {
     display: block;
     width: 100%;
     height: 100%;

@@ -1,6 +1,6 @@
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import Ager from '$lib/components/marks/ager.svelte'
+import Agr from '$lib/components/marks/agr.svelte'
 import Bytly from '$lib/components/marks/bytly.svelte'
 import Diggymon from '$lib/components/marks/diggymon.svelte'
 import Futhr from '$lib/components/marks/futhr.svelte'
@@ -20,7 +20,7 @@ const markComponents = [
   ['Orvane', Orvane],
   ['Reloved', Reloved],
   ['Rivure', Rivure],
-  ['ÄGR', Ager],
+  ['ÄGR', Agr],
   ['Recetas', Recetas],
   ['WoTEx', Wotex]
 ] as const
@@ -44,5 +44,5 @@ test('renders every venture mark in footer order', async () => {
       )
   )
   expect(screen.container.querySelectorAll('.mark')).toHaveLength(9)
-  expect(screen.container.querySelectorAll('.mark img')).toHaveLength(9)
+  expect(screen.container.querySelectorAll('.mark svg')).toHaveLength(9)
 })

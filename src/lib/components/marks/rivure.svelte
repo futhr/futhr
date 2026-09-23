@@ -1,5 +1,7 @@
 <script lang="ts">
-  import mark from '../../marks/rivure.svg?url'
+  import mark from '$site/marks/rivure.svg?raw'
+
+  const svg = mark.replace('<svg', '<svg aria-hidden="true"')
 </script>
 
-<img src={mark} alt="Rivure mark">
+<span role="img" aria-label="Rivure mark">{@html svg}</span>

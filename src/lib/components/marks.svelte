@@ -1,31 +1,31 @@
 <script lang="ts">
-  import ager from '$lib/marks/ager.svg?url'
-  import bytly from '$lib/marks/bytly.svg?url'
-  import diggymon from '$lib/marks/diggymon.svg?url'
-  import orvane from '$lib/marks/orvane.svg?url'
-  import recetas from '$lib/marks/recetas.svg?url'
-  import refpath from '$lib/marks/refpath.svg?url'
-  import reloved from '$lib/marks/reloved.svg?url'
-  import rivure from '$lib/marks/rivure.svg?url'
-  import wotex from '$lib/marks/wotex.svg?url'
+  import Agr from '$lib/components/marks/agr.svelte'
+  import Bytly from '$lib/components/marks/bytly.svelte'
+  import Diggymon from '$lib/components/marks/diggymon.svelte'
+  import Orvane from '$lib/components/marks/orvane.svelte'
+  import Recetas from '$lib/components/marks/recetas.svelte'
+  import Refpath from '$lib/components/marks/refpath.svelte'
+  import Reloved from '$lib/components/marks/reloved.svelte'
+  import Rivure from '$lib/components/marks/rivure.svelte'
+  import Wotex from '$lib/components/marks/wotex.svelte'
 
   const marks = [
-    { id: 'refpath', name: 'Refpath', src: refpath },
-    { id: 'bytly', name: 'Bytly', src: bytly },
-    { id: 'diggymon', name: 'Diggymon', src: diggymon },
-    { id: 'orvane', name: 'Orvane', src: orvane },
-    { id: 'reloved', name: 'Reloved', src: reloved },
-    { id: 'rivure', name: 'Rivure', src: rivure },
-    { id: 'ager', name: 'ÄGR', src: ager },
-    { id: 'recetas', name: 'Recetas', src: recetas },
-    { id: 'wotex', name: 'WoTEx', src: wotex }
+    { id: 'refpath', component: Refpath },
+    { id: 'bytly', component: Bytly },
+    { id: 'diggymon', component: Diggymon },
+    { id: 'orvane', component: Orvane },
+    { id: 'reloved', component: Reloved },
+    { id: 'rivure', component: Rivure },
+    { id: 'agr', component: Agr },
+    { id: 'recetas', component: Recetas },
+    { id: 'wotex', component: Wotex }
   ] as const
 </script>
 
 <div class="marks">
-  {#each marks as { id, name, src } (id)}
+  {#each marks as { id, component: Mark } (id)}
     <span class="mark {id}">
-      <img {src} alt={`${name} mark`}>
+      <Mark />
     </span>
   {/each}
 </div>
@@ -71,7 +71,7 @@
     --mark-scale: 0.98;
   }
 
-  .mark.ager {
+  .mark.agr {
     --mark-scale: 1.18;
   }
 
@@ -83,7 +83,14 @@
     --mark-scale: 1.22;
   }
 
-  .mark :global(img) {
+  .mark > :global([role="img"]) {
+    display: flex;
+    width: max-content;
+    height: 100%;
+    align-items: center;
+  }
+
+  .mark :global(svg) {
     display: block;
     width: auto;
     height: calc(100% * var(--mark-scale));

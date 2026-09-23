@@ -33,7 +33,7 @@
     class="mx-auto flex w-full max-w-2xl grow flex-col items-center justify-center gap-14 px-5 py-16 text-center"
   >
     <header class="flex flex-col items-center gap-7">
-      <span class="block w-16 [&>img]:block [&>img]:h-auto [&>img]:w-full">
+      <span class="block w-16 [&_svg]:block [&_svg]:h-auto [&_svg]:w-full">
         <Mark />
       </span>
       <span

@@ -1,5 +1,7 @@
 <script lang="ts">
-  import mark from '../../marks/wotex.svg?url'
+  import mark from '$site/marks/wotex.svg?raw'
+
+  const svg = mark.replace('<svg', '<svg aria-hidden="true"')
 </script>
 
-<img src={mark} alt="WoTEx mark">
+<span role="img" aria-label="WoTEx mark">{@html svg}</span>

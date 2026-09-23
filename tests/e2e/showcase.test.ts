@@ -136,18 +136,18 @@ test('keeps all venture marks on one line without colour hover', async ({ page }
   const row = page.locator('footer .marks')
   const marks = row.locator('.mark')
   await expect(marks).toHaveCount(9)
-  await expect(row.locator('img')).toHaveCount(9)
+  await expect(row.locator('svg')).toHaveCount(9)
   const bounds = await marks.evaluateAll((elements) =>
     elements.map((element) => {
-      const image = element.querySelector('img')
-      const rect = image?.getBoundingClientRect() ?? element.getBoundingClientRect()
+      const mark = element.querySelector('svg')
+      const rect = mark?.getBoundingClientRect() ?? element.getBoundingClientRect()
       return {
-        name: image?.alt,
+        name: element.querySelector('[role="img"]')?.getAttribute('aria-label'),
         top: rect.top,
         bottom: rect.bottom,
         right: rect.right,
         height: rect.height,
-        loaded: Boolean(image?.complete && image.naturalWidth)
+        loaded: Boolean(mark && rect.width > 0 && rect.height > 0)
       }
     })
   )
@@ -165,7 +165,7 @@ test('keeps all venture marks on one line without colour hover', async ({ page }
   expect(diggymon.height).toBeLessThan(first.height)
 
   await marks.nth(2).hover()
-  await expect(marks.nth(2).locator('img')).toHaveCSS('opacity', '1')
+  await expect(marks.nth(2).locator('svg')).toHaveCSS('opacity', '1')
 
   const socialLink = page.getByRole('link', { name: 'Mastodon' })
   const socialColor = await socialLink.evaluate((element) => getComputedStyle(element).color)
