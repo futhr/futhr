@@ -22,15 +22,15 @@ const projects: Readonly<Record<Project['id'], Project>> = {
     mark: 'reloved',
     indexed: true,
     statement: 'Owned locally. Found together.',
-    description: 'Exploring household-owned resale networks.',
+    description: 'Exploring independent resale shops and a nonprofit discovery Commons.',
     link: {
-      href: 'https://github.com/reloved-eco',
-      label: 'github.com/reloved-eco',
+      href: 'https://github.com/reloved-foundation',
+      label: 'github.com/reloved-foundation',
       kind: 'Organization'
     },
     relationship: {
-      from: { label: 'Local ownership', value: 'Household storefronts' },
-      to: { label: 'Shared reach', value: 'Network discovery' }
+      from: { label: 'Independent shops', value: 'Operator-owned catalogs' },
+      to: { label: 'Shared discovery', value: 'Nonprofit Commons' }
     }
   },
   recetas: {

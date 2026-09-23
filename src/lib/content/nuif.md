@@ -12,6 +12,6 @@ links:
     href: https://refpath.github.io/nuif/
 ---
 
-An open interchange model for authored interfaces moving between design tools, source code, runtimes, and agents. Stable identity and semantic operations preserve editability, while explicit loss records reveal what each adapter could not carry across a boundary. A deterministic Rust engine and conformance work turn fidelity into something testable rather than a visual judgment. The opportunity grows as autonomous systems begin editing real product interfaces across incompatible tools.
+An open interchange model for authored interfaces moving between design tools, source code, runtimes, and agents. Stable identity and semantic operations preserve editability, while **explicit loss records** reveal what each adapter could not carry across a boundary. A deterministic Rust engine and conformance work turn fidelity into something testable rather than a visual judgment. The opportunity grows as autonomous systems begin editing real product interfaces across incompatible tools.
 
 *Loss made visible, fidelity made testable.*

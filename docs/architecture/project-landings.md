@@ -40,7 +40,7 @@ placeholder label, dummy link, or “coming soon”.
 | Mark | Existing `wotex.svelte` | Existing `reloved.svelte` | Approved `recetas.svelte` toast with transparent interior |
 | Statement | “One standard for Things, and a runtime built to keep them running.” | “Owned locally. Found together.” | “Plan meals. Keep the kitchen in sync.” |
 | Supporting line | “Open-source Web of Things libraries for Elixir and the BEAM.” | “Exploring household-owned resale networks.” | “Pi-hosted kitchen automation with Home Assistant and Nx.” |
-| Primary link | `github.com/wotex-project` | `github.com/reloved-eco` | None approved; omit |
+| Primary link | `github.com/wotex-project` | `github.com/reloved-foundation` | None approved; omit |
 | Link kind | Open source | Organization | None |
 | Indexing | Index | Index | Index |
 

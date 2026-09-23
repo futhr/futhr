@@ -9,8 +9,8 @@ links:
     href: https://refpath.io
 ---
 
-An agent runtime that sits between foundation models and production systems. Model access is becoming interchangeable; what stays scattered across every serious deployment is the hard part: durable execution, policy, budgets, tool authority, recovery, and evidence. **Refpath** consolidates those responsibilities into one execution substrate with a public core, a runnable worker, versioned integrations, declarative packs, and executable examples, so a run is a durable, inspectable record rather than a transcript.
+Model access is becoming interchangeable, but reliable agent execution still gets rebuilt for every deployment. Refpath develops a durable runtime for work, tool authority, budgets, recovery, and evidence. A run becomes an **inspectable record with clear outcomes** rather than a transcript.
 
-It is the thesis in its purest form: probabilistic intelligence above a deterministic foundation. SigilGuard extends the trust boundary around tool use, and NUIF tests the same runtime idea against interface work. The open core builds inspectable foundations and distribution; a managed platform for teams that need shared control, governance, and operated infrastructure is the commercial layer on top.
+Its open core is designed for versioned integrations and executable examples. A managed platform is planned for teams that need shared governance and operations.
 
 *Models are interchangeable. Execution records are not.*

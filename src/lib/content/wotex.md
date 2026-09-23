@@ -9,8 +9,8 @@ links:
     href: https://github.com/wotex-project
 ---
 
-An open-source family of focused Elixir libraries for the W3C Web of Things and the edge-to-cloud continuum. IoT remains fragmented across vendors, protocols, and incompatible data models, so every product repeats the same description, discovery, and binding work and interoperability stays a promise on a diagram. **WoTEx** supplies shared terminology and contracts for describing a Thing's properties, actions, and events, validating Thing Descriptions, connecting protocol bindings, discovering Things, composing caller-owned runtimes, and keeping behavior consistent from cloud services to disconnected edge devices, with conformance testing against the published specifications and room for machine learning close to the device.
+Connected products still repeat the work of describing devices, discovering them, and binding incompatible protocols. WoTEx develops focused Elixir libraries for **W3C Thing Descriptions**, interactions, bindings, and discovery across cloud and edge runtimes. Each library follows OTP conventions and stays independently useful: the host application owns its supervision tree, storage, and protocol clients.
 
-Each library follows OTP conventions: independently useful, explicit about ownership, and passive until the consuming application starts it. Nothing imposes a database, supervision tree, web framework, or proprietary platform on the host. The aim is shared infrastructure for the Elixir, Nerves, and industrial IoT communities, open enough to adopt without inheriting a platform and extensible toward future protocols and edge intelligence.
+Conformance tests tie the shared contracts to published specifications. The aim is reusable infrastructure for Elixir and Nerves teams building connected systems without adopting a proprietary platform.
 
 *One standard for Things, and a runtime built to keep them running.*
