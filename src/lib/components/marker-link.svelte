@@ -38,7 +38,7 @@
     viewBox="0 0 200 20"
     preserveAspectRatio="none"
     aria-hidden="true"
-    class="absolute bottom-[-0.02em] left-[-0.15em] h-[0.5em] w-[calc(100%+0.3em)] overflow-visible text-inherit transition-colors duration-150 filter-[url('#marker-stroke')] group-hover/link:text-signal group-focus-visible/link:text-signal motion-reduce:transition-none"
+    class="absolute bottom-[-0.02em] left-[-0.15em] h-[0.5em] w-[calc(100%+0.3em)] overflow-visible text-inherit transition-colors duration-150 filter-[url('#marker-stroke')] group-hover/link:text-[var(--link-accent,var(--brand))] group-focus-visible/link:text-[var(--link-accent,var(--brand))] motion-reduce:transition-none"
   >
     <path
       d={path}

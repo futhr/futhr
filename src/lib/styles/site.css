@@ -47,14 +47,15 @@
   --label-size: clamp(0.75rem, 0.97cqw, 1rem);
   --lede-size: clamp(1.25rem, 2cqw, 2rem);
   --body-size: clamp(1rem, 1.15cqw, 1.25rem);
-  --brand-monday: #e4472b;
-  --brand-tuesday: #cf7412;
-  --brand-wednesday: #1f9470;
-  --brand-thursday: #2b7de0;
-  --brand-friday: #8f5cf5;
-  --brand-saturday: #e0409a;
-  --brand-sunday: #1b9a9a;
+  --brand-monday: #ff4f9a;
+  --brand-tuesday: #a86bff;
+  --brand-wednesday: #d9ee3f;
+  --brand-thursday: #00cdb8;
+  --brand-friday: #ef45ca;
+  --brand-saturday: #bd63ff;
+  --brand-sunday: #30dec9;
   --brand: var(--brand-monday);
+  --brand-paper: color-mix(in srgb, var(--brand) 40%, var(--color-ink));
   color: var(--color-ink);
   background: var(--color-ink);
   font-family: var(--font-display);
@@ -157,7 +158,7 @@ html[data-day="6"] {
   }
 
   .showcase-copy a:hover {
-    text-decoration-color: var(--brand);
+    text-decoration-color: var(--link-accent, var(--brand));
     text-decoration-thickness: 2px;
   }
 }

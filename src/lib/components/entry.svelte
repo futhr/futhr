@@ -64,7 +64,9 @@
     data-state={isOpen ? 'open' : 'closed'}
     class={[
     'fold group/row relative h-(--fold-height) overflow-hidden data-[state=open]:h-auto data-[state=open]:min-h-dvh data-[state=open]:overflow-visible',
-    inverse ? 'bg-ink text-paper' : 'bg-paper text-ink'
+    inverse
+      ? 'bg-ink text-paper [--link-accent:var(--brand)]'
+      : 'bg-paper text-ink [--link-accent:var(--brand-paper)]'
   ]}
   >
     <button

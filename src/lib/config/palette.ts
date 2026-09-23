@@ -3,18 +3,18 @@
  * the `--brand` token in src/lib/styles/site.css, which app.html selects before
  * first paint by setting `data-day` on the root element.
  *
- * The raw hues are decorative accents. Small text on ink uses the lighter
- * signal-light token; text on paper keeps its ink colour. Order follows
+ * The raw hues mark links on ink. Small text uses the lighter signal-light
+ * token; link marks on paper use a darker mix with ink. Order follows
  * JavaScript's `Date#getDay`, so Sunday is index 0.
  */
 const palette = [
-  { day: 'Sunday', short: 'Sun', name: 'Teal', hex: '#1b9a9a' },
-  { day: 'Monday', short: 'Mon', name: 'Vermilion', hex: '#e4472b' },
-  { day: 'Tuesday', short: 'Tue', name: 'Amber', hex: '#cf7412' },
-  { day: 'Wednesday', short: 'Wed', name: 'Jade', hex: '#1f9470' },
-  { day: 'Thursday', short: 'Thu', name: 'Azure', hex: '#2b7de0' },
-  { day: 'Friday', short: 'Fri', name: 'Violet', hex: '#8f5cf5' },
-  { day: 'Saturday', short: 'Sat', name: 'Magenta', hex: '#e0409a' }
+  { day: 'Sunday', short: 'Sun', name: 'Frost teal', hex: '#30dec9' },
+  { day: 'Monday', short: 'Mon', name: 'Neon pink', hex: '#ff4f9a' },
+  { day: 'Tuesday', short: 'Tue', name: 'Ultraviolet', hex: '#a86bff' },
+  { day: 'Wednesday', short: 'Wed', name: 'Acid yellow', hex: '#d9ee3f' },
+  { day: 'Thursday', short: 'Thu', name: 'Electric teal', hex: '#00cdb8' },
+  { day: 'Friday', short: 'Fri', name: 'Magenta', hex: '#ef45ca' },
+  { day: 'Saturday', short: 'Sat', name: 'Violet', hex: '#bd63ff' }
 ] as const
 
 export { palette }

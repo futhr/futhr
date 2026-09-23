@@ -27,7 +27,7 @@
   asChild
   play={async ({ canvas }) => {
     await expect(canvas.getAllByRole('listitem')).toHaveLength(7)
-    await expect(canvas.getByText('#e4472b')).toBeVisible()
+    await expect(canvas.getByText('#ff4f9a')).toBeVisible()
   }}
 >
   <div class="min-h-dvh bg-ink p-12 font-system text-paper">
@@ -39,12 +39,14 @@
               <span class="text-4xl font-bold text-ink">{entry.short}</span>
             </div>
             <div class="grid grid-cols-2">
-              <div class="grid place-items-center bg-ink text-sm">
+              <div class="grid place-items-center bg-ink text-sm [--link-accent:var(--brand)]">
                 <MarkerLink href="https://futhr.io/" label={`${entry.name} on ink`}
                   >link</MarkerLink
                 >
               </div>
-              <div class="grid place-items-center bg-paper text-sm text-ink">
+              <div
+                class="grid place-items-center bg-paper text-sm text-ink [--link-accent:var(--brand-paper)]"
+              >
                 <MarkerLink href="https://futhr.io/" label={`${entry.name} on paper`}
                   >link</MarkerLink
                 >
