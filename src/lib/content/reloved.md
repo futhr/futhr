@@ -5,7 +5,7 @@ title: Reloved
 lede: A planned network of independent resale shops and a nonprofit Commons for shared discovery.
 repositories: []
 links:
-  - label: Visit Reloved
+  - label: Join waitlist
     href: https://reloved.eco
 ---
 

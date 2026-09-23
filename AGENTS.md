@@ -18,8 +18,8 @@ Cloudflare Workers, one for the public waitlists and one for the private admin
 API, with their own build, tests, and artifacts. They reuse the showcase style system and marks and nothing else.
 `apps/waitlist/README.md` is their operating guide.
 
-The stateless project landings are a third package, `apps/landing/`, for WoTEx,
-Reloved, and Recetas. They share marks and the style system, but no waitlist
+The stateless project landing is a third package, `apps/landing/`, for WoTEx.
+It shares marks and the style system, but no waitlist
 data or components. `apps/landing/README.md` is their operating guide. The
 production Worker must retain its outer host gate and Worker-first asset
 routing; the adapter's build-only config must never be deployed.

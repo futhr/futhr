@@ -1,6 +1,6 @@
 # Project landings
 
-Server-rendered, stateless holding pages for WoTEx, Reloved, and Recetas. There
+Server-rendered, stateless holding page for WoTEx. There
 are no forms, browser scripts, cookies, analytics, data bindings, or runtime
 secrets. The source and approved marks are separate from the waitlist app.
 
@@ -14,8 +14,7 @@ pnpm landing:icons
 pnpm --filter landing dev
 ```
 
-Open `http://wotex.localhost:8788/`, `http://reloved.localhost:8788/`, or
-`http://recetas.localhost:8788/` in Chromium. The bare loopback host returns
+Open `http://wotex.localhost:8788/` in Chromium. The bare loopback host returns
 404. Stand-ins require the `local` Wrangler environment and are rejected in
 production. Use `pnpm --filter landing exec vite dev` for editing with HMR;
 release checks must use the built Worker.
@@ -33,8 +32,6 @@ release checks must use the built Worker.
 Edit `src/lib/projects.ts` for page content and the standalone SVGs under
 `../../src/lib/marks` for marks. The shared Svelte adapters live under
 `../../src/lib/components/marks`. Regenerate icons after mark or content changes.
-Recetas uses its approved public positioning and is indexed; its private repository
-is not a public destination.
 
 ## Build and routing
 
@@ -50,22 +47,17 @@ to the resolved project's assets; direct internal paths return branded 404s.
 
 Production binds ASSETS only. HTTP requests upgrade to the HTTPS apex in the
 Worker, even without a zone redirect. HSTS is enabled for one year following
-verification of all six HTTPS hostnames; it has no `includeSubDomains` or
+verification of the WoTEx HTTPS hostnames; it has no `includeSubDomains` or
 preload directive. Cache policy is one hour for pages/metadata, one day for
 images, and one year for immutable CSS/fonts. Errors are no-store.
 
 ## Release gate
 
-Nothing in CI deploys. The landing Worker was deployed on 8 September 2026 to
-all six Custom Domains. All three zones are active on Cloudflare; mail DNS was
-compared before and after deployment and remained unchanged. The waitlist
-Workers are still undeployed. Preserve mail records and follow
+Nothing in CI deploys. The landing Worker now owns only `wotex.io` and
+`www.wotex.io`; Reloved and Recetas use the waitlist Worker. Preserve mail
+records and follow
 [the landing architecture](../../docs/architecture/project-landings.md) and
 [Cloudflare operations](../../docs/architecture/cloudflare.md).
-
-Reloved has been removed from the waitlist configuration. A read-only check
-found zero Reloved subscriptions and withdrawal requests; repeat it before
-release. Do not delete any new rows as part of a deployment.
 
 For audit captures, start the built landing Worker on port 24176 and the built
 showcase preview on port 24177, then run:
@@ -78,10 +70,10 @@ The audit contains desktop/mobile PNGs and measurements; these are local build
 evidence, not proof of DNS or certificate correctness.
 
 Use `node scripts/audit.ts --live` from this package to capture the live
-landing domains and showcase. During DNS propagation, add `--authoritative-dns`
-to resolve the landing apexes through their assigned `brenda.ns.cloudflare.com`
+WoTEx landing and showcase. During DNS propagation, add `--authoritative-dns`
+to resolve the landing apex through its assigned `brenda.ns.cloudflare.com`
 nameserver. This overrides DNS only inside the audit browser, keeps TLS
 verification enabled, and records the override in the report. It does not
-prove that every recursive DNS cache has expired. The latest release captures
+prove that every recursive DNS cache has expired. Historical three-domain captures
 are at
 `/Users/roam/Desktop/project-landings-live-audit-recetas-copy-2026-09-08/`.

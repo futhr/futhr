@@ -64,9 +64,16 @@ describe('the join form action', () => {
   it('keeps the same address separate per brand', async () => {
     await join(host, { email: 'person@example.com' })
     await join('orvane.io', { email: 'person@example.com' })
+    await join('reloved.eco', { email: 'person@example.com' })
+    await join('recetas.co.com', { email: 'person@example.com' })
     const stored = await rows()
-    expect(stored.map(({ brand_id }) => brand_id)).toEqual(['rivure', 'orvane'])
-    expect(stored[0]?.email_digest).not.toBe(stored[1]?.email_digest)
+    expect(stored.map(({ brand_id }) => brand_id)).toEqual([
+      'rivure',
+      'orvane',
+      'reloved',
+      'recetas'
+    ])
+    expect(new Set(stored.map(({ email_digest }) => email_digest)).size).toBe(4)
   })
 
   it('survives concurrent duplicate submissions', async () => {

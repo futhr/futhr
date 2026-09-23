@@ -14,37 +14,6 @@ const projects: Readonly<Record<Project['id'], Project>> = {
       label: 'github.com/wotex-project',
       kind: 'Open source'
     }
-  },
-  reloved: {
-    id: 'reloved',
-    host: 'reloved.eco',
-    name: 'Reloved',
-    mark: 'reloved',
-    indexed: true,
-    statement: 'Owned locally. Found together.',
-    description: 'Exploring independent resale shops and a nonprofit discovery Commons.',
-    link: {
-      href: 'https://github.com/reloved-foundation',
-      label: 'github.com/reloved-foundation',
-      kind: 'Organization'
-    },
-    relationship: {
-      from: { label: 'Independent shops', value: 'Operator-owned catalogs' },
-      to: { label: 'Shared discovery', value: 'Nonprofit Commons' }
-    }
-  },
-  recetas: {
-    id: 'recetas',
-    host: 'recetas.co.com',
-    name: 'Recetas',
-    mark: 'recetas',
-    indexed: true,
-    statement: 'Plan meals. Keep the kitchen in sync.',
-    description: 'Pi-hosted kitchen automation with Home Assistant and Nx.',
-    relationship: {
-      from: { label: 'Kitchen planning', value: 'Recipes & meal plans' },
-      to: { label: 'Home automation', value: 'Timers & displays' }
-    }
   }
 }
 

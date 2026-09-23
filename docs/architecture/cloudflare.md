@@ -1,6 +1,8 @@
 # Cloudflare deployment
 
-Checked against the repository and Cloudflare account on 11 September 2026.
+Checked against the repository and Cloudflare account on 23 September 2026.
+The 23 September release moved Reloved and Recetas from the landing Worker to
+the waitlist Worker.
 Configuration in Git records deployment intent; registrar settings, mail DNS,
 Access identities, secret values, billing plans, and deployed versions still
 need an account-side check before later releases.
@@ -25,13 +27,12 @@ brand icons. The admin Worker lists records and resolves withdrawal requests. Ne
 
 The production waitlist configs bind the EU-jurisdiction `waitlist` D1 database.
 The local development environment retains a non-production placeholder ID because
-Wrangler uses a local database there. The ten declared public Custom Domains
+Wrangler uses a local database there. The fourteen declared public Custom Domains
 and the Access-protected `lists.futhr.io` admin hostname are attached to the
 live Workers. The Storybook config declares `ui.futhr.io` as a Custom Domain.
-The landing Worker declares six separate Custom Domains: apex and `www` for
-`wotex.io`, `reloved.eco`, and `recetas.co.com`. It collects nothing, binds only
-static assets, and serves no client JavaScript. Reloved no longer belongs to
-the waitlist configuration. See [project-landings.md](project-landings.md).
+The landing Worker declares two Custom Domains: `wotex.io` and `www.wotex.io`.
+It collects nothing, binds only static assets, and serves no client JavaScript.
+Reloved and Recetas are waitlist brands. See [project-landings.md](project-landings.md).
 
 ## Live account status
 
@@ -45,14 +46,14 @@ the waitlist configuration. See [project-landings.md](project-landings.md).
 | Storybook | Updated Worker `futhr-ui` is live on `ui.futhr.io`; noindex is verified, and both `workers.dev` and versioned previews are disabled |
 | D1 | Database `waitlist` exists with EU jurisdiction and both committed migrations applied |
 | Workers plan | Workers Free remains active. A payment method is now attached for Zero Trust onboarding, but no paid Workers plan or metered add-on was enabled |
-| Waitlist Workers | `waitlist-admin` is deployed and `waitlist-web` version `e3ed6dc1-d7ad-485a-b1f8-e8f838d3f798` serves all four brands and the Orvane aliases |
+| Waitlist Workers | `waitlist-admin` is deployed and `waitlist-web` version `2c393feb-1ba8-4d2c-8f0b-74966c98981d` serves six brands and the Orvane aliases |
 | Venture zones | Account read on 11 September: `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `orvane.ai`, and `reloved.eco` are active Cloudflare zones |
-| Landing Worker | Version `e26a788f-1328-4520-ae52-e0a31cfe7dc9` is deployed with all six intended Custom Domains; HTTPS, redirects, and complete live desktop/mobile layouts verified |
+| Landing Worker | Version `f81debae-d570-4394-9c58-5da44cc8ce27` owns only the WoTEx apex and `www`; live HTTPS returned the stateless page |
 | WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the landing deploy added apex/`www` web records without changing mail DNS |
 | Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the landing Worker continues to supply its application-level host-only HSTS and security headers |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
 | Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
-| Waitlist domains | `lists.futhr.io`; the apex and `www` hostnames for Rivure, Diggymon, Refpath, and Orvane; plus `orvane.ai` and `www.orvane.ai` are attached Custom Domains |
+| Waitlist domains | `lists.futhr.io`; the apex and `www` hostnames for Rivure, Diggymon, Refpath, Orvane, Reloved, and Recetas; plus `orvane.ai` and `www.orvane.ai` are attached Custom Domains |
 | Access | Zero Trust Free at `$0/month`; team domain `futhr.cloudflareaccess.com`; `lists.futhr.io` allows only `hi@futhr.io`, inherits independent MFA, and uses HTTP-only, binding, SameSite Strict cookies |
 | Orvane alias | `orvane.ai` and `www.orvane.ai` return `308` to `https://orvane.io` with path and query intact; existing Hostinger MX, SPF, and DKIM records are unchanged |
 
@@ -235,11 +236,11 @@ The public DNS baseline checked on 7 September 2026 is:
    Edit; a domain-based rule in Pages `_redirects` is not supported.
    [Pages canonical-domain redirect](https://developers.cloudflare.com/pages/how-to/redirect-to-custom-domain/),
    [Bulk Redirect API](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/create-api/)
-3. All eight application zones are active: the four canonical waitlist zones,
-   Orvane's `.ai` alias zone, plus WoTEx, Reloved, and Recetas. No further
+3. All eight application zones are active: the six canonical waitlist zones,
+   Orvane's `.ai` alias zone, plus WoTEx. No further
    nameserver change is needed for them. `orvane.ai` is an explicit redirecting
    alias and does not replace `orvane.io` as the canonical waitlist host.
-4. DNSSEC is still disabled on the three landing zones. Enable it only as a
+4. DNSSEC is still disabled on the WoTEx, Reloved, and Recetas zones. Enable it only as a
    coordinated task with publishing each assigned DS record at Namecheap and
    verifying the resulting chain. No DNSSEC or registrar changes were made.
    [Cloudflare DNSSEC](https://developers.cloudflare.com/dns/dnssec/)

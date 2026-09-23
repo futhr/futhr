@@ -61,6 +61,32 @@ const brands: Readonly<Record<BrandId, Brand>> = {
     updates: 'research releases',
     keywords: ['Orvane', 'research', 'Web of Things', 'IoT', 'connected systems', 'reliability'],
     consentVersion
+  },
+  reloved: {
+    id: 'reloved',
+    host: 'reloved.eco',
+    name: 'Reloved',
+    title: 'Reloved — independent resale shops and a shared discovery Commons',
+    description:
+      'Reloved is a planned network of independent resale shops and a nonprofit discovery Commons. Join the waitlist for project updates.',
+    lede: 'A planned network of independent resale shops and a nonprofit Commons for shared discovery.',
+    closing: 'Owned by the shop, found through the Commons.',
+    updates: 'project updates',
+    keywords: ['Reloved', 'resale', 'independent shops', 'reuse', 'Commons'],
+    consentVersion
+  },
+  recetas: {
+    id: 'recetas',
+    host: 'recetas.co.com',
+    name: 'Recetas',
+    title: 'Recetas — meal planning and home automation in one kitchen',
+    description:
+      'Recetas is a local-first kitchen platform in development. Join the waitlist for project updates.',
+    lede: 'A local-first kitchen platform connecting meal planning and home automation through one household-owned system.',
+    closing: 'The home becomes the interface.',
+    updates: 'project updates',
+    keywords: ['Recetas', 'meal planning', 'kitchen', 'home automation', 'local-first'],
+    consentVersion
   }
 }
 

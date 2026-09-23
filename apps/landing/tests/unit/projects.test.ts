@@ -21,23 +21,19 @@ describe('closed project map', () => {
   ])('rejects %s', (host) => {
     expect(resolveHost(host)).toBeUndefined()
   })
-  it('publishes the approved Recetas positioning without exposing its private repository', () => {
-    expect(projects.recetas.indexed).toBe(true)
-    expect(projects.recetas.statement).toBe('Plan meals. Keep the kitchen in sync.')
-    expect(projects.recetas.description).toContain('Home Assistant and Nx')
-    expect(projects.recetas.relationship).toEqual({
-      from: { label: 'Kitchen planning', value: 'Recipes & meal plans' },
-      to: { label: 'Home automation', value: 'Timers & displays' }
-    })
-    expect(projects.recetas.link).toBeUndefined()
-  })
-  it('gives the landing Worker sole ownership of all six domains', async () => {
+  it('gives each Worker sole ownership of its domains', async () => {
     const landing = await readFile('wrangler.toml', 'utf8')
     const waitlist = await readFile('../waitlist/wrangler.toml', 'utf8')
     for (const project of Object.values(projects)) {
       expect(landing).toContain(`pattern = "${project.host}"`)
       expect(landing).toContain(`pattern = "www.${project.host}"`)
       expect(waitlist).not.toContain(project.host)
+    }
+    for (const host of ['reloved.eco', 'recetas.co.com']) {
+      expect(landing).not.toContain(`pattern = "${host}"`)
+      expect(landing).not.toContain(`pattern = "www.${host}"`)
+      expect(waitlist).toContain(`pattern = "${host}"`)
+      expect(waitlist).toContain(`pattern = "www.${host}"`)
     }
     expect(landing).toContain('run_worker_first = true')
     expect(landing).not.toContain('d1_databases')

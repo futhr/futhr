@@ -70,6 +70,11 @@ describe('host routing', () => {
     const local = await call('http://WWW.Orvane.io:8787/privacy', { redirect: 'manual' })
     expect(local.status).toBe(308)
     expect(local.headers.get('location')).toBe('http://orvane.io:8787/privacy')
+    for (const host of ['reloved.eco', 'recetas.co.com']) {
+      const response = await call(`https://www.${host}/privacy?x=1`, { redirect: 'manual' })
+      expect(response.status).toBe(308)
+      expect(response.headers.get('location')).toBe(`https://${host}/privacy?x=1`)
+    }
   })
 
   it('redirects both Orvane alias hostnames to the canonical HTTPS origin', async () => {
@@ -100,8 +105,8 @@ describe('host routing', () => {
       'futhr.io',
       'rivure.com.evil.example',
       'www.example.com',
-      'reloved.eco',
-      'www.reloved.eco'
+      'reloved.eco.evil.example',
+      'recetas.co.com.evil.example'
     ]) {
       const response = await call(`https://${host}/anything?x=1`, { redirect: 'manual' })
       expect(response.status, host).toBe(302)

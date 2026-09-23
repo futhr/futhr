@@ -1,8 +1,8 @@
 # Waitlist architecture
 
-Implemented in `apps/waitlist/`. This document describes the code as of
-6 September 2026. The committed production database IDs are placeholders;
-provisioning and deployment are covered in [cloudflare.md](cloudflare.md).
+Implemented in `apps/waitlist/`. Updated on 23 September 2026 for the Reloved
+and Recetas waitlists. Provisioning and deployment are covered in
+[cloudflare.md](cloudflare.md).
 
 ## Boundaries
 
@@ -14,10 +14,10 @@ deletes, and operator resolution. These are application
 boundaries: both Workers' D1 bindings have database access, not SQL-level
 read-only or write-only grants.
 
-The public brand map in `src/lib/brands/brands.ts` names four apexes:
-`rivure.com`, `diggymon.com`, `refpath.io`, and `orvane.io`.
-Reloved belongs to the separate [project landings](project-landings.md) application,
-which has no collection form or database binding.
+The public brand map in `src/lib/brands/brands.ts` names six apexes:
+`rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `reloved.eco`,
+and `recetas.co.com`. WoTEx remains in the separate stateless
+[project landing](project-landings.md) application.
 Their `www` hosts redirect to the matching apex with path and query intact.
 Unknown hosts redirect to `https://futhr.io/`. Local development also accepts
 `<brand>.localhost` and provides a brand index on the loopback hostname.

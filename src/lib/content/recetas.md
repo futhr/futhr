@@ -5,7 +5,7 @@ title: Recetas
 lede: A local-first kitchen platform connecting meal planning and home automation through one household-owned system.
 repositories: []
 links:
-  - label: Visit Recetas
+  - label: Join waitlist
     href: https://recetas.co.com
 ---
 

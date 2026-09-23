@@ -14,12 +14,14 @@ const maxDescription = 160
 const unique = <T>(values: readonly T[]) => new Set(values).size === values.length
 
 describe('brand map', () => {
-  it('lists the four venture hosts, each keyed by its id', () => {
+  it('lists the six venture hosts, each keyed by its id', () => {
     expect(all.map(({ host }) => host)).toEqual([
       'rivure.com',
       'diggymon.com',
       'refpath.io',
-      'orvane.io'
+      'orvane.io',
+      'reloved.eco',
+      'recetas.co.com'
     ])
     for (const [key, brand] of Object.entries(brands)) {
       expect(brand.id).toBe(key)
@@ -64,20 +66,24 @@ describe('brandForHost', () => {
     expect(brandForHost('rivure.com:8787')?.id).toBe('rivure')
     expect(brandForHost('rivure.com.')?.id).toBe('rivure')
     expect(brandForHost(' orvane.io ')?.id).toBe('orvane')
+    expect(brandForHost('reloved.eco')?.id).toBe('reloved')
+    expect(brandForHost('recetas.co.com')?.id).toBe('recetas')
   })
 
   it('accepts <id>.localhost as a stand-in for the apex on a workstation', () => {
     expect(brandForHost('rivure.localhost')?.id).toBe('rivure')
     expect(brandForHost('Orvane.localhost:8787')?.id).toBe('orvane')
+    expect(brandForHost('reloved.localhost')?.id).toBe('reloved')
+    expect(brandForHost('recetas.localhost')?.id).toBe('recetas')
   })
 
-  it('fails closed for anything that is not one of the four apexes', () => {
+  it('fails closed for anything that is not one of the six apexes', () => {
     for (const host of [
       'www.rivure.com',
       'orvane.ai',
       'www.orvane.ai',
-      'reloved.eco',
-      'reloved.localhost',
+      'reloved.eco.evil.example',
+      'recetas.co.com.evil.example',
       'futhr.io',
       'ui.futhr.io',
       'rivure.com.evil.example',
@@ -115,7 +121,7 @@ describe('apexForWww', () => {
     for (const host of [
       'rivure.com',
       'wwwrivure.com',
-      'www.reloved.eco',
+      'www.www.reloved.eco',
       'www.futhr.io',
       'www.www.rivure.com',
       '',
@@ -123,5 +129,9 @@ describe('apexForWww', () => {
     ]) {
       expect(apexForWww(host)).toBeUndefined()
     }
+  })
+  it('maps the new www hostnames to their apexes', () => {
+    expect(apexForWww('www.reloved.eco')?.id).toBe('reloved')
+    expect(apexForWww('www.recetas.co.com')?.id).toBe('recetas')
   })
 })

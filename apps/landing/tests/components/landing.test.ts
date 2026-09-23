@@ -19,9 +19,9 @@ test.each(Object.values(projects))('renders the $name identity', async (project)
 
 test('removes optional mark, copy, relationship and link regions completely', async () => {
   const project = {
-    id: 'recetas',
-    name: 'Recetas',
-    host: 'recetas.co.com',
+    id: 'wotex',
+    name: 'WoTEx',
+    host: 'wotex.io',
     indexed: false
   } as const
   const screen = await render(ProjectLanding, { project })

@@ -1,4 +1,4 @@
-# Public waitlist Worker. One deployment serves the four canonical venture
+# Public waitlist Worker. One deployment serves the six canonical venture
 # hostnames and redirects Orvane's .ai aliases. The brand is derived from the
 # exact request hostname in src/lib/brands/host.ts; a canonical www hostname
 # redirects to its apex and any other hostname to futhr.io. Secrets are listed
@@ -57,6 +57,14 @@ custom_domain = true
 pattern = "orvane.io"
 custom_domain = true
 
+[[routes]]
+pattern = "reloved.eco"
+custom_domain = true
+
+[[routes]]
+pattern = "recetas.co.com"
+custom_domain = true
+
 # The www hostnames are attached too; the Worker redirects them to the apex.
 [[routes]]
 pattern = "www.rivure.com"
@@ -72,6 +80,14 @@ custom_domain = true
 
 [[routes]]
 pattern = "www.orvane.io"
+custom_domain = true
+
+[[routes]]
+pattern = "www.reloved.eco"
+custom_domain = true
+
+[[routes]]
+pattern = "www.recetas.co.com"
 custom_domain = true
 
 # Orvane's .ai domain is an alias. The Worker permanently redirects both

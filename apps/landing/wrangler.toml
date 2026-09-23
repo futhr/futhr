@@ -28,18 +28,6 @@ custom_domain = true
 [[routes]]
 pattern = "www.wotex.io"
 custom_domain = true
-[[routes]]
-pattern = "reloved.eco"
-custom_domain = true
-[[routes]]
-pattern = "www.reloved.eco"
-custom_domain = true
-[[routes]]
-pattern = "recetas.co.com"
-custom_domain = true
-[[routes]]
-pattern = "www.recetas.co.com"
-custom_domain = true
 
 [env.local]
 routes = []

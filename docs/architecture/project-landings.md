@@ -1,6 +1,9 @@
 # Project landing pages
 
-Status: deployed on 8 September 2026 to all six Custom Domains.
+Status: the 8 September three-domain release is historical. As of 23 September,
+the landing Worker owns only `wotex.io` and `www.wotex.io`. Reloved and Recetas
+use the six-brand waitlist Worker at their apex and `www` hostnames.
+The design and audit below record the initial landing release.
 This specification defines a shared holding-page application
 for project domains that need a credible public root without collecting an
 address, promising a release, or publishing a complete documentation site.
