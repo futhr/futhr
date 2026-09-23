@@ -1,3 +1,5 @@
+// biome-ignore lint/correctness/noNodejsModules: this palette contract runs in the Node-only unit suite.
+import { readFile } from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
 import { palette } from '$lib/config/palette'
 import stylesheet from '$lib/styles/site.css?raw'
@@ -43,9 +45,11 @@ describe('weekly brand palette', () => {
     }
   })
 
-  it('matches the tokens declared in the stylesheet', () => {
+  it('matches the tokens declared in both stylesheets', async () => {
+    const exkStylesheet = await readFile('apps/exk-passwd/src/styles.css', 'utf8')
     for (const { day, hex } of palette) {
       expect(stylesheet).toContain(`--brand-${day.toLowerCase()}: ${hex};`)
+      expect(exkStylesheet).toContain(`--brand-${day.toLowerCase()}: ${hex};`)
     }
     expect(stylesheet).toContain('--brand: var(--brand-monday);')
     expect(stylesheet).toContain(
