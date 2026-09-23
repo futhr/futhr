@@ -40,6 +40,29 @@ test('aligns the open ingress with its headline on desktop', async ({ page }, te
   expect(Math.abs(headlineLeft - ingressLeft)).toBeLessThan(1)
 })
 
+test('fits every expanded row within the 1440px reference viewport', async ({ page }, testInfo) => {
+  test.skip(testInfo.project.name !== 'chromium')
+  await page.setViewportSize({ width: 1440, height: 900 })
+  await page.emulateMedia({ reducedMotion: 'reduce' })
+  await page.evaluate(() => document.fonts.ready)
+
+  const rows = await page.locator('article[id^="showcase-row-"]').all()
+  const measureRow = async (index: number): Promise<void> => {
+    const row = rows[index]
+    if (!row) {
+      return
+    }
+    if ((await row.getAttribute('data-state')) !== 'open') {
+      await row.locator('button').click()
+      await expect(row).toHaveAttribute('data-state', 'open')
+    }
+    const height = await row.evaluate((element) => element.getBoundingClientRect().height)
+    expect(Math.ceil(height), (await row.getAttribute('id')) ?? undefined).toBeLessThanOrEqual(900)
+    await measureRow(index + 1)
+  }
+  await measureRow(0)
+})
+
 test('keeps exactly one disclosure open and exposes its content', async ({ page }) => {
   const thesis = page.locator('#showcase-row-thesis button')
   const sigilGuard = page.getByRole('button', { name: 'SigilGuard' })

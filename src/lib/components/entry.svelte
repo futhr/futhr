@@ -80,7 +80,12 @@
       >
       <span
         lang={site.language}
-        class="min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) text-(length:--headline-size) leading-[0.75] font-black tracking-[-0.04em] hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5"
+        class={[
+          'min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) leading-[0.75] font-black tracking-[-0.04em] hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5',
+          item.slug === 'thesis'
+            ? 'text-[clamp(3.5rem,8.5cqw,12.75rem)] @max-3xl:text-(length:--headline-size)'
+            : 'text-(length:--headline-size)'
+        ]}
         >{item.title}</span
       >
     </button>
