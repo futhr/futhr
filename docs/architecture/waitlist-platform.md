@@ -14,9 +14,9 @@ deletes, and operator resolution. These are application
 boundaries: both Workers' D1 bindings have database access, not SQL-level
 read-only or write-only grants.
 
-The public brand map in `src/lib/brands/brands.ts` names six apexes:
+The public brand map in `src/lib/brands/brands.ts` names seven apexes:
 `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `reloved.eco`,
-and `recetas.co.com`. WoTEx remains in the separate stateless
+`recetas.co.com`, and `conjunct.se`. WoTEx remains in the separate stateless
 [project landing](project-landings.md) application.
 Their `www` hosts redirect to the matching apex with path and query intact.
 Unknown hosts redirect to `https://futhr.io/`. Local development also accepts
@@ -164,7 +164,7 @@ crypto, headers, and JWT rejection. Workers tests exercise the built public
 Worker and admin module against local D1, including concurrent duplicates,
 brand authorization, pagination, transactional rollback, reviewer permissions,
 inbox capacity, and protection of later re-subscriptions. Playwright checks
-all four brands on desktop and mobile Chromium, native and enhanced forms,
+every configured brand on desktop and mobile Chromium, native and enhanced forms,
 metadata, and automated accessibility.
 
 These checks do not verify production DNS, Access policies, secrets, or D1

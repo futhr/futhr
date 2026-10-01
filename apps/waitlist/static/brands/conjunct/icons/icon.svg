@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 560 560" role="img">
+  <title>Conjunct icon</title>
+  <rect width="560" height="560" rx="112" fill="#1b1b1b" />
+  <svg xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" x="112" y="112" width="336" height="336" viewBox="0 0 240 240" aria-hidden="true">
+    <path
+        d="M112 84H88c-16 0-28 12-28 28v40c0 16 12 28 28 28h40c16 0 28-12 28-28v-24"
+        fill="none"
+        stroke="#e4e3df"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="32"
+      />
+      <path
+        d="M128 156h24c16 0 28-12 28-28V88c0-16-12-28-28-28h-40c-16 0-28 12-28 28v24"
+        fill="none"
+        stroke="#b7b6af"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="32"
+      />
+  </svg>
+</svg>

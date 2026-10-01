@@ -1,6 +1,6 @@
 # Waitlist Workers
 
-The venture waitlists: one public Worker that serves six canonical hostnames,
+The venture waitlists: one public Worker configured for seven canonical hostnames,
 redirects Orvane's two `.ai` aliases, and collects addresses and withdrawal
 requests, plus one private Worker for administration. The reasoning is in
 [docs/architecture/waitlist-platform.md](../../docs/architecture/waitlist-platform.md).
@@ -16,7 +16,7 @@ with it. A hidden honeypot and a per-client rate limit reduce automated submissi
 
 | Worker | Config | Hostnames | Capability |
 | --- | --- | --- | --- |
-| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `reloved.eco`, `recetas.co.com`; `orvane.ai` redirects to `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
+| `waitlist-web` | `wrangler.toml` | `rivure.com`, `diggymon.com`, `refpath.io`, `orvane.io`, `reloved.eco`, `recetas.co.com`, `conjunct.se`; `orvane.ai` redirects to `orvane.io` | Branded page, privacy notice, join, withdrawal requests |
 | `waitlist-admin` | `wrangler.admin.toml` | `lists.futhr.io` behind Cloudflare Access | List, delete, review and resolve withdrawal requests |
 
 The brand is derived from the request hostname in `src/lib/brands/host.ts`. A
@@ -63,7 +63,7 @@ this directory.
 | `icons` | Regenerate `static/brands/*/icons` from the mark components with Chromium |
 | `test:unit` | Brand map, documents, icons, crypto, email syntax, headers, Access |
 | `test:workers` | Both Workers in workerd with D1 and rate limiting, the public one as built |
-| `test:e2e` | Playwright against `wrangler dev` on the six hostnames |
+| `test:e2e` | Playwright against `wrangler dev` on the seven hostnames |
 
 ## Viewing it locally
 
@@ -76,10 +76,10 @@ Open `http://127.0.0.1:8787/`. Each brand answers on its own hostname, so that
 page lists the local stand-ins: `http://rivure.localhost:8787/`,
 `http://diggymon.localhost:8787/`, `http://refpath.localhost:8787/`,
 `http://orvane.localhost:8787/`, `http://reloved.localhost:8787/`,
-and `http://recetas.localhost:8787/`, each with
+`http://recetas.localhost:8787/`, and `http://conjunct.localhost:8787/`, each with
 `/privacy`. Chrome and Firefox resolve every `.localhost` name to this machine
 without configuration; Safari does not, so there add
-`127.0.0.1 rivure.com diggymon.com refpath.io orvane.io reloved.eco recetas.co.com` to
+`127.0.0.1 rivure.com diggymon.com refpath.io orvane.io reloved.eco recetas.co.com conjunct.se` to
 `/etc/hosts` for the session and open the real hostnames on port 8787. The
 showcase on `:5173` has no `/waitlist` route. A join lands in the local D1 and
 shows the on-page confirmation.

@@ -66,14 +66,16 @@ describe('the join form action', () => {
     await join('orvane.io', { email: 'person@example.com' })
     await join('reloved.eco', { email: 'person@example.com' })
     await join('recetas.co.com', { email: 'person@example.com' })
+    await join('conjunct.se', { email: 'person@example.com' })
     const stored = await rows()
     expect(stored.map(({ brand_id }) => brand_id)).toEqual([
       'rivure',
       'orvane',
       'reloved',
-      'recetas'
+      'recetas',
+      'conjunct'
     ])
-    expect(new Set(stored.map(({ email_digest }) => email_digest)).size).toBe(4)
+    expect(new Set(stored.map(({ email_digest }) => email_digest)).size).toBe(5)
   })
 
   it('survives concurrent duplicate submissions', async () => {

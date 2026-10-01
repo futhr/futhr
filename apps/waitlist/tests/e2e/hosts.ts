@@ -6,7 +6,8 @@ const hosts = [
   { id: 'refpath', host: 'refpath.io', name: 'Refpath' },
   { id: 'orvane', host: 'orvane.io', name: 'Orvane' },
   { id: 'reloved', host: 'reloved.eco', name: 'Reloved' },
-  { id: 'recetas', host: 'recetas.co.com', name: 'Recetas' }
+  { id: 'recetas', host: 'recetas.co.com', name: 'Recetas' },
+  { id: 'conjunct', host: 'conjunct.se', name: 'Conjunct' }
 ] as const
 
 const origin = (host: string) => `http://${host}:${port}`

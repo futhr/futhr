@@ -87,6 +87,26 @@ const brands: Readonly<Record<BrandId, Brand>> = {
     updates: 'project updates',
     keywords: ['Recetas', 'meal planning', 'kitchen', 'home automation', 'local-first'],
     consentVersion
+  },
+  conjunct: {
+    id: 'conjunct',
+    host: 'conjunct.se',
+    name: 'Conjunct',
+    title: 'Conjunct — product knowledge connected to the work around it',
+    description:
+      'Conjunct is a planned platform for product knowledge, checked configurations, delivery, and care. Join the waitlist for project updates.',
+    lede: 'A planned platform connecting product knowledge, checked configurations, and the work that brings physical products into use.',
+    closing: 'One product context, from specification to care.',
+    updates: 'project updates',
+    keywords: [
+      'Conjunct',
+      'product knowledge',
+      'configuration',
+      'manufacturing',
+      'delivery',
+      'care'
+    ],
+    consentVersion
   }
 }
 

@@ -9,10 +9,12 @@ const hosts = [
   'refpath.io',
   'orvane.io',
   'reloved.eco',
-  'recetas.co.com'
+  'recetas.co.com',
+  'conjunct.se',
+  'www.conjunct.se'
 ]
 
-// Chromium resolves the six venture hostnames to the local Worker, so pages
+// Chromium resolves the venture hostnames to the local Worker, so pages
 // load from their real hosts and the Worker's exact-host routing is exercised.
 const resolverRules = hosts.map((host) => `MAP ${host} 127.0.0.1`).join(', ')
 

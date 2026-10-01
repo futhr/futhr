@@ -1,5 +1,6 @@
 import type { Component } from 'svelte'
 import type { BrandId } from '$lib/types/brand-id'
+import Conjunct from '$site/components/marks/conjunct.svelte'
 import Diggymon from '$site/components/marks/diggymon.svelte'
 import Orvane from '$site/components/marks/orvane.svelte'
 import Recetas from '$site/components/marks/recetas.svelte'
@@ -14,7 +15,8 @@ const marks: Readonly<Record<BrandId, Component>> = {
   refpath: Refpath,
   orvane: Orvane,
   reloved: Reloved,
-  recetas: Recetas
+  recetas: Recetas,
+  conjunct: Conjunct
 }
 
 export { marks }

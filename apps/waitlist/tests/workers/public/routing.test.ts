@@ -70,7 +70,7 @@ describe('host routing', () => {
     const local = await call('http://WWW.Orvane.io:8787/privacy', { redirect: 'manual' })
     expect(local.status).toBe(308)
     expect(local.headers.get('location')).toBe('http://orvane.io:8787/privacy')
-    for (const host of ['reloved.eco', 'recetas.co.com']) {
+    for (const host of ['reloved.eco', 'recetas.co.com', 'conjunct.se']) {
       const response = await call(`https://www.${host}/privacy?x=1`, { redirect: 'manual' })
       expect(response.status).toBe(308)
       expect(response.headers.get('location')).toBe(`https://${host}/privacy?x=1`)
@@ -106,7 +106,8 @@ describe('host routing', () => {
       'rivure.com.evil.example',
       'www.example.com',
       'reloved.eco.evil.example',
-      'recetas.co.com.evil.example'
+      'recetas.co.com.evil.example',
+      'conjunct.se.evil.example'
     ]) {
       const response = await call(`https://${host}/anything?x=1`, { redirect: 'manual' })
       expect(response.status, host).toBe(302)

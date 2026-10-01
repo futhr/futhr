@@ -27,7 +27,7 @@ pnpm storybook                          # http://127.0.0.1:6006
 Node 24 (`.nvmrc`) and pnpm 11.27.0 (`packageManager` in `package.json`).
 
 The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
-them on `http://127.0.0.1:8787/`, which lists the four brands on their
+them on `http://127.0.0.1:8787/`, which lists the seven brands on their
 `<id>.localhost` stand-ins. Details in the "Viewing it locally" section of
 [apps/waitlist/README.md](../apps/waitlist/README.md). The showcase has no
 `/waitlist` route.
