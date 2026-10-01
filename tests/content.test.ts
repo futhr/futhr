@@ -65,15 +65,21 @@ describe('valid showcase content', () => {
     expect(items[13]).toMatchObject({ order: 14, slug: 'frameshift', group: 'Research' })
     expect(items[14]).toMatchObject({ order: 15, slug: 'refpath', group: 'Venture' })
     expect(items[19]).toMatchObject({ order: 20, slug: 'agr', group: 'Venture', title: 'ÄGR' })
-    expect(items.at(-1)).toMatchObject({ order: 22, slug: 'goatmire-2026', group: 'Conf talks' })
+    expect(items.at(-1)).toMatchObject({
+      order: 22,
+      slug: 'conjunct',
+      group: 'Venture',
+      title: 'Conjunct',
+      repositories: [],
+      links: []
+    })
     expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 22 }, (_, i) => i + 1))
     expect([...new Set(items.map(({ group }) => group))]).toEqual([
       'Thesis',
       'Elixir & OTP',
       'Ruby & Solidus',
       'Research',
-      'Venture',
-      'Conf talks'
+      'Venture'
     ])
   })
 

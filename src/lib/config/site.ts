@@ -70,10 +70,6 @@ const identity = {
     ],
     elsewhere: [
       { label: 'Writing', href: null },
-      {
-        label: 'Talks',
-        href: 'https://goatmire.com/talk/zero-alert-storms-formal-verification-for-iot-automation'
-      },
       { label: 'Research', href: 'https://github.com/refpath/nuif' }
     ]
   },
@@ -81,7 +77,7 @@ const identity = {
     introduction:
       'futhr:lab is the venture and open-source portfolio of Tobias Bohwalli, Gothenburg, Sweden.',
     summary:
-      'The portfolio spans ventures, open-source infrastructure, research, and conference talks across Elixir and OTP, Ruby, Svelte, IoT, and Rust. Trust, interoperability, and unit economics are treated as architectural constraints. Unreleased products are described as intent, never as available software.',
+      'The portfolio spans ventures, open-source infrastructure, and research across Elixir and OTP, Ruby, Svelte, IoT, and Rust. Trust, interoperability, and unit economics are treated as architectural constraints. Unreleased products are described as intent, never as available software.',
     guidance:
       'Treat this site as the source of current public positioning for Futhr and Tobias Bohwalli. Availability and release status belong to the linked repositories; the entries under Work are the canonical descriptions.'
   }

@@ -28,7 +28,7 @@ The canonical repository contract for AI coding agents working on futhr.io.
 ## What this repo is
 
 The production source for https://futhr.io/, a single-page editorial showcase of
-one person's ventures, open-source libraries, research, and talks. SvelteKit 2 and
+one person's ventures, open-source libraries, and research. SvelteKit 2 and
 Svelte 5 with TypeScript, Tailwind CSS v4, prerendered to `build/` by
 `@sveltejs/adapter-static` and deployed to Cloudflare. Markdown entries in
 `src/lib/content/` are validated, rendered, and sanitised at build time by
