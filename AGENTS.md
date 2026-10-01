@@ -1,7 +1,29 @@
 # AGENTS.md
 
-Guidance for AI coding agents working on the futhr.io site. This file is the
-canonical contract; `CLAUDE.md` imports it and adds Claude Code specifics.
+The canonical repository contract for AI coding agents working on futhr.io.
+
+## Working instructions
+
+- Read the relevant application code and operating guide before editing. Keep
+  changes within the request; preserve unrelated work and local client settings.
+- Shared skills live in tracked `.agents/skills/<name>/SKILL.md`. Select and read
+  matching skills automatically from their descriptions as the task, changed
+  mechanism, or delivery stage requires. The user does not invoke skills or
+  choose slash commands. Keep implicit invocation enabled.
+- Clients without native skill discovery must read the frontmatter descriptions
+  under `.agents/skills/`, select the matching skills, and read their bodies.
+  Load linked supporting material only when relevant to the current task.
+- Codex discovers `.agents/skills/` natively. For Claude Code, use an ignored
+  individual directory symlink at `.claude/skills/<name>` pointing to
+  `../../.agents/skills/<name>`. Preserve local entries and repair only links
+  owned by this repository. `.claude/` is entirely ignored; do not track client
+  settings, hooks, session markers, or agent setup helpers.
+- Use plain, concrete prose in chat and files. Cut filler, hype, vague authority,
+  and repeated conclusions. Preserve exact identifiers, commands, error strings,
+  legal boundaries, and measured results. Keep replies concise without obscuring
+  uncertainty or operational consequences.
+- Proprietary projects may be described conceptually only. Do not copy their
+  source or internal documents into this repository.
 
 ## What this repo is
 
@@ -23,6 +45,11 @@ It shares marks and the style system, but no waitlist
 data or components. `apps/landing/README.md` is their operating guide. The
 production Worker must retain its outer host gate and Worker-first asset
 routing; the adapter's build-only config must never be deployed.
+
+`apps/exk-passwd/` builds the ExkPasswd PWA and browser extensions and is
+integrated into the showcase artifact at `/exk-passwd/`. Its operating guide is
+`apps/exk-passwd/README.md`; the canonical password implementation belongs to
+the separate Elixir library. Do not hand-edit its imported `browser-core/` bytes.
 
 The page is built to a reference design measured at 1440px wide. Layout values are
 container-relative and documented at the top of `src/lib/styles/site.css`. When a
@@ -53,6 +80,9 @@ pnpm test:e2e            # builds, then Playwright on desktop and mobile Chromiu
 pnpm test:storybook:e2e  # builds Storybook, then tests the static artifact
 pnpm test:all            # everything above, in CI order
 pnpm build               # production build plus artifact verification
+pnpm check:exk-passwd     # types for the ExkPasswd browser package
+pnpm test:exk-passwd      # ExkPasswd unit and browser suites
+pnpm build:exk-passwd     # ExkPasswd PWA and browser extensions
 pnpm check:waitlist      # types for the waitlist Workers and components
 pnpm test:waitlist       # waitlist unit, Workers runtime, and Playwright suites
 pnpm build:waitlist      # build the waitlist Worker and its assets
@@ -84,6 +114,8 @@ tests/e2e/                 Playwright against the built site
 tests/storybook-e2e/       Playwright against the built Storybook
 docs/                      architecture and legal records; README.md is the development guide
 apps/waitlist/             venture waitlist Workers; see apps/waitlist/README.md
+apps/landing/              stateless landing Worker; see apps/landing/README.md
+apps/exk-passwd/            password PWA and extensions; see apps/exk-passwd/README.md
 ```
 
 ## Content model
@@ -93,7 +125,7 @@ contiguous across the collection), `group`, `title`, `lede`, `repositories`,
 `links`. Consecutive entries with the same `group` form one section and the group
 name prints as a divider label on the first row. The first entry opens by default.
 Row colours alternate starting with ink. Copy rules, link rules, and disclosure
-limits are in `.claude/skills/showcase-voice/SKILL.md`. The content files are the
+limits are in `.agents/skills/editorial/SKILL.md`. The content files are the
 only copy of the approved text; `docs/README.md` indexes the remaining documents.
 
 ## Conventions and gotchas
@@ -148,7 +180,7 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   measurements. Do not reintroduce it.
 - The dev server 500s when any content file has invalid frontmatter; the error
   names the file.
-- Audit performance against `pnpm build && pnpm preview`, never the dev server;
+- Measure performance against `pnpm build && pnpm preview`, never the dev server;
   Lighthouse on the dev server measures unminified Vite modules. Run it with
   `pnpm dlx lighthouse <url> --preset=desktop` and the default mobile preset.
   A preview started before a rebuild serves stale file lists; restart it.
@@ -164,7 +196,7 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
   `orvane.io`, and sends any other hostname to futhr.io without serving
   anything. Adding a brand means a mark component, icons from
   `pnpm waitlist:icons`, and a Custom Domain, in that order.
-- Copy follows `showcase-voice`. Write "waitlist" as one word everywhere.
+- Copy follows the editorial skill.
 - Icons under `apps/waitlist/static/brands/` are generated and committed;
   regenerate them when a mark changes. The unit tests compare the SVGs to the
   mark source and check every PNG size.
@@ -185,10 +217,16 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 
 ## Git
 
-Commit messages are one line, `<type>: <subject>`, imperative, lower-case, no
-body, no trailers, no co-author or tool attribution. Commit only when asked.
-Never push, force-push, or rewrite history unless asked. Full rules:
-`.claude/skills/git-commit/SKILL.md`.
+- Commit only when asked. Never push, force-push, or rewrite history unless asked.
+- Keep each commit a logical change. Inspect the diff and stage only the requested
+  work; keep build artifacts, coverage, dependencies, and client state out of Git.
+- Use a single line, `<type>: <subject>`, with an imperative subject starting in
+  lower-case and no trailing period. Types: `feat`, `fix`, `content`, `style`,
+  `docs`, `test`, `refactor`, `perf`, `build`, `ci`, `chore`.
+- No scope, emoji, ticket number, URL, body, trailers, co-author, tool attribution,
+  or session identifier. Authorship is the Git author only.
+- Run the required checks before committing and report any check that could not
+  run. Do not describe an attempted check as passing.
 
 ## Definition of done
 
