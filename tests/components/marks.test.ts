@@ -2,6 +2,7 @@ import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
 import Agr from '$lib/components/marks/agr.svelte'
 import Bytly from '$lib/components/marks/bytly.svelte'
+import Conjunct from '$lib/components/marks/conjunct.svelte'
 import Diggymon from '$lib/components/marks/diggymon.svelte'
 import Futhr from '$lib/components/marks/futhr.svelte'
 import Orvane from '$lib/components/marks/orvane.svelte'
@@ -22,7 +23,8 @@ const markComponents = [
   ['Rivure', Rivure],
   ['ÄGR', Agr],
   ['Recetas', Recetas],
-  ['WoTEx', Wotex]
+  ['WoTEx', Wotex],
+  ['Conjunct', Conjunct]
 ] as const
 
 test('renders each reusable logo component as an accessible image', async () => {
@@ -43,6 +45,6 @@ test('renders every venture mark in footer order', async () => {
         expect.element(screen.getByRole('img', { name: `${name} mark` })).toBeVisible()
       )
   )
-  expect(screen.container.querySelectorAll('.mark')).toHaveLength(9)
-  expect(screen.container.querySelectorAll('.mark svg')).toHaveLength(9)
+  expect(screen.container.querySelectorAll('.mark')).toHaveLength(10)
+  expect(screen.container.querySelectorAll('.mark svg')).toHaveLength(10)
 })

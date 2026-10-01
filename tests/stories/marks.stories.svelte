@@ -12,7 +12,8 @@
     'Rivure',
     'ÄGR',
     'Recetas',
-    'WoTEx'
+    'WoTEx',
+    'Conjunct'
   ]
   const { Story } = defineMeta({
     title: 'Brand/Venture marks',
@@ -23,7 +24,7 @@
     parameters: {
       docs: {
         description: {
-          component: 'The nine approved monochrome venture marks on ink, in footer order.'
+          component: 'The monochrome venture marks on ink, in footer order.'
         }
       }
     }
@@ -39,7 +40,7 @@
         expect(canvas.getByRole('img', { name: `${name} mark` })).toBeVisible()
       )
     )
-    await expect(canvas.getAllByRole('img')).toHaveLength(9)
+    await expect(canvas.getAllByRole('img')).toHaveLength(10)
   }}
 >
   <div class="grid min-h-dvh place-items-center bg-ink p-12 text-paper">

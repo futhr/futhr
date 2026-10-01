@@ -1,6 +1,7 @@
 <script lang="ts">
   import Agr from '$lib/components/marks/agr.svelte'
   import Bytly from '$lib/components/marks/bytly.svelte'
+  import Conjunct from '$lib/components/marks/conjunct.svelte'
   import Diggymon from '$lib/components/marks/diggymon.svelte'
   import Orvane from '$lib/components/marks/orvane.svelte'
   import Recetas from '$lib/components/marks/recetas.svelte'
@@ -18,7 +19,8 @@
     { id: 'rivure', component: Rivure },
     { id: 'agr', component: Agr },
     { id: 'recetas', component: Recetas },
-    { id: 'wotex', component: Wotex }
+    { id: 'wotex', component: Wotex },
+    { id: 'conjunct', component: Conjunct }
   ] as const
 </script>
 
