@@ -48,7 +48,7 @@ time the loader validates fields, requires a contiguous `order`, renders Markdow
 and sanitises the result to an allowlist: paragraphs, bold, italic, code, lists,
 links. Consecutive entries sharing a `group` form a section; the group name is the
 label on the first row of the section. Copy follows the editorial rules in
-`.claude/skills/showcase-voice/SKILL.md`, and the emphasis in the text is
+`.agents/skills/editorial/SKILL.md`, and the emphasis in the text is
 authored, not generated: bold for the product name at first mention, and an
 italic closing line that lands each entry in one sentence.
 

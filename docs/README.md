@@ -78,7 +78,7 @@ waitlist Workers, plus the landing Worker. Nothing is deployed by CI.
 | `src/routes/` | The page plus generated `llms.txt`, `llms-full.txt`, `agents.md`, `agents/stack.md`, `work/<slug>.md`, manifest, robots, sitemap |
 | `tests/` | `components/` Vitest browser, `stories/` Storybook, `e2e/` and `storybook-e2e/` Playwright, unit tests at the top level |
 | `static/` | Icons, `_headers`, font licence |
-| `.claude/` | Agent skills and settings; [AGENTS.md](../AGENTS.md) is the canonical contract |
+| `.agents/skills/` | Shared agent skills; [AGENTS.md](../AGENTS.md) is the canonical contract |
 | `apps/waitlist/` | Venture waitlist Workers, a pnpm workspace package; see its [README](../apps/waitlist/README.md) |
 | `apps/landing/` | Stateless project landing Worker; see its [README](../apps/landing/README.md) |
 
@@ -112,5 +112,5 @@ a dependency before adding it and remove packages that stop being used.
 Licence and excluded material: [LICENSE.md](../LICENSE.md). Names and marks:
 [TRADEMARKS.md](../TRADEMARKS.md). Reporting a vulnerability:
 [SECURITY.md](../SECURITY.md). Agent guidance is [AGENTS.md](../AGENTS.md) with
-the skills under `.claude/skills/`; the deployed site serves the same guidance at
+the skills under `.agents/skills/`; the deployed site serves the same guidance at
 `/agents.md` and `/agents/stack.md`.
