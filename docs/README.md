@@ -7,7 +7,7 @@
 [![Checked with Biome](https://img.shields.io/badge/checked_with-Biome-60a5fa?logo=biome&logoColor=white)](https://biomejs.dev/)
 [![Svelte 5](https://img.shields.io/badge/svelte-5-ff3e00?logo=svelte&logoColor=white)](https://svelte.dev/)
 [![Node 24](https://img.shields.io/badge/node-%3E%3D24-5fa04e?logo=node.js&logoColor=white)](../.nvmrc)
-[![pnpm](https://img.shields.io/badge/pnpm-11-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![pnpm](https://img.shields.io/badge/pnpm-12-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-1b1b1b.svg)](../LICENSE.md)
 
 Source for [futhr.io](https://futhr.io/): SvelteKit 2, Svelte 5, Tailwind CSS 4,
@@ -24,7 +24,7 @@ pnpm dev                                # http://127.0.0.1:5173
 pnpm storybook                          # http://127.0.0.1:6006
 ```
 
-Node 24 (`.nvmrc`) and pnpm 11.27.0 (`packageManager` in `package.json`).
+Node 24 (`.nvmrc`) and pnpm 12.10.1 (`packageManager` in `package.json`).
 
 The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
 them on `http://127.0.0.1:8787/`, which lists the seven brands on their
@@ -92,9 +92,56 @@ duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
 pnpm only, exact versions, lockfile committed and installed with
 `--frozen-lockfile` in CI. `pnpm-workspace.yaml` sets `minimumReleaseAge` to a
 day, so a version is not pulled in the hour it is published. Overrides pin
-`postcss` and the patched `cookie` release used by SvelteKit. Updates are made by
+`postcss`, the patched `cookie` release used by SvelteKit, and Miniflare's
+patched `sharp` release. Updates are made by
 hand; there are no update bots. Review
 a dependency before adding it and remove packages that stop being used.
+
+The 9 October 2026 update reviewed the upstream release notes before changing
+pins. Svelte 5.57.2 fixes reactivity and hydration edge cases; Vite 8.3.3 fixes
+development-server file checks; Storybook 10.6.1 and Svelte CSF 5.1.5 fix build,
+accessibility, and story rendering issues. Biome 2.5.15 adds the enforced
+`noSvelteExportLet` and `useSvelteKitRuneImports` rules. Playwright 1.64.0's
+native WebMCP API now exercises the portfolio's list, read, and open tools in
+Chromium. Wrangler 4.148.0 and its Vitest plugin 1.3.7 refresh the Workers
+runtime; Node typings remain on the Node 24 line. pnpm 12.10.1 adds stricter
+workspace-setting checks and includes package integrity and install fixes.
+Codecov 7.1.1 retries verification-key imports and cleans its downloaded CLI
+out of the job workspace with `cleanup: true`.
+
+Marked 18.1.0 and sanitize-html 2.18.0 include parser and sanitising fixes.
+Refreshing transitive dependencies picks up devalue 5.9.4 and source-map-js
+1.2.2. The Miniflare override selects sharp 0.35.5 because the upstream pin
+still selects 0.35.4. YAML 2.9.1 replaces gray-matter and removes its unpatched
+sprintf-js dependency chain. Frontmatter is now YAML only, rejects duplicate
+keys and aliases, and reports malformed blocks with their filenames.
+
+TypeScript 7 is held while svelte-check's peer range ends at TypeScript 6;
+Vitest 5 is held while the Cloudflare plugin allowed by the release-age policy
+requires Vitest 4.
+Vite, Cloudflare, and setup-node releases published within the one-day release
+window are deferred. SvelteKit 3 and its new adapters require a coordinated
+migration of config, imports, service workers, and form response behavior; this update
+retains SvelteKit 2 and the current adapter contract.
+
+Sources: [Svelte](https://github.com/sveltejs/svelte/releases/tag/svelte%405.57.2),
+[Vite](https://github.com/vitejs/vite/releases/tag/v8.3.3),
+[Storybook](https://github.com/storybookjs/storybook/releases/tag/v10.6.1),
+[Svelte CSF](https://github.com/storybookjs/addon-svelte-csf/releases/tag/v5.1.5),
+[Biome](https://github.com/biomejs/biome/releases/tag/%40biomejs/biome%402.5.15),
+[Playwright](https://playwright.dev/docs/release-notes#version-164),
+[Cloudflare](https://github.com/cloudflare/workers-sdk/blob/main/packages/wrangler/CHANGELOG.md),
+[Marked](https://github.com/markedjs/marked/releases/tag/v18.1.0),
+[sanitize-html](https://github.com/apostrophecms/apostrophe/blob/main/packages/sanitize-html/CHANGELOG.md),
+[devalue](https://github.com/sveltejs/devalue/releases/tag/v5.9.4),
+[source-map-js](https://github.com/advisories/GHSA-68fv-2mgg-jv7q),
+[sharp](https://github.com/lovell/sharp/releases/tag/v0.35.5),
+[YAML](https://github.com/eemeli/yaml/releases/tag/v2.9.1),
+[sprintf-js advisory](https://github.com/advisories/GHSA-hp3w-g68c-fv3c),
+[SvelteKit migration](https://svelte.dev/docs/kit/migrating-to-sveltekit-3),
+[pnpm 12](https://github.com/pnpm/pnpm/releases/tag/v12.0.0),
+[pnpm 12.10.1](https://github.com/pnpm/pnpm/releases/tag/v12.10.1), and
+[Codecov changes](https://github.com/codecov/codecov-action/compare/v7.0.0...v7.1.1).
 
 ## Documents
 

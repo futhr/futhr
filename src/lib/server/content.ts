@@ -1,6 +1,6 @@
-import matter from 'gray-matter'
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
+import { parse as parseYaml } from 'yaml'
 import type { ShowcaseEntry } from '$lib/types/showcase-entry'
 
 type ShowcaseLink = ShowcaseEntry['links'][number]
@@ -13,6 +13,7 @@ interface ShowcaseSource {
 const allowedProtocols = new Set(['http:', 'https:', 'mailto:'])
 const markdownExtension = /\.md$/
 const kebabCase = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+const frontmatter = /^(?:\uFEFF)?---\r?\n([\s\S]*?)\r?\n---(?:\r?\n|$)/
 // biome-ignore lint/suspicious/noControlCharactersInRegex: reject URL controls before browser normalisation
 const unsafeUrlCharacters = /[\\\u0000-\u0020\u007f]/
 const sanitizeOptions: sanitizeHtml.IOptions = {
@@ -108,14 +109,26 @@ const parseShowcaseSource = async ({
   filename,
   source
 }: ShowcaseSource): Promise<ShowcaseEntry> => {
-  const { data, content } = matter(source)
+  const match = source.match(frontmatter)
+  if (!match) {
+    throw new Error(`${filename}: Markdown must start with closed YAML frontmatter`)
+  }
+  let data: unknown
+  try {
+    data = parseYaml(match[1] ?? '', { maxAliasCount: 0 })
+  } catch (error) {
+    throw new Error(`${filename}: invalid YAML frontmatter`, { cause: error })
+  }
+  if (typeof data !== 'object' || data === null || Array.isArray(data)) {
+    throw new Error(`${filename}: YAML frontmatter must be a mapping`)
+  }
   const metadata = data as Record<string, unknown>
   const { links, order, repositories } = metadata
   if (typeof order !== 'number' || !Number.isInteger(order) || order < 1) {
     throw new Error(`${filename}: frontmatter field "order" must be a positive integer`)
   }
 
-  const body = content.trim()
+  const body = source.slice(match[0].length).trim()
   const rendered = await marked.parse(body, { async: true })
   return {
     order,

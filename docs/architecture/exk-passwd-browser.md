@@ -380,6 +380,7 @@ The generator page should also use a restrictive CSP such as:
 default-src 'self';
 script-src 'self' 'wasm-unsafe-eval';
 style-src 'self';
+style-src-attr 'unsafe-hashes' 'sha256-3oFxofzq3N//6J8H86e9ul4WT2OkJrtonB66gn/TLJw=';
 img-src 'self' data:;
 font-src 'self';
 connect-src 'self';
@@ -391,6 +392,13 @@ form-action 'none';
 frame-ancestors 'none';
 manifest-src 'self'
 ```
+
+The web policy allows only the `text-overflow:inherit` style attribute by SHA-256
+hash. WebKit 27.2 inserts that exact attribute in the native select shadow root,
+including hidden selects used by the custom dropdowns. Other inline attributes
+and style elements remain blocked. This compatibility exception is limited to
+the web headers; the Chromium extension retains its existing policy. See
+[the WebKit implementation](https://github.com/WebKit/WebKit/blob/main/Source/WebCore/html/HTMLSelectElement.cpp).
 
 The final CSP must be derived from the actual built application and verified in
 browser tests.

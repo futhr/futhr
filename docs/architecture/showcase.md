@@ -44,7 +44,8 @@ are specific to the measured build and device, not a frame-rate guarantee.
 ## Content pipeline
 
 Entries are Markdown files with YAML frontmatter in `src/lib/content/`. At build
-time the loader validates fields, requires a contiguous `order`, renders Markdown,
+time the loader parses a closed YAML block with `yaml`, rejects duplicate keys
+and aliases, validates fields, requires a contiguous `order`, renders Markdown,
 and sanitises the result to an allowlist: paragraphs, bold, italic, code, lists,
 links. Consecutive entries sharing a `group` form a section; the group name is the
 label on the first row of the section. Copy follows the editorial rules in

@@ -1,5 +1,6 @@
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest'
 import admin from '../../../src/admin-worker.ts'
+import { brands } from '../../../src/lib/brands/brands.ts'
 import { vault } from '../../../src/lib/server/crypto.ts'
 import { requestWithdrawal } from '../../../src/lib/server/request-store.ts'
 import { localSecrets } from '../../local-secrets.ts'
@@ -154,7 +155,9 @@ describe('admin API', () => {
   it('scopes every operation to the granted brands', async () => {
     stubCertificates()
     const owner = await as('owner@example.com', '/v1/brands')
-    expect(((await owner.json()) as unknown[]).length).toBe(6)
+    expect(await owner.json()).toEqual(
+      Object.values(brands).map(({ id, host, name }) => ({ id, host, name }))
+    )
     expect(owner.headers.get('cache-control')).toBe('no-store')
     const bot = await as('rivure-bot', '/v1/brands')
     expect(await bot.json()).toEqual([{ id: 'rivure', host: 'rivure.com', name: 'Rivure' }])
@@ -328,7 +331,9 @@ it('requires an operator decision and closes deletion and audit together', async
 
 it('paginates pending requests even when the previous page is resolved', async () => {
   stubCertificates()
-  const ids = Array.from({ length: 51 }, () => crypto.randomUUID()).sort()
+  const ids = Array.from({ length: 51 }, () => crypto.randomUUID()).sort((left, right) =>
+    left < right ? -1 : Number(left > right)
+  )
   await environment.DB.batch(
     ids.map((id) =>
       environment.DB.prepare(

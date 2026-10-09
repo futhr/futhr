@@ -94,6 +94,19 @@ test('boots the real core, generates locally, and exposes audited runtime identi
   expect(JSON.stringify(persisted)).not.toContain(password)
 })
 
+test('keeps unapproved inline styles blocked', async ({ page }) => {
+  await page.goto(appPath)
+  const position = await page.evaluate(() => {
+    const probe = document.createElement('div')
+    probe.setAttribute('style', 'position: fixed')
+    document.body.append(probe)
+    const actual = getComputedStyle(probe).position
+    probe.remove()
+    return actual
+  })
+  expect(position).toBe('static')
+})
+
 test('matches the native deterministic generation and entropy vector', async ({
   browserName,
   context,

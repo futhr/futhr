@@ -2,8 +2,10 @@
 import { readFile } from 'node:fs/promises'
 import { defineConfig } from 'vite'
 
+// WebKit's native select shadow root inserts exactly `text-overflow:inherit`.
+// Permit that attribute by hash while keeping other inline styles blocked.
 const contentSecurityPolicy =
-  "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'; manifest-src 'self'"
+  "default-src 'self'; script-src 'self' 'wasm-unsafe-eval'; style-src 'self'; style-src-attr 'unsafe-hashes' 'sha256-3oFxofzq3N//6J8H86e9ul4WT2OkJrtonB66gn/TLJw='; img-src 'self' data:; font-src 'self'; connect-src 'self'; worker-src 'self' blob:; frame-src 'self'; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'self'; manifest-src 'self'"
 
 const isolationHeaders = {
   'Content-Security-Policy': contentSecurityPolicy,

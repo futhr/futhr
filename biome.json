@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.14/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -52,7 +52,9 @@
         "useSvelteRequireEachKey": "error",
         "useTailwindShorthandClasses": "error",
         "useTestHooksInOrder": "error",
-        "useTestHooksOnTop": "error"
+        "useTestHooksOnTop": "error",
+        "noSvelteExportLet": "error",
+        "useSvelteKitRuneImports": "error"
       }
     }
   },

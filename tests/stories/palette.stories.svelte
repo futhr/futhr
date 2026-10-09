@@ -40,14 +40,14 @@
             </div>
             <div class="grid grid-cols-2">
               <div class="grid place-items-center bg-ink text-sm [--link-accent:var(--brand)]">
-                <MarkerLink href="https://futhr.io/" label={`${entry.name} on ink`}
+                <MarkerLink href="https://futhr.io/" label={`link: ${entry.name} on ink`}
                   >link</MarkerLink
                 >
               </div>
               <div
                 class="grid place-items-center bg-paper text-sm text-ink [--link-accent:var(--brand-paper)]"
               >
-                <MarkerLink href="https://futhr.io/" label={`${entry.name} on paper`}
+                <MarkerLink href="https://futhr.io/" label={`link: ${entry.name} on paper`}
                   >link</MarkerLink
                 >
               </div>

@@ -116,6 +116,43 @@ describe('valid showcase content', () => {
   })
 })
 
+describe('YAML frontmatter validation', () => {
+  it.each([
+    [
+      'missing frontmatter',
+      'A body without metadata.',
+      'Markdown must start with closed YAML frontmatter'
+    ],
+    ['an unclosed block', '---\norder: 1\n', 'Markdown must start with closed YAML frontmatter'],
+    [
+      'a different language',
+      '---javascript\n({order: 1})\n---\n',
+      'Markdown must start with closed YAML frontmatter'
+    ],
+    ['a scalar root', '---\nvalue\n---\n', 'YAML frontmatter must be a mapping'],
+    ['a sequence root', '---\n- value\n---\n', 'YAML frontmatter must be a mapping'],
+    ['a null root', '---\nnull\n---\n', 'YAML frontmatter must be a mapping'],
+    ['malformed YAML', '---\norder: [\n---\n', 'invalid YAML frontmatter'],
+    ['duplicate keys', source('order: 2\n'), 'invalid YAML frontmatter'],
+    ['aliases', source('alias: &alias value\ncopy: *alias\n'), 'invalid YAML frontmatter']
+  ])('rejects %s with the filename in its error', async (_case, invalid, message) => {
+    await expect(content.parse({ filename: 'invalid.md', source: invalid })).rejects.toThrow(
+      `invalid.md: ${message}`
+    )
+  })
+
+  it('accepts a UTF-8 BOM and Windows line endings without swallowing body separators', async () => {
+    const item = await content.parse({
+      filename: 'windows.md',
+      source: `\uFEFF${source('', 'First paragraph.\n\n---\n\nSecond paragraph.').replaceAll('\n', '\r\n')}`
+    })
+
+    expect(item.title).toBe('Example')
+    expect(item.body).toContain('---')
+    expect(item.bodyHtml).toContain('Second paragraph.')
+  })
+})
+
 describe('showcase field validation', () => {
   it('rejects unsafe frontmatter links', async () => {
     const invalid = source().replace('https://example.com/repository', 'javascript:alert(1)')

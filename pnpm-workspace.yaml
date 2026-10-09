@@ -7,6 +7,7 @@ saveExact: true
 overrides:
   postcss: 8.5.28
   '@sveltejs/kit>cookie': 0.7.2
+  'miniflare>sharp': 0.35.5
 
 allowBuilds:
   esbuild: true
