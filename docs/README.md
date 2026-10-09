@@ -63,7 +63,10 @@ them on `http://127.0.0.1:8787/`, which lists the seven brands on their
 
 CI checks all four workspace packages on pull requests and pushes to `main`, uploads
 showcase coverage to Codecov, and dry-runs the redirect, Storybook, and both
-waitlist Workers, plus the landing Worker. Nothing is deployed by CI.
+waitlist Workers, plus the landing Worker. After all four jobs pass on a push to
+`main`, CI applies pending waitlist migrations and deploys all six surfaces using
+the tested artifacts. Pull requests only run checks. Credential setup and release
+ordering are in [Cloudflare deployment](architecture/cloudflare.md#continuous-deployment).
 
 ## Layout
 

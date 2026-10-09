@@ -52,7 +52,7 @@ Reloved and Recetas are waitlist brands. See [project-landings.md](project-landi
 | WoTEx and Recetas DNS | Both zones are active and delegated to Cloudflare; the web Worker transfer preserved their mail DNS |
 | Recetas disclosure | Cloudflare-managed `security.txt` is live at the well-known path; the waitlist Worker supplies its application-level security headers |
 | Reloved data | Read-only production D1 query on 8 September: zero subscriptions and zero withdrawal requests; no rows changed |
-| Git deployment | The `futhr` Pages project is Direct Upload; deployments are manual and no deploy CI is configured |
+| Git deployment | The `futhr` Pages project is Direct Upload; the workflow now includes deployment after all checks pass on a push to `main`. GitHub activation requires the workflow push and the credentials below. |
 | Waitlist domains | `lists.futhr.io`; the apex and `www` hostnames for Rivure, Diggymon, Refpath, Orvane, Reloved, and Recetas; plus `orvane.ai` and `www.orvane.ai` are attached Custom Domains |
 | Access | Zero Trust Free at `$0/month`; team domain `futhr.cloudflareaccess.com`; `lists.futhr.io` allows only `hi@futhr.io`, inherits independent MFA, and uses HTTP-only, binding, SameSite Strict cookies |
 | Orvane alias | `orvane.ai` and `www.orvane.ai` return `308` to `https://orvane.io` with path and query intact; existing Hostinger MX, SPF, and DKIM records are unchanged |
@@ -330,9 +330,8 @@ pnpm --filter waitlist exec wrangler deploy --config wrangler.admin.toml --dry-r
 pnpm --filter landing exec wrangler deploy --env="" --dry-run
 ```
 
-CI runs tests and these five dry runs. It does not deploy. Any future deploy
-job must wait for `verify`, `waitlist`, and `landing`, use the relevant package's
-config, and receive a token scoped to the resources it changes.
+CI runs tests and these five dry runs on pull requests and pushes to `main`.
+Successful pushes also publish through the deployment job described below.
 
 Local verification on 8 September passed `pnpm test:all` under Node 24.20.0
 (one intentional mobile skip). The affected root unit, landing, and waitlist
@@ -356,16 +355,73 @@ them as a new hostname. Both default Worker domains and versioned preview
 URLs are disabled for the three deployed Workers and were checked via API.
 
 The existing `futhr` Pages project uses Direct Upload and Cloudflare does not
-allow converting a Direct Upload project to Git integration. Automatic
-showcase deployments therefore require a CI job that runs the Pages deploy
-command above, or a separately tested Pages project followed by a domain
-cutover. Do not repeat the generic Workers import that failed at the workspace
-root. For Workers Builds, connect each existing Worker separately and use an
-explicit root and deploy command: `/` plus the Storybook config for `futhr-ui`,
-and `/apps/waitlist` plus the relevant public or admin config for each waitlist
-Worker. The Worker name must match the config's `name`.
+allow converting a Direct Upload project to Git integration. The GitHub Actions
+deployment job uses the Pages deploy command above. Keep Cloudflare-side Git
+builds disabled for these resources so that they cannot publish independently
+of the repository checks. Do not repeat the generic Workers import that failed
+at the workspace root.
 [Pages Direct Upload](https://developers.cloudflare.com/pages/get-started/direct-upload/),
-[Workers Builds configuration](https://developers.cloudflare.com/workers/ci-cd/builds/configuration/)
+[Pages with GitHub Actions](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/)
+
+## Continuous deployment
+
+`.github/workflows/ci.yml` publishes only for a push to `refs/heads/main`, after
+`verify`, `exk-passwd`, `waitlist`, and `landing` all succeed. Pull requests never
+enter the deployment job. Production runs share a concurrency group and do not
+cancel a run already publishing; pending pushes can be superseded by newer pushes.
+
+The check jobs archive the built showcase, Storybook, landing, and public waitlist
+outputs after their tests and dry runs. The deployment job downloads artifacts
+from that same run and restores them without rebuilding. The Worker archives
+include the complete generated `.svelte-kit` directory: adapter entries import
+their generated server and manifest from outside `cloudflare/`. Tar preserves
+`.assetsignore`, which keeps the landing server code out of the static upload.
+The showcase archive includes its generated TypeScript config for bundling the
+redirect Worker. Artifact retention is three
+days; after expiry, rerun all jobs to recreate the artifacts.
+
+Publishing stops at the first failure, in this order:
+
+1. Apply pending migrations to the production EU `waitlist` D1 database.
+2. Deploy `waitlist-admin`, then `waitlist-web`.
+3. Deploy `project-landings` with `apps/landing/wrangler.toml`, retaining its host gate.
+4. Deploy `bohwalli-redirect`, then `futhr-ui`.
+5. Publish the showcase and integrated ExkPasswd PWA to the `futhr` Pages project
+   on branch `main`, labelled with the workflow commit SHA.
+
+This ordering publishes linked destinations before the showcase. Releases are
+not atomic across Cloudflare resources. A failed later command leaves earlier
+successful deployments live. Review committed migrations for compatibility with
+the currently deployed Workers; rerunning a failed deployment skips already
+applied migrations. Worker application secrets remain in Cloudflare and are not
+copied into Actions or artifacts. Extension-store publishing remains separate.
+
+Set these repository Actions secrets before pushing the workflow:
+
+| Secret | Value |
+| --- | --- |
+| `CLOUDFLARE_ACCOUNT_ID` | `7736979d2e616c63a5e99b54c0287268` |
+| `CLOUDFLARE_API_TOKEN` | A CI API token scoped to this account and the configured route zones |
+
+Before the first full automated release, ensure `conjunct.se` is an active
+Cloudflare zone, preserve its mail records, complete DNS delegation, and include
+the zone in the CI token's route permissions. The declared public waitlist routes
+require it; local tests and dry runs do not check zone provisioning.
+
+The token needs Account permissions for Cloudflare Pages Edit, Workers Scripts
+Edit, D1 Edit, and Account Settings Read, plus Zone permissions for Workers Routes
+Edit and Zone Read on the configured domains. It does not need DNS Edit, Access
+administration, billing, or application encryption keys. Use Cloudflare's
+Edit Cloudflare Workers token template as a starting point, remove permissions
+for unused services, and add Pages and D1. See
+[Workers CI authentication](https://developers.cloudflare.com/workers/ci-cd/external-cicd/github-actions/)
+and [Pages CI authentication](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
+
+The deployment job fails with an explicit setup error if either secret is
+missing. The workstation's interactive Wrangler OAuth login is not a CI
+credential. If a Chrome Web Store listing is configured, set the repository
+variable `VITE_EXK_PASSWD_CHROMIUM_STORE_URL`; both the readiness check and the
+tested showcase build use that value.
 
 ## Response headers
 

@@ -155,6 +155,12 @@ step are in [docs/architecture/cloudflare.md](../../docs/architecture/cloudflare
 The complete sequence and account checks are in
 [the deployment guide](../../docs/architecture/cloudflare.md).
 
+After initial provisioning, CI applies pending production migrations and deploys
+the admin Worker before the public Worker on each successful push to `main`.
+All four CI jobs must pass first. Pull requests only run checks. See
+[continuous deployment](../../docs/architecture/cloudflare.md#continuous-deployment)
+for the required GitHub secrets.
+
 ## Admin API
 
 All routes require `Cf-Access-Jwt-Assertion` and a grant for the brand. Operator

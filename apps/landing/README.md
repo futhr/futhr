@@ -53,8 +53,11 @@ images, and one year for immutable CSS/fonts. Errors are no-store.
 
 ## Release gate
 
-Nothing in CI deploys. The landing Worker owns `wotex.io`, `ghostshift.se`, and
-their `www` hostnames; Reloved and Recetas use the waitlist Worker. A deploy
+CI deploys the tested landing artifact after all four jobs pass on a push to
+`main`; pull requests only run checks. See
+[continuous deployment](../../docs/architecture/cloudflare.md#continuous-deployment)
+for credentials and release ordering. The landing Worker owns `wotex.io`,
+`ghostshift.se`, and their `www` hostnames; Reloved and Recetas use the waitlist Worker. A deploy
 claims every route in `wrangler.toml`, so `ghostshift.se` must be an active
 Cloudflare zone first. Preserve mail
 records and follow
