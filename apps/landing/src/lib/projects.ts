@@ -14,6 +14,19 @@ const projects: Readonly<Record<Project['id'], Project>> = {
       label: 'github.com/wotex-project',
       kind: 'Open source'
     }
+  },
+  ghostshift: {
+    id: 'ghostshift',
+    host: 'ghostshift.se',
+    name: 'Ghostshift Assembly',
+    mark: 'ghostshift',
+    indexed: true,
+    statement: 'Autonomous invention through compounding intelligence.',
+    link: {
+      href: 'https://github.com/ghostshift-assembly',
+      label: 'github.com/ghostshift-assembly',
+      kind: 'Organization'
+    }
   }
 }
 

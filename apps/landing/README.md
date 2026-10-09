@@ -1,6 +1,6 @@
 # Project landings
 
-Server-rendered, stateless holding page for WoTEx. There
+Server-rendered, stateless holding pages for WoTEx and Ghostshift Assembly. There
 are no forms, browser scripts, cookies, analytics, data bindings, or runtime
 secrets. The source and approved marks are separate from the waitlist app.
 
@@ -14,7 +14,7 @@ pnpm landing:icons
 pnpm --filter landing dev
 ```
 
-Open `http://wotex.localhost:8788/` in Chromium. The bare loopback host returns
+Open `http://wotex.localhost:8788/` or `http://ghostshift.localhost:8788/` in Chromium. The bare loopback host returns
 404. Stand-ins require the `local` Wrangler environment and are rejected in
 production. Use `pnpm --filter landing exec vite dev` for editing with HMR;
 release checks must use the built Worker.
@@ -53,8 +53,10 @@ images, and one year for immutable CSS/fonts. Errors are no-store.
 
 ## Release gate
 
-Nothing in CI deploys. The landing Worker now owns only `wotex.io` and
-`www.wotex.io`; Reloved and Recetas use the waitlist Worker. Preserve mail
+Nothing in CI deploys. The landing Worker owns `wotex.io`, `ghostshift.se`, and
+their `www` hostnames; Reloved and Recetas use the waitlist Worker. A deploy
+claims every route in `wrangler.toml`, so `ghostshift.se` must be an active
+Cloudflare zone first. Preserve mail
 records and follow
 [the landing architecture](../../docs/architecture/project-landings.md) and
 [Cloudflare operations](../../docs/architecture/cloudflare.md).

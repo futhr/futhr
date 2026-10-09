@@ -149,12 +149,12 @@ try {
       const page = await context.newPage()
       await page.goto(live ? 'https://futhr.io/' : 'http://127.0.0.1:24177/')
       await page.evaluate(() => document.fonts.ready)
-      await page.getByRole('button', { name: 'Recetas', exact: true }).click()
-      await page.locator('#showcase-row-recetas').scrollIntoViewIfNeeded()
-      await page.screenshot({ path: join(directory, `showcase-recetas-${view.width}.png`) })
+      await page.locator('#showcase-row-wotex button').click()
+      await page.locator('#showcase-row-wotex').scrollIntoViewIfNeeded()
+      await page.screenshot({ path: join(directory, `showcase-wotex-${view.width}.png`) })
       const footer = page.locator('footer')
       await footer.scrollIntoViewIfNeeded()
-      const marks = await footer.locator('img[alt$=" mark"]').evaluateAll((elements) =>
+      const marks = await footer.locator('.mark > [role="img"]').evaluateAll((elements) =>
         elements.map((element) => {
           const r = element.getBoundingClientRect()
           return {
@@ -173,7 +173,7 @@ try {
   )
   await writeFile(
     join(directory, 'measurements.json'),
-    `${JSON.stringify({ source, capturedAt: new Date().toISOString(), dns: { mode: authoritativeDns ? 'authoritative override' : 'system', nameserver: authoritativeDns ? nameserver : null, addresses }, reference: { canvas: [1280, 640], innerWidth: 1112, mark: { x: 84, y: 104, width: 246 }, title: { x: 456, y: 64, fontSize: 96 }, note: 'Landing composition uses the same two-column grid and cap-height rhythm, scaled into a centered 1240px frame. WoTEx statement wraps deliberately. Recetas uses the same complete copy and relationship rhythm as the other projects. Footer retains prior mark order and adds Recetas eighth.' }, pages, showcase }, null, 2)}\n`
+    `${JSON.stringify({ source, capturedAt: new Date().toISOString(), dns: { mode: authoritativeDns ? 'authoritative override' : 'system', nameserver: authoritativeDns ? nameserver : null, addresses }, reference: { canvas: [1280, 640], innerWidth: 1112, mark: { x: 84, y: 104, width: 246 }, title: { x: 456, y: 64, fontSize: 96 }, note: 'Landing composition uses the same two-column grid and cap-height rhythm, scaled into a centered 1240px frame. WoTEx statement wraps deliberately. The showcase footer uses five SVG project marks.' }, pages, showcase }, null, 2)}\n`
   )
   const gallery = pages
     .map(

@@ -2,7 +2,13 @@
 
 Status: the 8 September three-domain release is historical. As of 23 September,
 the landing Worker owns only `wotex.io` and `www.wotex.io`. Reloved and Recetas
-use the six-brand waitlist Worker at their apex and `www` hostnames.
+use the waitlist Worker at their apex and `www` hostnames.
+On 8 October Ghostshift Assembly was added for `ghostshift.se` and
+`www.ghostshift.se`, using the supplied graphite mark, the organization's public
+tagline as its statement, and its GitHub organization as the only link. The
+domain had no delegated nameservers on that date, so the Worker cannot claim it
+until the zone is active in Cloudflare. Unreleased ventures stay off both this
+page and the showcase until they launch.
 The design and audit below record the initial landing release.
 This specification defines a shared holding-page application
 for project domains that need a credible public root without collecting an
@@ -28,7 +34,6 @@ client-supplied field.
 The boundary changes the existing waitlist plan: Reloved has no invitation or
 release notification to offer, so `reloved.eco` must leave `waitlist-web` before
 either Worker is deployed. WoTEx is open source rather than a venture waitlist.
-Recetas now has a Venture entry in the showcase and an approved toast mark in the footer.
 
 ## Initial content
 
@@ -43,7 +48,7 @@ placeholder label, dummy link, or “coming soon”.
 | Mark | Existing `wotex.svelte` | Existing `reloved.svelte` | Approved `recetas.svelte` toast with transparent interior |
 | Statement | “One standard for Things, and a runtime built to keep them running.” | “Owned locally. Found together.” | “Plan meals. Keep the kitchen in sync.” |
 | Supporting line | “Open-source Web of Things libraries for Elixir and the BEAM.” | “Exploring household-owned resale networks.” | “Pi-hosted kitchen automation with Home Assistant and Nx.” |
-| Primary link | `github.com/wotex-project` | `github.com/reloved-foundation` | None approved; omit |
+| Primary link | `github.com/wotex-project` | `github.com/reloved-collective` | None approved; omit |
 | Link kind | Open source | Organization | None |
 | Indexing | Index | Index | Index |
 

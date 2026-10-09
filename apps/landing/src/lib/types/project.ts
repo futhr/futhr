@@ -1,5 +1,5 @@
 interface Project {
-  readonly id: 'wotex'
+  readonly id: 'wotex' | 'ghostshift'
   readonly host: string
   readonly name: string
   readonly mark?: Project['id']
