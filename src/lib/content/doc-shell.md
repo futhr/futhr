@@ -1,5 +1,5 @@
 ---
-order: 5
+order: 7
 group: Elixir & OTP
 title: DocShell
 lede: One versioned documentation artifact for every site, product surface, search index, and AI system.
@@ -12,6 +12,6 @@ links:
     href: https://hexdocs.pm/doc_shell/
 ---
 
-A renderer-neutral documentation pipeline that turns Elixir module docs, Markdown guides, Livebooks, changelogs, and OpenAPI material into a **versioned JSON contract**. The same artifact can drive a documentation site, embedded help, search, knowledge graphs, and AI retrieval without rebuilding the source for each channel. Generation identity prevents mixed releases, while rendering and access policy stay with the consuming product. DocShell converts documentation from a site-specific build output into portable product infrastructure.
+A renderer-neutral documentation pipeline that turns Elixir module docs, Markdown guides, Livebooks, changelogs, and OpenAPI material into a versioned JSON contract. The same artifact can drive a documentation site, embedded help, search, knowledge graphs, and AI retrieval *without rebuilding the source for each channel*. Generation identity prevents mixed releases, while rendering and access policy stay with the consuming product. DocShell converts documentation from a site-specific build output into portable product infrastructure.
 
 *Documented once, served everywhere.*

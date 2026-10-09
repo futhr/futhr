@@ -97,6 +97,30 @@ const parseRepositories = (value: unknown, filename: string): string[] => {
   return value
 }
 
+const parseKerning = (
+  value: unknown,
+  title: string,
+  filename: string
+): Record<string, number> | undefined => {
+  if (value === undefined) {
+    return undefined
+  }
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new Error(`${filename}: frontmatter field "kerning" must map letter pairs to numbers`)
+  }
+  const kerning: Record<string, number> = {}
+  for (const [pair, amount] of Object.entries(value)) {
+    if ([...pair].length !== 2 || !title.includes(pair)) {
+      throw new Error(`${filename}: kerning pair "${pair}" must be two characters from the title`)
+    }
+    if (typeof amount !== 'number' || !Number.isFinite(amount) || Math.abs(amount) > 0.5) {
+      throw new Error(`${filename}: kerning for "${pair}" must be a number between -0.5 and 0.5`)
+    }
+    kerning[pair] = amount
+  }
+  return kerning
+}
+
 const slugFromFilename = (filename: string): string => {
   const slug = filename.split('/').at(-1)?.replace(markdownExtension, '') ?? ''
   if (!kebabCase.test(slug)) {
@@ -123,18 +147,21 @@ const parseShowcaseSource = async ({
     throw new Error(`${filename}: YAML frontmatter must be a mapping`)
   }
   const metadata = data as Record<string, unknown>
-  const { links, order, repositories } = metadata
+  const { kerning, links, order, repositories } = metadata
   if (typeof order !== 'number' || !Number.isInteger(order) || order < 1) {
     throw new Error(`${filename}: frontmatter field "order" must be a positive integer`)
   }
 
+  const title = requiredString(metadata, 'title', filename)
+  const parsedKerning = parseKerning(kerning, title, filename)
   const body = source.slice(match[0].length).trim()
   const rendered = await marked.parse(body, { async: true })
   return {
     order,
     slug: slugFromFilename(filename),
     group: requiredString(metadata, 'group', filename),
-    title: requiredString(metadata, 'title', filename),
+    title,
+    ...(parsedKerning ? { kerning: parsedKerning } : {}),
     lede: requiredString(metadata, 'lede', filename),
     repositories: parseRepositories(repositories, filename),
     links: parseLinks(links, filename),

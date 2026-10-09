@@ -3,8 +3,6 @@ import { site } from '$lib/config/site'
 import { agentDocuments } from '$lib/server/agent-documents'
 import type { ShowcaseEntry } from '$lib/types/showcase-entry'
 
-const frameworkRow = /\| Framework \| `@sveltejs\/kit` \| \d+\.\d+\.\d+ \|/
-
 const items: ShowcaseEntry[] = [
   {
     order: 1,
@@ -60,10 +58,12 @@ An embedded Elixir enforcement layer.
     expect(index.startsWith(`# ${site.displayName}\n\n> `)).toBe(true)
     expect(index).toContain(site.machineSummary.guidance)
     expect(index).toContain('- [SigilGuard](https://futhr.io/work/sigil-guard.md): The in-process')
-    expect(index).toContain('- [Agent guide](https://futhr.io/agents.md)')
-    expect(index).toContain('- [Stack matrix](https://futhr.io/agents/stack.md)')
     expect(index).toContain('- [Full portfolio](https://futhr.io/llms-full.txt)')
-    expect(index).not.toContain('[llms.txt](')
+    expect(index).toContain('- [Sitemap](https://futhr.io/sitemap.xml)')
+    expect(index).toContain('- [Pwd generator](https://futhr.io/exk-passwd/)')
+    expect(index).toContain('- [Research](https://github.com/refpath/nuif)')
+    expect(index).not.toContain('[Site index](')
+    expect(index).not.toContain('[Writing](')
     expect(index).toContain(`- [GitHub](${site.links.github})`)
     expect(index).toContain(`- [Contact](${site.links.email})`)
   })
@@ -77,14 +77,14 @@ An embedded Elixir enforcement layer.
     expect(full).toContain('# SigilGuard')
   })
 
-  it('exposes the agent guide and a stack matrix read from package.json', () => {
-    expect(agentDocuments.guide).toContain('# AGENTS.md')
-    expect(agentDocuments.guide).toContain('## Definition of done')
+  it('lists the page, the text documents, and every entry in the sitemap', () => {
+    const xml = agentDocuments.sitemap(items)
 
-    const stack = agentDocuments.stackMatrix()
-    expect(stack).toContain('| Runtime | Node.js | >=24 |')
-    expect(stack).toContain('| Package manager | pnpm | 11.27.0 |')
-    expect(stack).toMatch(frameworkRow)
-    expect(stack).toContain('https://futhr.io/agents.md')
+    expect(xml.startsWith('<?xml version="1.0" encoding="UTF-8"?>')).toBe(true)
+    expect(xml).toContain('<loc>https://futhr.io/</loc>')
+    expect(xml).toContain('<loc>https://futhr.io/llms.txt</loc>')
+    expect(xml).toContain('<loc>https://futhr.io/llms-full.txt</loc>')
+    expect(xml).toContain('<loc>https://futhr.io/work/sigil-guard.md</loc>')
+    expect(xml.match(/<url>/g)).toHaveLength(5)
   })
 })

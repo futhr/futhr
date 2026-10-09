@@ -16,7 +16,7 @@ test('prerenders every ordered showcase section and metadata', async ({ page }) 
     'content',
     'A capital-efficient portfolio of platforms and open infrastructure for domains where software decisions carry operational, financial, or legal consequences.'
   )
-  await expect(page.locator('section[aria-label="Selected work"] article')).toHaveCount(22)
+  await expect(page.locator('section[aria-label="Selected work"] article')).toHaveCount(14)
   const firstEntry = page.locator('#showcase-row-thesis')
   await expect(firstEntry.locator('button')).toHaveAttribute('aria-expanded', 'true')
   await expect(firstEntry).toHaveCSS('background-color', 'rgb(27, 27, 27)')
@@ -166,8 +166,8 @@ test('keeps all venture marks on one line without colour hover', async ({ page }
 
   const row = page.locator('footer .marks')
   const marks = row.locator('.mark')
-  await expect(marks).toHaveCount(9)
-  await expect(row.locator('svg')).toHaveCount(9)
+  await expect(marks).toHaveCount(5)
+  await expect(row.locator('svg')).toHaveCount(5)
   const bounds = await marks.evaluateAll((elements) =>
     elements.map((element) => {
       const mark = element.querySelector('svg')
@@ -183,17 +183,16 @@ test('keeps all venture marks on one line without colour hover', async ({ page }
     })
   )
   expect(bounds.every(({ loaded }) => loaded)).toBe(true)
-  const [first, , diggymon] = bounds
+  const [first] = bounds
   const last = bounds.at(-1)
-  if (!(first && diggymon && last)) {
+  if (!(first && last)) {
     throw new Error('Venture mark row is incomplete')
   }
   const center = (first.top + first.bottom) / 2
   expect(bounds.every(({ top, bottom }) => Math.abs((top + bottom) / 2 - center) < 1)).toBe(true)
-  expect(last.name).toBe('WoTEx mark')
+  expect(last.name).toBe('Frameshift mark')
   const rowRight = await row.evaluate((element) => element.getBoundingClientRect().right)
   expect(last.right).toBeLessThanOrEqual(rowRight)
-  expect(diggymon.height).toBeLessThan(first.height)
 
   await marks.nth(2).hover()
   await expect(marks.nth(2).locator('svg')).toHaveCSS('opacity', '1')

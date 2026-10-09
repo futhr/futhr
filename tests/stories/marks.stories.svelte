@@ -3,18 +3,7 @@
   import { expect } from 'storybook/test'
   import Marks from '$lib/components/marks.svelte'
 
-  const markNames = [
-    'Refpath',
-    'Bytly',
-    'Diggymon',
-    'Orvane',
-    'Reloved',
-    'Rivure',
-    'ÄGR',
-    'Recetas',
-    'WoTEx',
-    'Conjunct'
-  ]
+  const markNames = ['Ghostshift Assembly', 'Refpath', 'Rivure', 'WoTEx', 'Frameshift']
   const { Story } = defineMeta({
     title: 'Brand/Venture marks',
     component: Marks,
@@ -40,7 +29,7 @@
         expect(canvas.getByRole('img', { name: `${name} mark` })).toBeVisible()
       )
     )
-    await expect(canvas.getAllByRole('img')).toHaveLength(10)
+    await expect(canvas.getAllByRole('img')).toHaveLength(5)
   }}
 >
   <div class="grid min-h-dvh place-items-center bg-ink p-12 text-paper">

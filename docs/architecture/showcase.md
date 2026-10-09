@@ -50,8 +50,8 @@ and sanitises the result to an allowlist: paragraphs, bold, italic, code, lists,
 links. Consecutive entries sharing a `group` form a section; the group name is the
 label on the first row of the section. Copy follows the editorial rules in
 `.agents/skills/editorial/SKILL.md`, and the emphasis in the text is
-authored, not generated: bold for the product name at first mention, and an
-italic closing line that lands each entry in one sentence.
+authored, not generated: one italic mechanism in the body and a separate italic
+closing line that adds an idea. Entries contain no bold emphasis.
 
 `src/lib/config/site.ts` holds the site identity, navigation, and metadata, and
 feeds the web manifest, JSON-LD, robots, and sitemap. Entry copy stays in Markdown.
@@ -80,19 +80,33 @@ A service worker precaches the build and serves hashed assets cache-first, and
 HTML and generated documents network-first with the cache as fallback, so a
 deploy shows on the next load and the site still opens without a connection.
 
-Icons never depend on the colour scheme. The favicon and app icons carry their
-own ink background with a paper glyph, so a light or dark tab strip makes no
-difference and the browser's cached render is always right. The set is an SVG
-favicon, a 48px PNG for browsers without SVG favicon support, a 180px Apple touch
-icon, 192px and 512px any-purpose icons, and a 512px maskable icon whose glyph sits
-inside the 80 percent safe circle on an opaque background.
+The SVG favicons are transparent glyphs. `favicon.svg` carries a `<style>` that
+colours the mark ink by default and paper under `prefers-color-scheme: dark`;
+`favicon-light.svg` and `favicon-dark.svg` are the single-colour versions for
+the `media`-qualified links and their 32px and 48px PNGs. The plain PNG fallback
+and the app icons keep an opaque ink background: a 180px Apple touch icon, 192px
+and 512px any-purpose icons, and a 512px maskable icon whose glyph sits inside
+the 80 percent safe circle.
 
 ## Agent surface
 
 Agents that fetch URLs get the site as text: `/llms.txt` in the llmstxt.org
 shape with a link per entry, `/llms-full.txt` with every entry, `/work/<slug>.md`
-per entry, `/agents.md` with the repository's agent contract, and
-`/agents/stack.md` with pinned versions read from `package.json` at build time.
+per entry, and `/sitemap.xml` listing all of them. These documents describe the
+portfolio; repository guidance stays in the repository.
+
+The page embeds JSON-LD generated from the same entries by
+`src/lib/server/structured-data.ts`: a `Person` with `sameAs` profiles and
+`knowsAbout` topics, the `WebSite`, a `ProfilePage`, and an `ItemList` of the
+work, where entries with repositories are `SoftwareSourceCode` nodes carrying
+`codeRepository`, `programmingLanguage`, and a link to their Markdown document.
+The entity links make the relationships between the author, site, and work
+explicit. Every node mirrors visible content or a generated document.
+
+`robots.txt` allows every crawler, names the AI search, user-fetch, and training
+agents explicitly, and carries a `Content-Signal` line stating the same intent.
+No agent-card, catalog, or API discovery file is published: those describe an
+agent or API this site does not run.
 
 Agents that drive the reader's browser get WebMCP tools. When
 `document.modelContext` exists, the showcase registers three tools:

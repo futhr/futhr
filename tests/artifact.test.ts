@@ -48,7 +48,7 @@ it('rejects Storybook runtime code hidden in a hashed web chunk', async () => {
 it('allows documentation to describe Storybook without treating it as bundled code', async () => {
   const cwd = await artifact({
     'build/index.html': '<!doctype html>',
-    'build/agents.md': 'Use @storybook/addon-vitest for the review surface.'
+    'build/llms-full.txt': 'Use @storybook/addon-vitest for the review surface.'
   })
   await expect(exec(process.execPath, [script, 'web'], { cwd })).resolves.toMatchObject({
     stderr: ''

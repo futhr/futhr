@@ -3,10 +3,10 @@ import worker from '../src/lib/server/domain-redirect.ts'
 
 describe('Domain redirects', () => {
   it('redirects Bohwalli while preserving the path and query string', () => {
-    const response = worker.fetch(new Request('https://bohwalli.se/work/refpath?source=bohwalli'))
+    const response = worker.fetch(new Request('https://bohwalli.se/work/wotex?source=bohwalli'))
 
     expect(response.status).toBe(301)
-    expect(response.headers.get('location')).toBe('https://futhr.io/work/refpath?source=bohwalli')
+    expect(response.headers.get('location')).toBe('https://futhr.io/work/wotex?source=bohwalli')
   })
 
   it('redirects Entvue while preserving the path and query string', () => {
@@ -24,9 +24,9 @@ describe('Domain redirects', () => {
   })
 
   it('redirects www Futhr without changing the path or query', () => {
-    const response = worker.fetch(new Request('https://www.futhr.io/work/recetas?from=www'))
+    const response = worker.fetch(new Request('https://www.futhr.io/work/nuif?from=www'))
 
-    expect(response.headers.get('location')).toBe('https://futhr.io/work/recetas?from=www')
+    expect(response.headers.get('location')).toBe('https://futhr.io/work/nuif?from=www')
   })
 
   it('keeps protocol-relative paths on the approved destination', () => {

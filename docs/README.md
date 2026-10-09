@@ -43,13 +43,13 @@ them on `http://127.0.0.1:8787/`, which lists the seven brands on their
 | `pnpm test:storybook` | Story rendering, interactions, axe |
 | `pnpm test:e2e` | Builds, then Playwright on desktop and mobile Chromium |
 | `pnpm test:storybook:e2e` | Builds Storybook, then tests the static artifact |
-| `pnpm test:all` | Quality, types, and all test suites for all three packages |
+| `pnpm test:all` | Quality, types, and all test suites for all four packages |
 | `pnpm build` | Prerenders to `build/` and verifies the artifact |
 | `pnpm preview` | Serves `build/` for audits; restart after each rebuild |
 | `pnpm storybook:build` | Static Storybook to `storybook-static/` |
 | `pnpm storybook:deploy` | Builds and deploys Storybook with Wrangler |
 | `pnpm redirects:deploy` | Deploys the legacy-domain-to-Futhr redirect Worker |
-| `pnpm build:exk-passwd` | Builds the ExkPasswd PWA and Chromium/Firefox extensions |
+| `pnpm build:exk-passwd` | Builds the ExkPasswd PWA and Chromium extension |
 | `pnpm check:exk-passwd` | Type-checks the ExkPasswd browser package |
 | `pnpm test:exk-passwd` | Runs the ExkPasswd unit and cross-browser suites |
 | `pnpm build:waitlist` | Builds the waitlist Worker and its assets to `apps/waitlist/.svelte-kit/cloudflare/` |
@@ -69,13 +69,13 @@ waitlist Workers, plus the landing Worker. Nothing is deployed by CI.
 
 | Path | Contents |
 | --- | --- |
-| `src/lib/components/` | Production components; `logos/` holds the SVG marks |
+| `src/lib/components/` | Production components; `marks/` holds the SVG adapters |
 | `src/lib/client/` | Browser-only integrations such as the WebMCP tools |
 | `src/lib/config/` | `site.ts` identity and strings, `palette.ts` weekly colours |
 | `src/lib/content/` | Ordered Markdown entries |
 | `src/lib/server/` | Content loader, validation, agent document generators |
 | `src/lib/styles/site.css` | Tailwind theme, layout tokens, global rules |
-| `src/routes/` | The page plus generated `llms.txt`, `llms-full.txt`, `agents.md`, `agents/stack.md`, `work/<slug>.md`, manifest, robots, sitemap |
+| `src/routes/` | The page plus generated `llms.txt`, `llms-full.txt`, `work/<slug>.md`, manifest, robots, sitemap |
 | `tests/` | `components/` Vitest browser, `stories/` Storybook, `e2e/` and `storybook-e2e/` Playwright, unit tests at the top level |
 | `static/` | Icons, `_headers`, font licence |
 | `.agents/skills/` | Shared agent skills; [AGENTS.md](../AGENTS.md) is the canonical contract |
@@ -159,5 +159,4 @@ Sources: [Svelte](https://github.com/sveltejs/svelte/releases/tag/svelte%405.57.
 Licence and excluded material: [LICENSE.md](../LICENSE.md). Names and marks:
 [TRADEMARKS.md](../TRADEMARKS.md). Reporting a vulnerability:
 [SECURITY.md](../SECURITY.md). Agent guidance is [AGENTS.md](../AGENTS.md) with
-the skills under `.agents/skills/`; the deployed site serves the same guidance at
-`/agents.md` and `/agents/stack.md`.
+the skills under `.agents/skills/`; it is not served by the site.

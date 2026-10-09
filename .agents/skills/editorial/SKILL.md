@@ -62,7 +62,7 @@ quiet text links. Keep the established screen-length composition.
 | --- | --- |
 | `title` | Readable display name. Put exact repository names in `repositories`. Use U+00AD only for a deliberate headline break. |
 | `lede` | A single-sentence pitch explaining the category, structural advantage, and outcome. |
-| body | Explain the problem, differentiated model, and expansion path where supported. End with a separate italic closing line that adds an idea rather than repeating the lede. |
+| body | Explain the problem, differentiated model, and expansion path where supported. Italicise one phrase per entry with `*…*`: the mechanism that the lede and closing line do not already state, never a product name or a feature list. No bold. End with a separate italic closing line that adds an idea rather than repeating the lede. |
 | `group` | An existing group unless a new section was requested; consecutive matching groups form one section. |
 | `links` | Quiet destination labels such as `Repository`, `HexDocs`, or `Talk`. |
 
@@ -70,7 +70,10 @@ quiet text links. Keep the established screen-length composition.
 
 - Link public repositories to GitHub. Add HexDocs only for a published Hex
   package; an unpublished package gets no documentation link.
-- Venture entries link to the public root domain or waitlist, never private source,
+- Ventures and private platforms stay off the showcase until they launch: no
+  entry, footer mark, keyword, or metadata mention. Their public surface is the
+  Ghostshift Assembly landing and their own domains or waitlists.
+- A launched venture links to its public root domain, never private source,
   GitHub, or HexDocs. Keep approved destinations during DNS or server setup.
 - Report a failed availability check for review. A timeout or pending deployment
   does not justify deleting an approved destination.

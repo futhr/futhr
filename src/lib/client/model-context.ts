@@ -52,7 +52,7 @@ const registerShowcaseTools = ({ items, open }: ShowcaseToolHost): (() => void) 
     {
       name: 'list-work',
       description:
-        'List every entry on this portfolio page: ventures, open-source libraries, and research, with slug, group, one-sentence summary, and links.',
+        'List every entry on this portfolio page: open-source libraries and research, with slug, group, one-sentence summary, and links.',
       inputSchema: { type: 'object', properties: {} },
       execute: () => text(JSON.stringify(items.map(summary)))
     },

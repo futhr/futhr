@@ -15,6 +15,24 @@
   let { item, index, isOpen, divider, onToggle }: Props = $props()
 
   const inverse = $derived(index % 2 === 0)
+  // Split the title so pairs listed in the entry's kerning get their own tracking.
+  const segments = $derived.by(() => {
+    const kerning = item.kerning ?? {}
+    const chars = [...item.title]
+    const out: { text: string; kern?: number }[] = []
+    for (const [i, char] of chars.entries()) {
+      const kern = kerning[`${char}${chars[i + 1] ?? ''}`]
+      const last = out.at(-1)
+      if (kern !== undefined) {
+        out.push({ text: char, kern })
+      } else if (last && last.kern === undefined) {
+        last.text += char
+      } else {
+        out.push({ text: char })
+      }
+    }
+    return out
+  })
   let article = $state<HTMLElement>()
   let renderedOpen: boolean | undefined
   let previousHeight: number | undefined
@@ -83,12 +101,20 @@
       <span
         lang={site.language}
         class={[
-          'min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) leading-[0.75] font-black tracking-[-0.04em] hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5',
+          'min-w-0 pt-[calc(var(--fold-inset)-0.02em)] pr-(--gutter) leading-[0.75] font-black tracking-(--headline-tracking) hyphens-manual [overflow-wrap:break-word] @max-3xl:px-5',
           item.slug === 'thesis'
-            ? 'text-[clamp(3.5rem,8.5cqw,12.75rem)] @max-3xl:text-(length:--headline-size)'
+            ? 'hyphens-none text-[clamp(3.5rem,8.5cqw,12.75rem)] @max-3xl:text-(length:--headline-size) @max-3xl:hyphens-manual'
             : 'text-(length:--headline-size)'
         ]}
-        >{item.title}</span
+        >{#each segments as segment, i (i)}
+          {#if segment.kern === undefined}
+            {segment.text}
+          {:else}
+            <span style="letter-spacing: calc(var(--headline-tracking) + {segment.kern}em)"
+              >{segment.text}</span
+            >
+          {/if}
+        {/each}</span
       >
     </button>
 

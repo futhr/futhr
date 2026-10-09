@@ -27,8 +27,6 @@ validation.
 - **Ruby and Solidus:** payment and shipping extensions for existing shops.
 - **Rust:** NUIF research into interface interchange and measurable conversion
   loss.
-- **Projects:** Refpath, Rivure, Diggymon, WoTEx, Orvane, and ÄGR, all
-  in development and described as direction rather than released solutions.
 
 ## Method
 

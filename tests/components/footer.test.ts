@@ -30,11 +30,16 @@ test('renders every identity, social destination and footer group', async () => 
   )
 
   await Promise.all(
-    site.footer.agents.map(({ label, href }) =>
-      expect.element(screen.getByRole('link', { name: label })).toHaveAttribute('href', href)
-    )
+    [...site.footer.agents, ...site.footer.elsewhere]
+      .flatMap(({ label, href }) => (href === null ? [] : [{ label, href }]))
+      .map(async ({ label, href }) => {
+        const link = screen.getByRole('link', { name: label })
+        await expect.element(link).toHaveAttribute('href', href)
+        await expect.element(link).toHaveAttribute('target', '_blank')
+        await expect.element(link).toHaveAttribute('rel', 'noopener')
+      })
   )
 
-  expect(screen.container.querySelectorAll('svg')).toHaveLength(14)
+  expect(screen.container.querySelectorAll('svg')).toHaveLength(10)
   expect(screen.container.querySelectorAll('img')).toHaveLength(0)
 })

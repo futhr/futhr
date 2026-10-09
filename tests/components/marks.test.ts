@@ -1,10 +1,10 @@
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import Agr from '$lib/components/marks/agr.svelte'
-import Bytly from '$lib/components/marks/bytly.svelte'
 import Conjunct from '$lib/components/marks/conjunct.svelte'
 import Diggymon from '$lib/components/marks/diggymon.svelte'
+import Frameshift from '$lib/components/marks/frameshift.svelte'
 import Futhr from '$lib/components/marks/futhr.svelte'
+import Ghostshift from '$lib/components/marks/ghostshift.svelte'
 import Orvane from '$lib/components/marks/orvane.svelte'
 import Recetas from '$lib/components/marks/recetas.svelte'
 import Refpath from '$lib/components/marks/refpath.svelte'
@@ -15,15 +15,15 @@ import Marks from '$lib/components/marks.svelte'
 
 const markComponents = [
   ['Futhr', Futhr],
+  ['Ghostshift Assembly', Ghostshift],
   ['Refpath', Refpath],
-  ['Bytly', Bytly],
   ['Diggymon', Diggymon],
   ['Orvane', Orvane],
   ['Reloved', Reloved],
   ['Rivure', Rivure],
-  ['ÄGR', Agr],
   ['Recetas', Recetas],
   ['WoTEx', Wotex],
+  ['Frameshift', Frameshift],
   ['Conjunct', Conjunct]
 ] as const
 
@@ -36,15 +36,18 @@ test('renders each reusable logo component as an accessible image', async () => 
   )
 })
 
-test('renders every venture mark in footer order', async () => {
+const footerOrder = ['Ghostshift Assembly', 'Refpath', 'Rivure', 'WoTEx', 'Frameshift']
+
+test('renders the footer marks in order', async () => {
   const screen = await render(Marks)
   await Promise.all(
-    markComponents
-      .slice(1)
-      .map(([name]) =>
-        expect.element(screen.getByRole('img', { name: `${name} mark` })).toBeVisible()
-      )
+    footerOrder.map((name) =>
+      expect.element(screen.getByRole('img', { name: `${name} mark` })).toBeVisible()
+    )
   )
-  expect(screen.container.querySelectorAll('.mark')).toHaveLength(10)
-  expect(screen.container.querySelectorAll('.mark svg')).toHaveLength(10)
+  expect(
+    [...screen.container.querySelectorAll('.mark > [role="img"]')].map((mark) =>
+      mark.getAttribute('aria-label')
+    )
+  ).toEqual(footerOrder.map((name) => `${name} mark`))
 })

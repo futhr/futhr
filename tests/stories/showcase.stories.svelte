@@ -68,8 +68,9 @@
     await userEvent.click(sigilGuard)
     await expect(thesis).toHaveAttribute('aria-expanded', 'false')
     await expect(sigilGuard).toHaveAttribute('aria-expanded', 'true')
-    await expect(
-      canvas.getByText(sigilGuardWords).closest('[aria-hidden]')
-    ).toHaveAttribute('aria-hidden', 'false')
+    await expect(canvas.getByText(sigilGuardWords).closest('[aria-hidden]')).toHaveAttribute(
+      'aria-hidden',
+      'false'
+    )
   }}
 />

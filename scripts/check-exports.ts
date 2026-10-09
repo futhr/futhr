@@ -6,8 +6,6 @@ const sourceDirectories = ['src', 'apps/waitlist/src', 'apps/landing/src']
 const svelteExportPattern =
   /\bexport\s+(?:default|const|let|var|function|class|interface|type|\{|\*)/gv
 const multipleExportExceptions = new Set([
-  'src/routes/agents.md/+server.ts',
-  'src/routes/agents/stack.md/+server.ts',
   'src/routes/llms-full.txt/+server.ts',
   'src/routes/llms.txt/+server.ts',
   'src/routes/work/[slug].md/+server.ts',

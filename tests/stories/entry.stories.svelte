@@ -48,10 +48,9 @@
   name="Open"
   args={{ isOpen: true }}
   play={async ({ canvas }) => {
-    await expect(canvas.getByRole('button', { name: `${example.group} ${example.title}` })).toHaveAttribute(
-      'aria-expanded',
-      'true'
-    )
+    await expect(
+      canvas.getByRole('button', { name: `${example.group} ${example.title}` })
+    ).toHaveAttribute('aria-expanded', 'true')
     await expect(canvas.getByRole('link', { name: 'GitHub organization' })).toHaveAttribute(
       'rel',
       'noopener noreferrer'

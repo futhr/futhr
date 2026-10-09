@@ -49,3 +49,24 @@ test('exposes disclosure state and delegates interaction', async () => {
     .element(screen.getByRole('link', { name: 'Repository' }))
     .toHaveAttribute('rel', 'noopener noreferrer')
 })
+
+test('keeps a kerned headline readable and updates its title without stale letter spacing', async () => {
+  const screen = await render(Entry, {
+    item: { ...item, title: 'WoTEx', kerning: { oT: -0.1 } },
+    index: 0,
+    isOpen: false,
+    divider: true,
+    onToggle: vi.fn()
+  })
+
+  await expect.element(screen.getByRole('button', { name: 'Example WoTEx' })).toBeVisible()
+  const kernedLetter = screen.container.querySelector('span[style]')
+  expect(kernedLetter?.textContent).toBe('o')
+  expect(kernedLetter?.getAttribute('style')).toContain('-0.1em')
+
+  await screen.rerender({ item })
+  await expect
+    .element(screen.getByRole('button', { name: 'Example Example project' }))
+    .toBeVisible()
+  expect(screen.container.querySelector('span[style]')).toBeNull()
+})

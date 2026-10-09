@@ -10,7 +10,7 @@
 
 <footer class="@container min-h-90 bg-ink font-system text-paper">
   <div
-    class="footer-grid grid min-w-0 grid-cols-[27.5fr_32.1fr_40.4fr] items-start gap-y-12 px-(--gutter) pt-6 pb-10 @max-5xl:grid-cols-[27.5fr_72.5fr] @max-3xl:grid-cols-1 @max-3xl:px-5 @max-3xl:pb-12"
+    class="footer-grid grid min-w-0 grid-cols-[27.5fr_32.1fr_40.4fr] items-start gap-y-12 px-(--gutter) pt-[calc(var(--fold-inset)-0.3rem)] pb-10 @max-5xl:grid-cols-[27.5fr_72.5fr] @max-3xl:grid-cols-1 @max-3xl:px-5 @max-3xl:pb-12"
   >
     <div class="flex flex-col @max-3xl:order-last">
       <div class="flex items-start gap-3 text-xl leading-5.5 font-bold whitespace-nowrap">
@@ -24,19 +24,41 @@
         <a
           class="social-link"
           href={site.links.mastodon}
-          rel="me"
+          target="_blank"
+          rel="me noopener"
           aria-label="Mastodon"
           title="Mastodon"
         >
           <Mastodon />
         </a>
-        <a class="social-link" href={site.links.bluesky} aria-label="Bluesky" title="Bluesky">
+        <a
+          class="social-link"
+          href={site.links.bluesky}
+          target="_blank"
+          rel="noopener"
+          aria-label="Bluesky"
+          title="Bluesky"
+        >
           <Bluesky />
         </a>
-        <a class="social-link" href={site.links.x} aria-label="X" title="X">
+        <a
+          class="social-link"
+          href={site.links.x}
+          target="_blank"
+          rel="noopener"
+          aria-label="X"
+          title="X"
+        >
           <X />
         </a>
-        <a class="social-link" href={site.links.github} aria-label="GitHub" title="GitHub">
+        <a
+          class="social-link"
+          href={site.links.github}
+          target="_blank"
+          rel="noopener"
+          aria-label="GitHub"
+          title="GitHub"
+        >
           <Github />
         </a>
       </nav>
@@ -57,7 +79,7 @@
           class="flex flex-col items-start text-[13px] leading-[1.5] font-bold [&>a]:py-1 [&>span]:py-1 [&_a]:text-paper [&_a]:no-underline [&_a:hover]:text-signal-light [&_a:focus-visible]:text-signal-light"
         >
           {#each site.footer.agents as item (item.label)}
-            <a href={item.href}>{item.label}</a>
+            <a href={item.href} target="_blank" rel="noopener">{item.label}</a>
           {/each}
         </div>
       </div>
@@ -68,7 +90,7 @@
         >
           {#each site.footer.elsewhere as item (item.label)}
             {#if item.href}
-              <a href={item.href}>{item.label}</a>
+              <a href={item.href} target="_blank" rel="noopener">{item.label}</a>
             {:else}
               <span>{item.label}</span>
             {/if}

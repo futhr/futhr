@@ -1,26 +1,16 @@
 <script lang="ts">
-  import Agr from '$lib/components/marks/agr.svelte'
-  import Bytly from '$lib/components/marks/bytly.svelte'
-  import Conjunct from '$lib/components/marks/conjunct.svelte'
-  import Diggymon from '$lib/components/marks/diggymon.svelte'
-  import Orvane from '$lib/components/marks/orvane.svelte'
-  import Recetas from '$lib/components/marks/recetas.svelte'
+  import Frameshift from '$lib/components/marks/frameshift.svelte'
+  import Ghostshift from '$lib/components/marks/ghostshift.svelte'
   import Refpath from '$lib/components/marks/refpath.svelte'
-  import Reloved from '$lib/components/marks/reloved.svelte'
   import Rivure from '$lib/components/marks/rivure.svelte'
   import Wotex from '$lib/components/marks/wotex.svelte'
 
   const marks = [
+    { id: 'ghostshift', component: Ghostshift },
     { id: 'refpath', component: Refpath },
-    { id: 'bytly', component: Bytly },
-    { id: 'diggymon', component: Diggymon },
-    { id: 'orvane', component: Orvane },
-    { id: 'reloved', component: Reloved },
     { id: 'rivure', component: Rivure },
-    { id: 'agr', component: Agr },
-    { id: 'recetas', component: Recetas },
     { id: 'wotex', component: Wotex },
-    { id: 'conjunct', component: Conjunct }
+    { id: 'frameshift', component: Frameshift }
   ] as const
 </script>
 
@@ -39,8 +29,8 @@
     width: 100%;
     min-width: 0;
     align-items: center;
-    justify-content: space-between;
-    gap: 0.35cqw;
+    justify-content: flex-end;
+    gap: 2rem;
   }
 
   .mark {
@@ -52,37 +42,24 @@
     align-items: center;
   }
 
-  .mark.refpath,
-  .mark.bytly {
-    --mark-scale: 0.9;
+  .mark.ghostshift {
+    --mark-scale: 0.82;
   }
 
-  .mark.diggymon {
-    --mark-scale: 0.88;
-  }
-
-  .mark.orvane {
-    --mark-scale: 1.1;
-  }
-
-  .mark.reloved {
-    --mark-scale: 1.2;
+  .mark.refpath {
+    --mark-scale: 0.8;
   }
 
   .mark.rivure {
-    --mark-scale: 0.98;
-  }
-
-  .mark.agr {
-    --mark-scale: 1.18;
-  }
-
-  .mark.recetas {
-    --mark-scale: 1.15;
+    --mark-scale: 0.835;
   }
 
   .mark.wotex {
-    --mark-scale: 1.22;
+    --mark-scale: 0.68;
+  }
+
+  .mark.frameshift {
+    --mark-scale: 0.875;
   }
 
   .mark > :global([role="img"]) {

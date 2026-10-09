@@ -1,8 +1,9 @@
-import { site } from '$lib/config/site'
+import { agentDocuments } from '$lib/server/agent-documents'
+import { loadShowcase } from '$lib/server/showcase'
 
 export const prerender = true
 
-export const GET = () =>
-  new Response(site.documents.sitemapXml, {
+export const GET = async () =>
+  new Response(agentDocuments.sitemap(await loadShowcase()), {
     headers: { 'content-type': 'application/xml; charset=utf-8' }
   })

@@ -30,7 +30,7 @@
   <meta name="twitter:title" content={site.seo.title}>
   <meta name="twitter:description" content={site.description}>
   <meta name="twitter:image" content={site.images.social}>
-  {@html `<script type="application/ld+json">${site.documents.structuredData}</script>`}
+  {@html `<script type="application/ld+json">${data.structuredData}</script>`}
 </svelte:head>
 
 <a

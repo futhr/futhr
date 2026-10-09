@@ -7,7 +7,6 @@ const storyCodePattern = /@storybook|__STORYBOOK__|storybook\/internal/
 const siteOnlyFiles = new Set([
   'llms.txt',
   'llms-full.txt',
-  'agents.md',
   'manifest.webmanifest',
   'service-worker.js',
   'sw.js',

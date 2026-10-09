@@ -59,27 +59,23 @@ describe('valid showcase content', () => {
     }))
     const items = await content.load(sources)
 
-    expect(items).toHaveLength(22)
+    expect(items).toHaveLength(14)
     expect(items[0]).toMatchObject({ order: 1, slug: 'thesis', group: 'Thesis' })
     expect(items[1]).toMatchObject({ order: 2, slug: 'wotex', group: 'Elixir & OTP' })
-    expect(items[13]).toMatchObject({ order: 14, slug: 'frameshift', group: 'Research' })
-    expect(items[14]).toMatchObject({ order: 15, slug: 'refpath', group: 'Venture' })
-    expect(items[19]).toMatchObject({ order: 20, slug: 'agr', group: 'Venture', title: 'ÄGR' })
+    expect(items[2]).toMatchObject({ order: 3, slug: 'ex-maude', group: 'Elixir & OTP' })
+    expect(items[3]).toMatchObject({ order: 4, slug: 'exk-passwd', group: 'Elixir & OTP' })
     expect(items.at(-1)).toMatchObject({
-      order: 22,
-      slug: 'conjunct',
-      group: 'Venture',
-      title: 'Conjunct',
-      repositories: [],
-      links: []
+      order: 14,
+      slug: 'frameshift',
+      group: 'Research',
+      repositories: ['ghostshift-assembly/frameshift']
     })
-    expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 22 }, (_, i) => i + 1))
+    expect(items.map(({ order }) => order)).toEqual(Array.from({ length: 14 }, (_, i) => i + 1))
     expect([...new Set(items.map(({ group }) => group))]).toEqual([
       'Thesis',
       'Elixir & OTP',
       'Ruby & Solidus',
-      'Research',
-      'Venture'
+      'Research'
     ])
   })
 
@@ -113,6 +109,23 @@ describe('valid showcase content', () => {
     })
 
     expect(item.repositories).toEqual([])
+  })
+})
+
+describe('optional showcase fields', () => {
+  it('parses headline kerning pairs that appear in the title', async () => {
+    const item = await content.parse({
+      filename: 'kerned.md',
+      source: source('kerning:\n  xa: -0.06\n')
+    })
+
+    expect(item.kerning).toEqual({ xa: -0.06 })
+  })
+
+  it('leaves kerning undefined when the field is omitted', async () => {
+    const item = await content.parse({ filename: 'plain.md', source: source() })
+
+    expect(item.kerning).toBeUndefined()
   })
 })
 
@@ -168,6 +181,17 @@ describe('showcase field validation', () => {
         filename: 'invalid-frontmatter.md',
         source: source().replace(target, replacement)
       })
+    ).rejects.toThrow(message)
+  })
+
+  it.each([
+    ['a pair missing from the title', 'kerning:\n  oT: -0.06\n', 'two characters from the title'],
+    ['a non-numeric amount', 'kerning:\n  xa: tight\n', 'between -0.5 and 0.5'],
+    ['an out-of-range amount', 'kerning:\n  xa: -1\n', 'between -0.5 and 0.5'],
+    ['a non-object field', 'kerning: tight\n', 'map letter pairs to numbers']
+  ])('rejects %s in the kerning field', async (_case, overrides, message) => {
+    await expect(
+      content.parse({ filename: 'bad-kerning.md', source: source(overrides) })
     ).rejects.toThrow(message)
   })
 
