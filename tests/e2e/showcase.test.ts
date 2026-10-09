@@ -96,6 +96,20 @@ test('has no serious automated accessibility violations', async ({ page }) => {
   expect(seriousViolations).toEqual([])
 })
 
+test('serves transparent SVG favicons that follow the colour scheme', async ({ request }) => {
+  const faviconResponse = await request.get('/icons/favicon.svg')
+  expect(faviconResponse.ok()).toBe(true)
+  const faviconSource = await faviconResponse.text()
+  expect(faviconSource).not.toContain('<rect')
+  expect(faviconSource).toContain('@media (prefers-color-scheme: dark)')
+  const lightFavicon = await (await request.get('/icons/favicon-light.svg')).text()
+  expect(lightFavicon).not.toContain('<rect')
+  expect(lightFavicon).toContain('fill="#1b1b1b"')
+  const darkFavicon = await (await request.get('/icons/favicon-dark.svg')).text()
+  expect(darkFavicon).not.toContain('<rect')
+  expect(darkFavicon).toContain('fill="#dcdbd6"')
+})
+
 test('publishes install metadata, loadable icons and the primary font preload', async ({
   page,
   request
@@ -116,12 +130,6 @@ test('publishes install metadata, loadable icons and the primary font preload', 
   ).toHaveAttribute('href', faviconDarkAsset)
   await expect(page.locator('meta[name="theme-color"]')).toHaveAttribute('content', '#1b1b1b')
   await expect(page.locator('html')).toHaveCSS('background-color', 'rgb(27, 27, 27)')
-
-  const faviconResponse = await request.get('/icons/favicon.svg')
-  expect(faviconResponse.ok()).toBe(true)
-  const faviconSource = await faviconResponse.text()
-  expect(faviconSource).toContain('<rect')
-  expect(faviconSource).not.toContain('prefers-color-scheme')
 
   const manifestResponse = await request.get('/manifest.webmanifest')
   expect(manifestResponse.ok()).toBe(true)
