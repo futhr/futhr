@@ -1,7 +1,7 @@
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import Footer from '$lib/components/footer.svelte'
-import { site } from '$lib/config/site'
+import Footer from '#lib/components/footer.svelte'
+import { site } from '#lib/config/site.ts'
 
 const socialLinks = [
   ['Mastodon', site.links.mastodon],

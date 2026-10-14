@@ -1,5 +1,5 @@
-import { controller } from '$lib/brands/controller'
-import type { Brand } from '$lib/types/brand'
+import { controller } from '#lib/brands/controller.ts'
+import type { Brand } from '#lib/types/brand.ts'
 
 /** Collection notice; operating requirements are in docs/legal/waitlist-operations.md. */
 const privacyNotice = (brand: Brand): readonly string[] => [

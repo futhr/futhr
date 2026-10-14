@@ -55,7 +55,7 @@ test('boots the real core, generates locally, and exposes audited runtime identi
       .locator('#runtime-status')
       .evaluate((element) => getComputedStyle(element, '::before').backgroundColor)
   ).toBe('rgb(85, 207, 138)')
-  await expect(page.locator('#runtime-info')).toContainText('v0.4.0')
+  await expect(page.locator('#runtime-info')).toContainText('v0.4.1')
   await expect(page.locator('#runtime-info')).toContainText('Web Crypto getRandomValues')
   await expect(page.locator('#runtime-info')).toContainText('Cross-origin isolated')
   await expect(page.locator('#seen-entropy')).toHaveText(entropyPattern)

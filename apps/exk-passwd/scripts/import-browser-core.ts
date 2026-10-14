@@ -17,7 +17,7 @@ const runtimeDirectory =
 const sourceBundle =
   process.env.EXK_PASSWD_BROWSER_BUNDLE ??
   resolve(exkPasswdDirectory, 'browser/_release/core/bundle.avm')
-const supportedExkPasswdVersion = '0.4.0'
+const supportedExkPasswdVersion = '0.4.1'
 const exkPasswdLockPattern =
   /"exk_passwd": \{:hex, :exk_passwd, "([^"]+)", "([0-9a-f]{64})", \[:mix\], \[\], "hexpm", "([0-9a-f]{64})"\}/
 
@@ -146,7 +146,7 @@ const sbom = {
   name: 'exk-passwd-browser-core-0.1.0',
   documentNamespace: `https://futhr.io/exk-passwd/sbom/${manifest.futhr_source_commit}`,
   creationInfo: {
-    created: '2026-09-20T00:00:00Z',
+    created: new Date().toISOString(),
     creators: ['Organization: Futhr']
   },
   packages: [

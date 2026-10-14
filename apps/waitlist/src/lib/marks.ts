@@ -1,5 +1,5 @@
 import type { Component } from 'svelte'
-import type { BrandId } from '$lib/types/brand-id'
+import type { BrandId } from '#lib/types/brand-id.ts'
 import Conjunct from '$site/components/marks/conjunct.svelte'
 import Diggymon from '$site/components/marks/diggymon.svelte'
 import Orvane from '$site/components/marks/orvane.svelte'

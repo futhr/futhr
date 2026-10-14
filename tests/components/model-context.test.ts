@@ -1,7 +1,7 @@
 import { afterEach, expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import Showcase from '$lib/components/showcase.svelte'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import Showcase from '#lib/components/showcase.svelte'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const items: ShowcaseEntry[] = [
   {

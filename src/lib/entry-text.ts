@@ -1,4 +1,4 @@
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 /** Titles may carry a soft hyphen for the headline; plain text gets the whole word. */
 const plainTitle = (item: ShowcaseEntry): string => item.title.replaceAll('\u00AD', '')

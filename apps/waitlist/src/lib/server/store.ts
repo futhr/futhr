@@ -1,4 +1,4 @@
-import type { SubscriptionRow } from '$lib/server/subscription-row'
+import type { SubscriptionRow } from '#lib/server/subscription-row.ts'
 
 /** Inserts a row; false when the brand already holds this address. */
 const insert = async (db: D1Database, row: SubscriptionRow): Promise<boolean> => {

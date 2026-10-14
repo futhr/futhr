@@ -10,7 +10,7 @@
 [![pnpm](https://img.shields.io/badge/pnpm-12-f69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
 [![Code license: MIT](https://img.shields.io/badge/code-MIT-1b1b1b.svg)](../LICENSE.md)
 
-Source for [futhr.io](https://futhr.io/): SvelteKit 2, Svelte 5, Tailwind CSS 4,
+Source for [futhr.io](https://futhr.io/): SvelteKit 3, Svelte 5, Tailwind CSS 4,
 TypeScript, prerendered and deployed to Cloudflare. The root `README.md` is the
 GitHub profile page; this file is where development starts. Application code is
 MIT; editorial copy and marks are excluded, see [LICENSE.md](../LICENSE.md).
@@ -24,7 +24,8 @@ pnpm dev                                # http://127.0.0.1:5173
 pnpm storybook                          # http://127.0.0.1:6006
 ```
 
-Node 24 (`.nvmrc`) and pnpm 12.10.1 (`packageManager` in `package.json`).
+Node 24 (`.nvmrc`), its locked 24.21.0 script runtime (`devEngines.runtime`),
+and pnpm 12.11.2 (`packageManager` in `package.json`).
 
 The venture waitlists are a separate Worker: `pnpm --filter waitlist dev` serves
 them on `http://127.0.0.1:8787/`, which lists the seven brands on their
@@ -85,7 +86,7 @@ ordering are in [Cloudflare deployment](architecture/cloudflare.md#continuous-de
 | `apps/waitlist/` | Venture waitlist Workers, a pnpm workspace package; see its [README](../apps/waitlist/README.md) |
 | `apps/landing/` | Stateless project landing Worker; see its [README](../apps/landing/README.md) |
 
-Conventions: kebab-case filenames, `$lib` imports, no barrel files, at most one
+Conventions: kebab-case filenames, `#lib` imports, no barrel files, at most one
 public symbol per module. Entries are Markdown with `order`, `group`, `title`,
 `lede`, `repositories`, and `links` in frontmatter; the build rejects gaps,
 duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
@@ -93,58 +94,48 @@ duplicates, missing fields, unsafe link protocols, and non-kebab filenames.
 ## Dependencies
 
 pnpm only, exact versions, lockfile committed and installed with
-`--frozen-lockfile` in CI. `pnpm-workspace.yaml` sets `minimumReleaseAge` to a
-day, so a version is not pulled in the hour it is published. Overrides pin
-`postcss`, the patched `cookie` release used by SvelteKit, and Miniflare's
-patched `sharp` release. Updates are made by
-hand; there are no update bots. Review
-a dependency before adding it and remove packages that stop being used.
+`--frozen-lockfile` in CI. The normal one-day release-age policy remains in
+`pnpm-workspace.yaml`; the 14 October refresh explicitly selects the reviewed
+Cloudflare 1.4.2/4.151.0 runtime set through exact version exclusions. PostCSS
+8.5.30 remains pinned. The old cookie and sharp overrides are removed because
+SvelteKit 3 selects cookie 2.0.1 and current Miniflare selects sharp 0.35.5.
 
-The 9 October 2026 update reviewed the upstream release notes before changing
-pins. Svelte 5.57.2 fixes reactivity and hydration edge cases; Vite 8.3.3 fixes
-development-server file checks; Storybook 10.6.1 and Svelte CSF 5.1.5 fix build,
-accessibility, and story rendering issues. Biome 2.5.15 adds the enforced
-`noSvelteExportLet` and `useSvelteKitRuneImports` rules. Playwright 1.64.0's
-native WebMCP API now exercises the portfolio's list, read, and open tools in
-Chromium. Wrangler 4.148.0 and its Vitest plugin 1.3.7 refresh the Workers
-runtime; Node typings remain on the Node 24 line. pnpm 12.10.1 adds stricter
-workspace-setting checks and includes package integrity and install fixes.
-Codecov 7.1.1 retries verification-key imports and cleans its downloaded CLI
-out of the job workspace with `cleanup: true`.
+The showcase, landing, and waitlist now use SvelteKit 3.0.1 with the matching
+static and Cloudflare adapters. Configuration lives in the Vite plugins,
+`#lib` uses package imports with explicit file extensions, and route matchers
+live in `src/params.ts`. Cloudflare bindings come from `cloudflare:workers`;
+request host gates, authorization, and CSRF protection remain owned by the
+existing routes and Workers. Expected framework errors keep their default
+status and safe message; only unknown server failures are logged.
 
-Marked 18.1.0 and sanitize-html 2.18.0 include parser and sanitising fixes.
-Refreshing transitive dependencies picks up devalue 5.9.4 and source-map-js
-1.2.2. The Miniflare override selects sharp 0.35.5 because the upstream pin
-still selects 0.35.4. YAML 2.9.1 replaces gray-matter and removes its unpatched
-sprintf-js dependency chain. Frontmatter is now YAML only, rejects duplicate
-keys and aliases, and reports malformed blocks with their filenames.
+The showcase service worker uses the new manifest objects and its own typed
+project. It still fetches HTML and generated documents from the network first
+and caches immutable files first. The ExkPasswd product imports published
+0.4.1 core bytes with the same qualified compiler and verified Web Crypto
+runtime, manifest, checksums, and SBOM.
 
-TypeScript 7 is held while svelte-check's peer range ends at TypeScript 6;
-Vitest 5 is held while the Cloudflare plugin allowed by the release-age policy
-requires Vitest 4.
-Vite, Cloudflare, and setup-node releases published within the one-day release
-window are deferred. SvelteKit 3 and its new adapters require a coordinated
-migration of config, imports, service workers, and form response behavior; this update
-retains SvelteKit 2 and the current adapter contract.
+Storybook uses its own Svelte/Vite config so application adapters cannot
+overwrite its static headers and search-indexing controls.
 
-Sources: [Svelte](https://github.com/sveltejs/svelte/releases/tag/svelte%405.57.2),
-[Vite](https://github.com/vitejs/vite/releases/tag/v8.3.3),
-[Storybook](https://github.com/storybookjs/storybook/releases/tag/v10.6.1),
-[Svelte CSF](https://github.com/storybookjs/addon-svelte-csf/releases/tag/v5.1.5),
-[Biome](https://github.com/biomejs/biome/releases/tag/%40biomejs/biome%402.5.15),
-[Playwright](https://playwright.dev/docs/release-notes#version-164),
-[Cloudflare](https://github.com/cloudflare/workers-sdk/blob/main/packages/wrangler/CHANGELOG.md),
-[Marked](https://github.com/markedjs/marked/releases/tag/v18.1.0),
-[sanitize-html](https://github.com/apostrophecms/apostrophe/blob/main/packages/sanitize-html/CHANGELOG.md),
-[devalue](https://github.com/sveltejs/devalue/releases/tag/v5.9.4),
-[source-map-js](https://github.com/advisories/GHSA-68fv-2mgg-jv7q),
-[sharp](https://github.com/lovell/sharp/releases/tag/v0.35.5),
-[YAML](https://github.com/eemeli/yaml/releases/tag/v2.9.1),
-[sprintf-js advisory](https://github.com/advisories/GHSA-hp3w-g68c-fv3c),
-[SvelteKit migration](https://svelte.dev/docs/kit/migrating-to-sveltekit-3),
-[pnpm 12](https://github.com/pnpm/pnpm/releases/tag/v12.0.0),
-[pnpm 12.10.1](https://github.com/pnpm/pnpm/releases/tag/v12.10.1), and
-[Codecov changes](https://github.com/codecov/codecov-action/compare/v7.0.0...v7.1.1).
+Vitest 5.0.4 moves with the compatible Workers plugin and Storybook 10.6.2.
+Workers tests disable Vitest's host filesystem module cache and load transformed
+modules through the runner, because Workerd cannot read that Node cache.
+Cross-origin mutations without a content type now receive SvelteKit's CSRF
+rejection; same-origin routing and method tests supply their origin explicitly.
+Vite 8.3.4, Wrangler 4.151.0, Marked 18.1.1, PostCSS 8.5.30, pnpm 12.11.2,
+Node 24 typings, and setup-node 7.1.0 include the reviewed maintenance fixes.
+TypeScript remains at 6.0.3: SvelteKit requires its 6.x peer range, and
+svelte-check does not yet declare TypeScript 7 support.
+
+Sources: [SvelteKit migration](https://svelte.dev/docs/kit/migrating-to-sveltekit-3),
+[Vitest migration](https://vitest.dev/guide/migration/),
+[Workers plugin](https://github.com/cloudflare/workers-sdk/releases/tag/%40cloudflare%2Fvitest-plugin%401.4.2),
+[Wrangler](https://github.com/cloudflare/workers-sdk/releases/tag/wrangler%404.151.0),
+[Storybook](https://github.com/storybookjs/storybook/releases/tag/v10.6.2),
+[Vite](https://github.com/vitejs/vite/releases/tag/v8.3.4),
+[Marked](https://github.com/markedjs/marked/releases/tag/v18.1.1),
+[PostCSS](https://github.com/postcss/postcss/releases/tag/8.5.30), and
+[pnpm](https://github.com/pnpm/pnpm/releases/tag/v12.11.2).
 
 ## Documents
 

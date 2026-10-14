@@ -1,5 +1,5 @@
 import type { Preview } from '@storybook/svelte'
-import '$lib/styles/site.css'
+import '#lib/styles/site.css'
 
 const preview: Preview = {
   tags: ['autodocs'],

@@ -1,7 +1,7 @@
 <script lang="ts">
   import type { Component, Snippet } from 'svelte'
-  import { strings } from '$lib/brands/strings'
-  import type { Brand } from '$lib/types/brand'
+  import { strings } from '#lib/brands/strings.ts'
+  import type { Brand } from '#lib/types/brand.ts'
 
   interface Props {
     brand: Brand

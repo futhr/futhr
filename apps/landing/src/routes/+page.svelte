@@ -1,5 +1,5 @@
 <script lang="ts">
-  import ProjectLanding from '$lib/components/project-landing.svelte'
+  import ProjectLanding from '#lib/components/project-landing.svelte'
 
   let { data } = $props()
 </script>

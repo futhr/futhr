@@ -1,9 +1,9 @@
 <script lang="ts">
   import type { Component } from 'svelte'
-  import JoinForm from '$lib/components/join-form.svelte'
-  import Page from '$lib/components/page.svelte'
-  import type { Brand } from '$lib/types/brand'
-  import type { JoinFormProps } from '$lib/types/join-form-props'
+  import JoinForm from '#lib/components/join-form.svelte'
+  import Page from '#lib/components/page.svelte'
+  import type { Brand } from '#lib/types/brand.ts'
+  import type { JoinFormProps } from '#lib/types/join-form-props.ts'
 
   interface Props {
     brand: Brand

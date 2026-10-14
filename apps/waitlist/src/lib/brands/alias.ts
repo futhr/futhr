@@ -1,5 +1,5 @@
-import { brands } from '$lib/brands/brands'
-import type { Brand } from '$lib/types/brand'
+import { brands } from '#lib/brands/brands.ts'
+import type { Brand } from '#lib/types/brand.ts'
 
 const portSuffix = /:\d+$/
 const trailingDot = /\.$/

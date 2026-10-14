@@ -1,6 +1,6 @@
 # Browser-core reproducibility
 
-Measured on 20 September 2026 from two separate source copies. Each copy
+Measured for ExkPasswd 0.4.0 on 20 September 2026 from two separate source copies. Each copy
 excluded build products and dependencies, then ran `browser/scripts/build-core.sh`
 in a fresh `hexpm/elixir:1.17.3-erlang-26.0.2-alpine-3.20.3` container.
 
@@ -21,3 +21,8 @@ The release is therefore **not claimed to be reproducible**. `manifest.json`
 and `SHA256SUMS` identify the exact browser-core bytes consumed by the site and
 extensions. Re-run this measurement after changes to Elixir, OTP, Popcorn, or
 the AtomVM packaging path.
+
+On 14 October 2026, the published ExkPasswd 0.4.1 core was rebuilt with the
+same qualified compiler profile and imported with the existing verified Web
+Crypto runtime. That refresh did not repeat the two-build reproducibility
+measurement; the current manifest identifies the exact imported bytes.

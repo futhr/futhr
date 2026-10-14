@@ -1,6 +1,6 @@
 <script lang="ts">
+  import type { EmailFormProps } from '#lib/types/email-form-props.ts'
   import { enhance } from '$app/forms'
-  import type { EmailFormProps } from '$lib/types/email-form-props'
 
   let { id, text, result }: EmailFormProps = $props()
 

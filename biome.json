@@ -92,13 +92,7 @@
       }
     },
     {
-      "includes": [
-        "*.config.ts",
-        "svelte.config.ts",
-        ".storybook/**/*.ts",
-        "apps/*/*.config.ts",
-        "apps/*/svelte.config.ts"
-      ],
+      "includes": ["*.config.ts", ".storybook/**/*.ts", "apps/*/*.config.ts"],
       "linter": {
         "rules": {
           "style": {

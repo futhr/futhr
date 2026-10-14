@@ -1,8 +1,8 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
   import { expect } from 'storybook/test'
-  import Showcase from '$lib/components/showcase.svelte'
-  import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+  import Showcase from '#lib/components/showcase.svelte'
+  import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
   // Real entries from the site: the thesis and the first two Elixir rows.
   const items: ShowcaseEntry[] = [

@@ -1,4 +1,4 @@
-import type { BrandId } from '$lib/types/brand-id'
+import type { BrandId } from '#lib/types/brand-id.ts'
 
 /**
  * One venture waitlist. The record is closed and typed; the Worker derives it

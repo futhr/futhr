@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { content } from '$lib/server/content'
+import { content } from '#lib/server/content.ts'
 
 const contentFiles = import.meta.glob<string>('../src/lib/content/*.md', {
   eager: true,

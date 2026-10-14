@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { marks } from '$lib/marks'
-  import type { Project } from '$lib/types/project'
+  import { marks } from '#lib/marks.ts'
+  import type { Project } from '#lib/types/project.ts'
 
   let { project }: { project: Project } = $props()
   const Mark = $derived(project.mark ? marks[project.mark] : undefined)

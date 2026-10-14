@@ -1,7 +1,7 @@
-import { brands } from '$lib/brands/brands'
-import type { AdminActor } from '$lib/server/admin/actor'
-import type { Brand } from '$lib/types/brand'
-import type { BrandId } from '$lib/types/brand-id'
+import { brands } from '#lib/brands/brands.ts'
+import type { AdminActor } from '#lib/server/admin/actor.ts'
+import type { Brand } from '#lib/types/brand.ts'
+import type { BrandId } from '#lib/types/brand-id.ts'
 
 /** Parses the ADMIN_BRAND_GRANTS JSON for one identity; anything malformed grants nothing. */
 const parse = (raw: string, identity: string): ReadonlySet<string> => {

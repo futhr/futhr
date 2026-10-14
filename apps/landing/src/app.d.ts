@@ -1,12 +1,9 @@
-import type { Project } from '$lib/types/project'
+import type { Project } from '#lib/types/project.ts'
 
 declare global {
   namespace App {
     interface Locals {
       project?: Project
-    }
-    interface Platform {
-      env: Env
     }
   }
 }

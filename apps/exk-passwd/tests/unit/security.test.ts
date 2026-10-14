@@ -52,10 +52,10 @@ describe('browser-core release controls', () => {
     expect(manifest.futhr_source_commit).toMatch(commitPattern)
     expect(typeof manifest.futhr_source_dirty).toBe('boolean')
     expect(manifest.exk_passwd).toEqual({
-      checksum: '3d7e8e30dbd6cce680710dcf35286cf003008b2ce9cb2d793c28b1516a754fd8',
-      outer_checksum: '4e14d64aebfd43b12737b457dac20f702dc3e49a2f1cf592d40b30b24e6b5830',
+      checksum: 'a4edf8d8acac5eebe4acd8040a58274dedf6d73de2a3c6118d2dd0c3cdb784c0',
+      outer_checksum: '51b3c3d8268336523ad5a4f5d8153e9735781814af5216788a59f2e2bc95fdaa',
       source: 'hexpm',
-      version: '0.4.0'
+      version: '0.4.1'
     })
 
     for (const [path, expected] of Object.entries(manifest.files)) {

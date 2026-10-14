@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { foldMotion } from '$lib/client/fold-motion'
-  import MarkerLink from '$lib/components/marker-link.svelte'
-  import { site } from '$lib/config/site'
-  import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+  import { foldMotion } from '#lib/client/fold-motion.ts'
+  import MarkerLink from '#lib/components/marker-link.svelte'
+  import { site } from '#lib/config/site.ts'
+  import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
   interface Props {
     item: ShowcaseEntry

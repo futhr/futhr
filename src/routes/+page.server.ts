@@ -1,5 +1,5 @@
-import { loadShowcase } from '$lib/server/showcase'
-import { structuredData } from '$lib/server/structured-data'
+import { loadShowcase } from '#lib/server/showcase.ts'
+import { structuredData } from '#lib/server/structured-data.ts'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = async () => {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { site } from '$lib/config/site'
+import { site } from '#lib/config/site.ts'
 
 describe('site metadata', () => {
   it('keeps browser and machine-readable identity on the canonical source', () => {

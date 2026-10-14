@@ -1,4 +1,4 @@
-import { strings } from '$lib/brands/strings'
+import { strings } from '#lib/brands/strings.ts'
 import type { PageServerLoad } from './$types'
 
 export const load: PageServerLoad = ({ locals }) => ({

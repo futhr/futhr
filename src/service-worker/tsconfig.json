@@ -1,0 +1,10 @@
+{
+  "extends": "$app/tsconfig/service-worker",
+  "compilerOptions": {
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "noUncheckedIndexedAccess": true
+  }
+}

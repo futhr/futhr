@@ -1,4 +1,4 @@
-import { cubicBezier } from '$lib/client/cubic-bezier'
+import { cubicBezier } from '#lib/client/cubic-bezier.ts'
 
 /** One curve and one clock for everything that moves when a row opens. */
 const foldMotion = {

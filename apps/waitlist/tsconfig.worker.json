@@ -22,10 +22,7 @@
     "target": "ES2022",
     "types": ["@cloudflare/vitest-plugin/types"],
     "useUnknownInCatchVariables": true,
-    "verbatimModuleSyntax": true,
-    "paths": {
-      "$lib/*": ["./src/lib/*"]
-    }
+    "verbatimModuleSyntax": true
   },
   "include": [
     "worker-configuration.d.ts",

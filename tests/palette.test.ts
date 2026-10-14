@@ -1,8 +1,8 @@
 // biome-ignore lint/correctness/noNodejsModules: this palette contract runs in the Node-only unit suite.
 import { readFile } from 'node:fs/promises'
 import { describe, expect, it } from 'vitest'
-import { palette } from '$lib/config/palette'
-import stylesheet from '$lib/styles/site.css?raw'
+import { palette } from '#lib/config/palette.ts'
+import stylesheet from '#lib/styles/site.css?raw'
 
 const hexPattern = /^#[0-9a-f]{6}$/
 const hexPairs = /[0-9a-f]{2}/g

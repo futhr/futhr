@@ -1,5 +1,5 @@
-import { content } from '$lib/server/content'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import { content } from '#lib/server/content.ts'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const files = import.meta.glob<string>('../content/*.md', {
   eager: true,

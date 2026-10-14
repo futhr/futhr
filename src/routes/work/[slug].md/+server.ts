@@ -1,6 +1,6 @@
 import { error } from '@sveltejs/kit'
-import { agentDocuments } from '$lib/server/agent-documents'
-import { loadShowcase } from '$lib/server/showcase'
+import { agentDocuments } from '#lib/server/agent-documents.ts'
+import { loadShowcase } from '#lib/server/showcase.ts'
 import type { EntryGenerator, RequestHandler } from './$types'
 
 export const prerender = true

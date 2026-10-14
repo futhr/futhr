@@ -1,4 +1,4 @@
-import { withdrawalPolicy } from '$lib/server/withdrawal-policy'
+import { withdrawalPolicy } from '#lib/server/withdrawal-policy.ts'
 
 interface RequestRow {
   id: string

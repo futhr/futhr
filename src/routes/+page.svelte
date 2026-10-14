@@ -1,7 +1,7 @@
 <script lang="ts">
-  import Footer from '$lib/components/footer.svelte'
-  import Showcase from '$lib/components/showcase.svelte'
-  import { site } from '$lib/config/site'
+  import Footer from '#lib/components/footer.svelte'
+  import Showcase from '#lib/components/showcase.svelte'
+  import { site } from '#lib/config/site.ts'
   import type { PageData } from './$types'
 
   let { data }: { data: PageData } = $props()

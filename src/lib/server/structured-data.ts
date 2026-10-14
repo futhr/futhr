@@ -1,6 +1,6 @@
-import { site } from '$lib/config/site'
-import { entryText } from '$lib/entry-text'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import { site } from '#lib/config/site.ts'
+import { entryText } from '#lib/entry-text.ts'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const absolute = (path: string) => new URL(path, site.canonicalUrl).href
 const ids = {

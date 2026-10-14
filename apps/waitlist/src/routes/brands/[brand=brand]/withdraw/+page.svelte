@@ -1,9 +1,9 @@
 <script lang="ts">
-  import { controller } from '$lib/brands/controller'
-  import { strings } from '$lib/brands/strings'
-  import EmailForm from '$lib/components/email-form.svelte'
-  import Page from '$lib/components/page.svelte'
-  import { marks } from '$lib/marks'
+  import { controller } from '#lib/brands/controller.ts'
+  import { strings } from '#lib/brands/strings.ts'
+  import EmailForm from '#lib/components/email-form.svelte'
+  import Page from '#lib/components/page.svelte'
+  import { marks } from '#lib/marks.ts'
   import type { ActionData, PageData } from './$types'
 
   let { data, form }: { data: PageData; form: ActionData } = $props()

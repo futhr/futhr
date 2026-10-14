@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { site } from '$lib/config/site'
-import { agentDocuments } from '$lib/server/agent-documents'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import { site } from '#lib/config/site.ts'
+import { agentDocuments } from '#lib/server/agent-documents.ts'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const items: ShowcaseEntry[] = [
   {

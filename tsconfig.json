@@ -1,25 +1,21 @@
 {
-  "extends": "./.svelte-kit/tsconfig.json",
+  "extends": "$app/tsconfig",
   "compilerOptions": {
-    "allowJs": true,
-    "allowImportingTsExtensions": true,
     "allowUnreachableCode": false,
     "allowUnusedLabels": false,
-    "esModuleInterop": true,
     "exactOptionalPropertyTypes": true,
-    "forceConsistentCasingInFileNames": true,
-    "moduleResolution": "bundler",
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true,
     "noImplicitReturns": true,
     "noPropertyAccessFromIndexSignature": true,
     "noUncheckedIndexedAccess": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true,
     "sourceMap": true,
     "strict": true,
     "target": "ES2022",
-    "useUnknownInCatchVariables": true
+    "useUnknownInCatchVariables": true,
+    "paths": {
+      "$site/*": ["./src/lib/*"]
+    }
   },
   "include": [
     ".storybook/**/*.ts",
@@ -27,7 +23,6 @@
     "src/**/*.svelte",
     "src/**/*.d.ts",
     "vite.config.ts",
-    "svelte.config.ts",
     "playwright.config.ts",
     "playwright.storybook.config.ts",
     "vitest.config.ts",
@@ -35,5 +30,6 @@
     "vitest.browser.config.ts",
     "tests/**/*.ts",
     "tests/**/*.svelte"
-  ]
+  ],
+  "exclude": ["node_modules", "src/service-worker"]
 }

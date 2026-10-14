@@ -1,7 +1,7 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
   import { expect } from 'storybook/test'
-  import MarkerLink from '$lib/components/marker-link.svelte'
+  import MarkerLink from '#lib/components/marker-link.svelte'
 
   const { Story } = defineMeta({
     title: 'Primitives/Marker link',

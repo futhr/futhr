@@ -1,7 +1,7 @@
 import { storybookTest } from '@storybook/addon-vitest/vitest-plugin'
 import { playwright } from '@vitest/browser-playwright'
 import { defineConfig, mergeConfig } from 'vitest/config'
-import viteConfig from './vite.config.ts'
+import viteConfig from './.storybook/vite.config.ts'
 
 const storybookDirectory = new URL('./.storybook', import.meta.url).pathname
 

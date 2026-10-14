@@ -1,9 +1,9 @@
 <script lang="ts">
-  import Frameshift from '$lib/components/marks/frameshift.svelte'
-  import Ghostshift from '$lib/components/marks/ghostshift.svelte'
-  import Refpath from '$lib/components/marks/refpath.svelte'
-  import Rivure from '$lib/components/marks/rivure.svelte'
-  import Wotex from '$lib/components/marks/wotex.svelte'
+  import Frameshift from '#lib/components/marks/frameshift.svelte'
+  import Ghostshift from '#lib/components/marks/ghostshift.svelte'
+  import Refpath from '#lib/components/marks/refpath.svelte'
+  import Rivure from '#lib/components/marks/rivure.svelte'
+  import Wotex from '#lib/components/marks/wotex.svelte'
 
   const marks = [
     { id: 'ghostshift', component: Ghostshift },

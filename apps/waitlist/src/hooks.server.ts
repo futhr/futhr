@@ -1,17 +1,16 @@
-import type { Handle, HandleServerError } from '@sveltejs/kit'
-import { brandForAliasHost } from '$lib/brands/alias'
-import { brands } from '$lib/brands/brands'
-import { controller } from '$lib/brands/controller'
-import { brandForHost } from '$lib/brands/host'
-import { apexForWww } from '$lib/brands/www'
-import { applyHeaders } from '$lib/server/headers'
+import type { Handle, HandleServerError } from '@sveltejs/kit/hooks'
+import { brandForAliasHost } from '#lib/brands/alias.ts'
+import { brands } from '#lib/brands/brands.ts'
+import { controller } from '#lib/brands/controller.ts'
+import { brandForHost } from '#lib/brands/host.ts'
+import { apexForWww } from '#lib/brands/www.ts'
+import { applyHeaders } from '#lib/server/headers.ts'
 
 type Kind = Parameters<typeof applyHeaders>[1]['kind']
 
 const permanentRedirect = 308
 const temporaryRedirect = 302
 const firstErrorStatus = 400
-const notFound = 404
 const loopback = new Set(['localhost', '127.0.0.1', '[::1]'])
 
 /**
@@ -51,6 +50,7 @@ const localIndex = (url: URL): Response => {
     )
     .join('')
   const body = `<!doctype html><meta charset="utf-8"><title>Waitlist, local</title><h1>Waitlist, local</h1><p>Each brand answers on its own hostname. These stand-ins resolve to this machine in Chrome and Firefox; Safari needs the real hostnames in /etc/hosts.</p><ul>${links}</ul>`
+
   return new Response(body, { headers: { 'content-type': 'text/html; charset=utf-8' } })
 }
 
@@ -89,14 +89,15 @@ export const handle: Handle = async ({ event, resolve }) => {
     status: resolved.status,
     headers: new Headers(resolved.headers)
   })
+
   applyHeaders(response.headers, { kind: kindFor(event.route.id, response.status), secure })
+
   return response
 }
 
 /** Unknown paths are routine on a public host; only real failures reach the log. */
-export const handleError: HandleServerError = ({ status, message }) => {
-  if (status !== notFound) {
-    console.error('request failed', status)
+export const handleError: HandleServerError = ({ kind }) => {
+  if (kind === 'unknown') {
+    console.error('request failed', 500)
   }
-  return { message }
 }

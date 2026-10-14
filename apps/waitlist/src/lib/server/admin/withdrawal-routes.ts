@@ -1,11 +1,11 @@
-import type { AdminActor } from '$lib/server/admin/actor'
-import type { AdminEnv } from '$lib/server/admin/env'
-import { adminResponses } from '$lib/server/admin/responses'
-import { adminStore } from '$lib/server/admin/store'
-import { withdrawals } from '$lib/server/admin/withdrawals'
-import { vault } from '$lib/server/crypto'
-import { joinData } from '$lib/server/join-data'
-import { secrets } from '$lib/server/secrets'
+import type { AdminActor } from '#lib/server/admin/actor.ts'
+import type { AdminEnv } from '#lib/server/admin/env.ts'
+import { adminResponses } from '#lib/server/admin/responses.ts'
+import { adminStore } from '#lib/server/admin/store.ts'
+import { withdrawals } from '#lib/server/admin/withdrawals.ts'
+import { vault } from '#lib/server/crypto.ts'
+import { joinData } from '#lib/server/join-data.ts'
+import { secrets } from '#lib/server/secrets.ts'
 
 interface Call {
   request: Request

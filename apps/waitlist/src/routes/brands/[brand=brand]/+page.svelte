@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Landing from '$lib/components/landing.svelte'
-  import { marks } from '$lib/marks'
+  import Landing from '#lib/components/landing.svelte'
+  import { marks } from '#lib/marks.ts'
   import type { ActionData, PageData } from './$types'
 
   let { data, form }: { data: PageData; form: ActionData } = $props()

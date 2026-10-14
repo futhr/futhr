@@ -1,5 +1,5 @@
-import { strings } from '$lib/brands/strings'
-import { withdraw } from '$lib/server/withdraw'
+import { strings } from '#lib/brands/strings.ts'
+import { withdraw } from '#lib/server/withdraw.ts'
 import type { Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = ({ locals }) => ({

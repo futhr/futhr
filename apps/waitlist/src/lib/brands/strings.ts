@@ -1,4 +1,4 @@
-import type { Brand } from '$lib/types/brand'
+import type { Brand } from '#lib/types/brand.ts'
 
 /** Every visible string that is not brand copy. Components never hard-code text. */
 const strings = {

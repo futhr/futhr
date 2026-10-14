@@ -1,22 +1,23 @@
-/// <reference lib="webworker" />
-/// <reference types="@sveltejs/kit" />
-
-import { build, files, prerendered, version } from '$service-worker'
+import { version } from '$app/env'
+import { assets, immutable, prerendered } from '$app/manifest'
+import { self as serviceWorker } from '$app/service-worker'
 
 const successfulStatus = 200
-const serviceWorker = globalThis as unknown as ServiceWorkerGlobalScope
 const cachePrefix = 'futhr-'
 const cacheName = `${cachePrefix}${version}`
-const assets = [...build, ...files, ...prerendered]
+const applicationUrl = new URL('./', serviceWorker.location.href)
+const cachedAssets = [...immutable, ...assets, ...prerendered].map(
+  ({ path }) => new URL(path, applicationUrl).href
+)
 // Hashed build output never changes under the same URL, so it is safe to serve
 // from the cache first. Everything else (HTML, generated documents, icons) is
 // fetched from the network first so a new deploy or a dev-server change shows
 // up on the next load, with the cache only as the offline fallback.
-const immutable = new Set(build)
+const immutablePaths = new Set(immutable.map(({ path }) => new URL(path, applicationUrl).pathname))
 
 const install = async (): Promise<void> => {
   const cache = await caches.open(cacheName)
-  await cache.addAll(assets)
+  await cache.addAll(cachedAssets)
   await serviceWorker.skipWaiting()
 }
 
@@ -68,6 +69,6 @@ serviceWorker.addEventListener('fetch', (event) => {
   }
 
   event.respondWith(
-    immutable.has(url.pathname) ? cacheFirst(event.request) : networkFirst(event.request)
+    immutablePaths.has(url.pathname) ? cacheFirst(event.request) : networkFirst(event.request)
   )
 })

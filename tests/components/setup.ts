@@ -1,1 +1,1 @@
-import '$lib/styles/site.css'
+import '#lib/styles/site.css'

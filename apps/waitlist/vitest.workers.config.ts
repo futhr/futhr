@@ -2,14 +2,12 @@ import { cloudflareTest, readD1Migrations } from '@cloudflare/vitest-plugin'
 import { defineConfig } from 'vitest/config'
 import { localSecrets } from './tests/local-secrets.ts'
 
-const library = new URL('./src/lib', import.meta.url).pathname
 const migrations = await readD1Migrations(new URL('./migrations', import.meta.url).pathname)
 
 export default defineConfig({
-  resolve: {
-    alias: { $lib: library }
-  },
   test: {
+    // Workerd loads transformed modules through the runner, not Node's disk cache.
+    fsModuleCache: false,
     projects: [
       {
         extends: true,

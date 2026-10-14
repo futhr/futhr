@@ -1,7 +1,7 @@
 import { expect, test, vi } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import Entry from '$lib/components/entry.svelte'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import Entry from '#lib/components/entry.svelte'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const item: ShowcaseEntry = {
   order: 1,

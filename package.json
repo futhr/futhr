@@ -13,7 +13,7 @@
   "bugs": {
     "url": "https://github.com/futhr/futhr/issues"
   },
-  "packageManager": "pnpm@12.10.1",
+  "packageManager": "pnpm@12.11.2",
   "engines": {
     "node": ">=24"
   },
@@ -36,7 +36,7 @@
     "storybook": "storybook dev --port 6006 --no-open",
     "storybook:build": "storybook build --output-dir storybook-static && node scripts/verify-artifact.ts storybook",
     "storybook:deploy": "pnpm storybook:build && wrangler deploy --config wrangler.storybook.toml",
-    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --config ./svelte.config.ts && tsc --noEmit --project ./tsconfig.service-worker.json",
+    "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json && tsc --noEmit --project ./src/service-worker/tsconfig.json",
     "check:waitlist": "pnpm --filter waitlist check",
     "lint": "biome lint --error-on-warnings .",
     "format": "biome format --write .",
@@ -58,32 +58,42 @@
     "@biomejs/biome": "2.5.15",
     "@fontsource-variable/archivo": "5.3.0",
     "@playwright/test": "1.64.0",
-    "@storybook/addon-a11y": "10.6.1",
-    "@storybook/addon-docs": "10.6.1",
+    "@storybook/addon-a11y": "10.6.2",
+    "@storybook/addon-docs": "10.6.2",
     "@storybook/addon-svelte-csf": "5.1.5",
-    "@storybook/addon-vitest": "10.6.1",
-    "@storybook/svelte": "10.6.1",
-    "@storybook/sveltekit": "10.6.1",
-    "@sveltejs/adapter-static": "3.0.10",
-    "@sveltejs/kit": "2.70.3",
+    "@storybook/addon-vitest": "10.6.2",
+    "@storybook/svelte": "10.6.2",
+    "@storybook/svelte-vite": "10.6.2",
+    "@sveltejs/adapter-static": "4.0.0",
+    "@sveltejs/kit": "3.0.1",
     "@sveltejs/vite-plugin-svelte": "7.3.1",
     "@tailwindcss/vite": "4.3.3",
     "@types/sanitize-html": "2.16.2",
-    "@vitest/browser-playwright": "4.1.11",
-    "@vitest/coverage-v8": "4.1.11",
-    "marked": "18.1.0",
+    "@vitest/browser-playwright": "5.0.4",
+    "@vitest/coverage-v8": "5.0.4",
+    "marked": "18.1.1",
     "react": "19.3.0",
     "react-dom": "19.3.0",
     "sanitize-html": "2.18.0",
-    "storybook": "10.6.1",
+    "storybook": "10.6.2",
     "svelte": "5.57.2",
     "svelte-check": "4.7.6",
     "tailwindcss": "4.3.3",
     "typescript": "6.0.3",
-    "vite": "8.3.3",
-    "vitest": "4.1.11",
+    "vite": "8.3.4",
+    "vitest": "5.0.4",
     "vitest-browser-svelte": "3.1.0",
-    "wrangler": "4.148.0",
+    "wrangler": "4.151.0",
     "yaml": "2.9.1"
+  },
+  "imports": {
+    "#lib/*": "./src/lib/*"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "download"
+    }
   }
 }

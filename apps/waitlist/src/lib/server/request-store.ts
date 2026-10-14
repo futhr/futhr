@@ -1,4 +1,4 @@
-import { withdrawalPolicy } from '$lib/server/withdrawal-policy'
+import { withdrawalPolicy } from '#lib/server/withdrawal-policy.ts'
 
 /** Queue matching subscriptions only. Capacity and insertion share one transaction. */
 const requestWithdrawal = async (db: D1Database, brandId: string, digest: string) => {

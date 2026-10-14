@@ -23,7 +23,7 @@ const closedPolicy = "default-src 'none'; frame-ancestors 'none'"
 
 /**
  * Security headers for every Worker response. SvelteKit sets the nonce policy
- * on HTML pages from svelte.config.ts; any response without a policy gets a
+ * on HTML pages from vite.config.ts; any response without a policy gets a
  * closed one here. Static assets are covered by _headers instead.
  */
 const applyHeaders = (headers: Headers, { kind, secure }: HeaderInput): Headers => {

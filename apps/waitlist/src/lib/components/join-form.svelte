@@ -1,7 +1,7 @@
 <script lang="ts">
-  import { strings } from '$lib/brands/strings'
-  import EmailForm from '$lib/components/email-form.svelte'
-  import type { JoinFormProps } from '$lib/types/join-form-props'
+  import { strings } from '#lib/brands/strings.ts'
+  import EmailForm from '#lib/components/email-form.svelte'
+  import type { JoinFormProps } from '#lib/types/join-form-props.ts'
 
   let { text, result }: JoinFormProps = $props()
 </script>

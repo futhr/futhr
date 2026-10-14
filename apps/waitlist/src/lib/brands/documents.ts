@@ -1,6 +1,6 @@
-import { controller } from '$lib/brands/controller'
-import { strings } from '$lib/brands/strings'
-import type { Brand } from '$lib/types/brand'
+import { controller } from '#lib/brands/controller.ts'
+import { strings } from '#lib/brands/strings.ts'
+import type { Brand } from '#lib/types/brand.ts'
 
 const ink = '#1b1b1b'
 

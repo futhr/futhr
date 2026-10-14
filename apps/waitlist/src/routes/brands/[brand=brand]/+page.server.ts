@@ -1,6 +1,6 @@
-import { strings } from '$lib/brands/strings'
-import { join } from '$lib/server/join'
-import type { JoinFormProps } from '$lib/types/join-form-props'
+import { strings } from '#lib/brands/strings.ts'
+import { join } from '#lib/server/join.ts'
+import type { JoinFormProps } from '#lib/types/join-form-props.ts'
 import type { Actions, PageServerLoad } from './$types'
 
 export const load: PageServerLoad = ({ locals }) => {

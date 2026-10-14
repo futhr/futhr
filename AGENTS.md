@@ -28,7 +28,7 @@ The canonical repository contract for AI coding agents working on futhr.io.
 ## What this repo is
 
 The production source for https://futhr.io/, a single-page editorial showcase of
-one person's open-source libraries and research. SvelteKit 2 and
+one person's open-source libraries and research. SvelteKit 3 and
 Svelte 5 with TypeScript, Tailwind CSS v4, prerendered to `build/` by
 `@sveltejs/adapter-static` and deployed to Cloudflare. Markdown entries in
 `src/lib/content/` are validated, rendered, and sanitised at build time by
@@ -65,7 +65,8 @@ pnpm install
 pnpm exec playwright install --with-deps chromium   # first time only
 ```
 
-Node 24 is selected by `.nvmrc`; pnpm 12.10.1 is pinned in `package.json`.
+Node 24 is selected by `.nvmrc`; `devEngines.runtime` locks the script runtime
+to 24.21.0. pnpm 12.11.2 is pinned in `package.json`.
 
 ## Commands
 
@@ -132,7 +133,7 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 
 ## Conventions and gotchas
 
-- Kebab-case filenames, `$lib` imports, no barrel files, at most one public symbol
+- Kebab-case filenames, `#lib` imports, no barrel files, at most one public symbol
   per module (`scripts/check-exports.ts` enforces this).
 - Biome is strict and formats with single quotes and no semicolons. Prettier is
   not used. `void expr`, empty blocks, and regex literals inside functions are
@@ -209,10 +210,10 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 - The public Worker is SvelteKit on `@sveltejs/adapter-cloudflare`, rendered
   per request: `src/hooks.ts` reroutes every path on a venture hostname into
   `src/routes/brands/[brand=brand]/`, `src/hooks.server.ts` resolves the brand and
-  sets the headers, and `svelte.config.ts` holds the page CSP. The admin Worker
+  sets the headers, and `vite.config.ts` holds the page CSP. The admin Worker
   is the plain module `src/admin-worker.ts`, type-checked against the generated
-  `worker-configuration.d.ts` by `tsconfig.worker.json`. Biome resolves `$lib`
-  only under `src/`, so tests in the package import relatively.
+  `worker-configuration.d.ts` by `tsconfig.worker.json`. Package imports resolve
+  `#lib` within each workspace package; tests may also import relatively.
 - The Workers send no email and invoke no AI. Joining ends on the page; `/withdraw`
   queues a separate request without deleting or suspending a subscription.
   Reviewers receive metadata only; operator resolution requires evidence and

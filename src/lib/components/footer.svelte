@@ -1,11 +1,11 @@
 <script lang="ts">
-  import Bluesky from '$lib/components/icons/bluesky.svelte'
-  import Github from '$lib/components/icons/github.svelte'
-  import Mastodon from '$lib/components/icons/mastodon.svelte'
-  import X from '$lib/components/icons/x.svelte'
-  import Futhr from '$lib/components/marks/futhr.svelte'
-  import Marks from '$lib/components/marks.svelte'
-  import { site } from '$lib/config/site'
+  import Bluesky from '#lib/components/icons/bluesky.svelte'
+  import Github from '#lib/components/icons/github.svelte'
+  import Mastodon from '#lib/components/icons/mastodon.svelte'
+  import X from '#lib/components/icons/x.svelte'
+  import Futhr from '#lib/components/marks/futhr.svelte'
+  import Marks from '#lib/components/marks.svelte'
+  import { site } from '#lib/config/site.ts'
 </script>
 
 <footer class="@container min-h-90 bg-ink font-system text-paper">

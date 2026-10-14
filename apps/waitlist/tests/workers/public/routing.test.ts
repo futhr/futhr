@@ -116,6 +116,7 @@ describe('host routing', () => {
     }
     const post = await call('https://futhr.io/api/v1/subscriptions', {
       method: 'POST',
+      headers: { origin: 'https://futhr.io' },
       redirect: 'manual'
     })
     expect(post.status).toBe(302)
@@ -149,9 +150,18 @@ describe('host routing', () => {
   })
 
   it('rejects unexpected methods with 405', async () => {
-    expect((await call('https://rivure.com/privacy', { method: 'POST' })).status).toBe(405)
-    expect((await call('https://rivure.com/privacy', { method: 'PUT' })).status).toBe(405)
-    expect((await call('https://rivure.com/', { method: 'PUT' })).status).toBe(405)
+    const headers = { origin: 'https://rivure.com' }
+    expect((await call('https://rivure.com/privacy', { method: 'POST', headers })).status).toBe(405)
+    expect((await call('https://rivure.com/privacy', { method: 'PUT', headers })).status).toBe(405)
+    expect((await call('https://rivure.com/', { method: 'PUT', headers })).status).toBe(405)
+  })
+
+  it('rejects cross-origin mutations without a content type before routing', async () => {
+    const response = await call('https://rivure.com/privacy', {
+      method: 'POST',
+      headers: { origin: 'https://foreign.example' }
+    })
+    expect(response.status).toBe(403)
   })
 
   it('answers HEAD with headers and no body', async () => {

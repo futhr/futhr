@@ -1,5 +1,5 @@
-import { brandForHost } from '$lib/brands/host'
-import type { Brand } from '$lib/types/brand'
+import { brandForHost } from '#lib/brands/host.ts'
+import type { Brand } from '#lib/types/brand.ts'
 
 const prefix = /^www\./
 

@@ -1,8 +1,8 @@
 <script lang="ts">
+  import { strings } from '#lib/brands/strings.ts'
+  import Notice from '#lib/components/notice.svelte'
+  import { marks } from '#lib/marks.ts'
   import { page } from '$app/state'
-  import { strings } from '$lib/brands/strings'
-  import Notice from '$lib/components/notice.svelte'
-  import { marks } from '$lib/marks'
 
   const notFound = 404
   const brand = $derived(page.data.brand)

@@ -1,10 +1,10 @@
 import { fail, type RequestEvent } from '@sveltejs/kit'
-import { bindings } from '$lib/server/bindings'
-import { vault } from '$lib/server/crypto'
-import { normaliseEmail } from '$lib/server/email'
-import { joinData } from '$lib/server/join-data'
-import { secrets } from '$lib/server/secrets'
-import { store } from '$lib/server/store'
+import { bindings } from '#lib/server/bindings.ts'
+import { vault } from '#lib/server/crypto.ts'
+import { normaliseEmail } from '#lib/server/email.ts'
+import { joinData } from '#lib/server/join-data.ts'
+import { secrets } from '#lib/server/secrets.ts'
+import { store } from '#lib/server/store.ts'
 
 const badRequest = 400
 const tooManyRequests = 429
@@ -24,7 +24,7 @@ const join = async (event: RequestEvent) => {
   if (!email) {
     return fail(badRequest, { error: 'invalid_email' as const })
   }
-  const env = bindings(event)
+  const env = bindings()
   const { brand } = event.locals
   const client = event.getClientAddress() || 'unknown'
   const { success } = await env.SUBSCRIBE_LIMITER.limit({ key: `${brand.id}:${client}` })

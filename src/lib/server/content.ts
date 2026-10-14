@@ -1,7 +1,7 @@
 import { marked } from 'marked'
 import sanitizeHtml from 'sanitize-html'
 import { parse as parseYaml } from 'yaml'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 type ShowcaseLink = ShowcaseEntry['links'][number]
 

@@ -31,7 +31,7 @@ Nothing here is served from `futhr.io`.
 src/hooks.ts          reroutes every path on a venture hostname into that brand's route tree
 src/hooks.server.ts   resolves the brand from the hostname, redirects unknown hosts, sets headers
 src/routes/           SvelteKit pages and endpoints under brands/[brand]/
-src/params/           route matchers: brand id, generated document names, icon files
+src/params.ts         route matchers: brand id, generated document names, icon files
 src/lib/brands/       closed brand map, copy, controller, generated documents, icon composition
 src/lib/components/   Svelte 5 page shell, landing, join form, privacy, notice pages
 src/lib/server/       the join action, crypto, store, headers; admin/ holds the private API and Access JWT

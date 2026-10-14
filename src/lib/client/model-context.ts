@@ -1,5 +1,5 @@
-import { entryText } from '$lib/entry-text'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import { entryText } from '#lib/entry-text.ts'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 interface ShowcaseToolHost {
   items: readonly ShowcaseEntry[]

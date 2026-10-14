@@ -1,8 +1,8 @@
 <script lang="ts">
   import type { Component } from 'svelte'
-  import Page from '$lib/components/page.svelte'
-  import type { Brand } from '$lib/types/brand'
-  import type { PageNotice } from '$lib/types/page-notice'
+  import Page from '#lib/components/page.svelte'
+  import type { Brand } from '#lib/types/brand.ts'
+  import type { PageNotice } from '#lib/types/page-notice.ts'
 
   interface Props {
     brand: Brand

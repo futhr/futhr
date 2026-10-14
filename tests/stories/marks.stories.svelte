@@ -1,7 +1,7 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
   import { expect } from 'storybook/test'
-  import Marks from '$lib/components/marks.svelte'
+  import Marks from '#lib/components/marks.svelte'
 
   const markNames = ['Ghostshift Assembly', 'Refpath', 'Rivure', 'WoTEx', 'Frameshift']
   const { Story } = defineMeta({

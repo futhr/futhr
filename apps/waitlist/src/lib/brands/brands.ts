@@ -1,5 +1,5 @@
-import type { Brand } from '$lib/types/brand'
-import type { BrandId } from '$lib/types/brand-id'
+import type { Brand } from '#lib/types/brand.ts'
+import type { BrandId } from '#lib/types/brand-id.ts'
 
 const consentVersion = '2026-09-06.1'
 

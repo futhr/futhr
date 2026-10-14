@@ -46,7 +46,8 @@ const shellPath = '/exk-passwd/'
 const precached = new Set(assets)
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(assets)).then(() => self.skipWaiting()))
+  const freshAssets = assets.map((path) => new Request(path, { cache: 'reload' }))
+  event.waitUntil(caches.open(cacheName).then((cache) => cache.addAll(freshAssets)).then(() => self.skipWaiting()))
 })
 
 self.addEventListener('activate', (event) => {

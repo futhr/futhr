@@ -1,6 +1,5 @@
-import type { PublicEnv } from '$lib/server/public-env'
-import type { Brand } from '$lib/types/brand'
-import type { PageMeta } from '$lib/types/page-meta'
+import type { Brand } from '#lib/types/brand.ts'
+import type { PageMeta } from '#lib/types/page-meta.ts'
 
 declare global {
   namespace App {
@@ -11,9 +10,6 @@ declare global {
     interface PageData {
       brand: Brand
       meta?: PageMeta
-    }
-    interface Platform {
-      env: PublicEnv
     }
   }
 }

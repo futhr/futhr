@@ -1,10 +1,10 @@
 <script lang="ts">
   import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url'
   import type { Snippet } from 'svelte'
+  import { brandDocuments } from '#lib/brands/documents.ts'
+  import { strings } from '#lib/brands/strings.ts'
   import { page } from '$app/state'
-  import { brandDocuments } from '$lib/brands/documents'
-  import { strings } from '$lib/brands/strings'
-  import '$lib/styles/waitlist.css'
+  import '#lib/styles/waitlist.css'
 
   let { children }: { children: Snippet } = $props()
 

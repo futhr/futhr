@@ -1,6 +1,6 @@
 <script lang="ts">
+  import { strings } from '#lib/strings.ts'
   import { page } from '$app/state'
-  import { strings } from '$lib/strings'
 </script>
 
 <svelte:head

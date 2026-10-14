@@ -1,4 +1,4 @@
-import type { StorybookConfig } from '@storybook/sveltekit'
+import type { StorybookConfig } from '@storybook/svelte-vite'
 import { mergeConfig } from 'vite'
 
 const testsDirectory = new URL('../tests', import.meta.url).pathname
@@ -12,8 +12,8 @@ const config: StorybookConfig = {
     '@storybook/addon-vitest'
   ],
   framework: {
-    name: '@storybook/sveltekit',
-    options: {}
+    name: '@storybook/svelte-vite',
+    options: { builder: { viteConfigPath: '.storybook/vite.config.ts' } }
   },
   features: {
     sidebarOnboardingChecklist: false

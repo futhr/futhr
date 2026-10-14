@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
-import { site } from '$lib/config/site'
-import { structuredData } from '$lib/server/structured-data'
-import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+import { site } from '#lib/config/site.ts'
+import { structuredData } from '#lib/server/structured-data.ts'
+import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
 const items: ShowcaseEntry[] = [
   {

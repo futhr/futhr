@@ -1,7 +1,7 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
   import { expect, fn } from 'storybook/test'
-  import Entry from '$lib/components/entry.svelte'
+  import Entry from '#lib/components/entry.svelte'
 
   // The real WoTEx entry: two paragraphs, bold and italic emphasis, one link.
   const example = {

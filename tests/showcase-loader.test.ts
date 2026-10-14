@@ -1,5 +1,5 @@
 import { expect, it } from 'vitest'
-import { loadShowcase } from '$lib/server/showcase'
+import { loadShowcase } from '#lib/server/showcase.ts'
 
 it('loads the ordered collection once and reuses it', async () => {
   const first = loadShowcase()

@@ -1,5 +1,5 @@
 import type { Component } from 'svelte'
-import type { Project } from '$lib/types/project'
+import type { Project } from '#lib/types/project.ts'
 import Ghostshift from '$site/components/marks/ghostshift.svelte'
 import Wotex from '$site/components/marks/wotex.svelte'
 

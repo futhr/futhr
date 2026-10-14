@@ -1,4 +1,4 @@
-import type { SubscriptionRow } from '$lib/server/subscription-row'
+import type { SubscriptionRow } from '#lib/server/subscription-row.ts'
 
 interface ListPage {
   readonly items: readonly SubscriptionRow[]

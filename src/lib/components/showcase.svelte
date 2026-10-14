@@ -1,11 +1,11 @@
 <script lang="ts">
   import { type Snippet, tick } from 'svelte'
-  import { registerShowcaseTools } from '$lib/client/model-context'
-  import { createRowGlide } from '$lib/client/row-glide'
-  import Entry from '$lib/components/entry.svelte'
-  import MarkerFilter from '$lib/components/marker-filter.svelte'
-  import { site } from '$lib/config/site'
-  import type { ShowcaseEntry } from '$lib/types/showcase-entry'
+  import { registerShowcaseTools } from '#lib/client/model-context.ts'
+  import { createRowGlide } from '#lib/client/row-glide.ts'
+  import Entry from '#lib/components/entry.svelte'
+  import MarkerFilter from '#lib/components/marker-filter.svelte'
+  import { site } from '#lib/config/site.ts'
+  import type { ShowcaseEntry } from '#lib/types/showcase-entry.ts'
 
   interface Props {
     items: ShowcaseEntry[]

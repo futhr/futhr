@@ -1,10 +1,10 @@
 <script lang="ts">
   import type { Component } from 'svelte'
-  import { controller } from '$lib/brands/controller'
-  import { privacyNotice } from '$lib/brands/privacy'
-  import { strings } from '$lib/brands/strings'
-  import Page from '$lib/components/page.svelte'
-  import type { Brand } from '$lib/types/brand'
+  import { controller } from '#lib/brands/controller.ts'
+  import { privacyNotice } from '#lib/brands/privacy.ts'
+  import { strings } from '#lib/brands/strings.ts'
+  import Page from '#lib/components/page.svelte'
+  import type { Brand } from '#lib/types/brand.ts'
 
   interface Props {
     brand: Brand

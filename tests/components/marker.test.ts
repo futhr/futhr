@@ -1,8 +1,8 @@
 import { createRawSnippet } from 'svelte'
 import { expect, test } from 'vitest'
 import { render } from 'vitest-browser-svelte'
-import MarkerFilter from '$lib/components/marker-filter.svelte'
-import MarkerLink from '$lib/components/marker-link.svelte'
+import MarkerFilter from '#lib/components/marker-filter.svelte'
+import MarkerLink from '#lib/components/marker-link.svelte'
 
 const children = createRawSnippet(() => ({ render: () => '<span>Repository</span>' }))
 

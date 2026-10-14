@@ -1,9 +1,9 @@
-import { brandDocuments } from '$lib/brands/documents'
+import { brandDocuments } from '#lib/brands/documents.ts'
 import type { RequestHandler } from './$types'
 
 type Documents = ReturnType<typeof brandDocuments>
 
-/** Body and content type per generated document; src/params/document.ts admits only these names. */
+/** Body and content type per generated document; src/params.ts admits only these names. */
 const documents = {
   'manifest.webmanifest': (d: Documents) => [
     `${JSON.stringify(d.webManifest, null, 2)}\n`,

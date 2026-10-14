@@ -1,4 +1,6 @@
+import adapter from '@sveltejs/adapter-static'
 import { sveltekit } from '@sveltejs/kit/vite'
+import { vitePreprocess } from '@sveltejs/vite-plugin-svelte'
 import tailwindcss from '@tailwindcss/vite'
 import { defineConfig, type Plugin } from 'vite'
 
@@ -38,5 +40,17 @@ const exkPasswdHeaders = (): Plugin => ({
 })
 
 export default defineConfig({
-  plugins: [exkPasswdHeaders(), tailwindcss(), sveltekit()]
+  resolve: { alias: { $site: new URL('./src/lib', import.meta.url).pathname } },
+  plugins: [
+    exkPasswdHeaders(),
+    tailwindcss(),
+    sveltekit({
+      preprocess: vitePreprocess(),
+      adapter: adapter({ fallback: '404.html' }),
+      prerender: { crawl: false },
+      // The single stylesheet is about 6 KB gzipped; inlining it removes the only
+      // render-blocking request on the critical path.
+      inlineStyleThreshold: 32 * 1024
+    })
+  ]
 })

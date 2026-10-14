@@ -1,8 +1,8 @@
 <script module lang="ts">
   import { defineMeta } from '@storybook/addon-svelte-csf'
   import { expect } from 'storybook/test'
-  import MarkerLink from '$lib/components/marker-link.svelte'
-  import { palette } from '$lib/config/palette'
+  import MarkerLink from '#lib/components/marker-link.svelte'
+  import { palette } from '#lib/config/palette.ts'
 
   const hexPairs = /[0-9a-f]{2}/g
   const week = [...palette.slice(1), palette[0]]

@@ -1,4 +1,4 @@
-import { foldMotion } from '$lib/client/fold-motion'
+import { foldMotion } from '#lib/client/fold-motion.ts'
 
 /** Scroll with the rows' height animation; user input or teardown cancels it. */
 const createRowGlide = () => {

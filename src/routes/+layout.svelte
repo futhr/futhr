@@ -2,8 +2,8 @@
   import archivoLatinItalic from '@fontsource-variable/archivo/files/archivo-latin-wght-italic.woff2?url'
   import archivoLatin from '@fontsource-variable/archivo/files/archivo-latin-wght-normal.woff2?url'
   import type { Snippet } from 'svelte'
-  import { site } from '$lib/config/site'
-  import '$lib/styles/site.css'
+  import { site } from '#lib/config/site.ts'
+  import '#lib/styles/site.css'
 
   let { children }: { children: Snippet } = $props()
 </script>
