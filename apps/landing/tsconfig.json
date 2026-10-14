@@ -8,7 +8,9 @@
     "target": "ES2022",
     "paths": {
       "$site/*": ["../../src/lib/*"]
-    }
+    },
+    "allowJs": false,
+    "checkJs": false
   },
   "include": [
     ".svelte-kit/ambient.d.ts",
