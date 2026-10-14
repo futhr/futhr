@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "browser_core_version": "0.1.0",
-  "futhr_source_commit": "3e79469f97a98b7ed28858cfd4777233710fb661",
-  "futhr_source_dirty": true,
+  "futhr_source_commit": "be11ac58e17740d98e4b25e13ffcc41736ed241b",
+  "futhr_source_dirty": false,
   "exk_passwd": {
     "version": "0.4.1",
     "source": "hexpm",
