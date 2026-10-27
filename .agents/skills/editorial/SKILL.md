@@ -86,4 +86,9 @@ apply. For content changes, `pnpm test:unit` exercises the
 [content loader](../../../src/lib/server/content.ts); it validates frontmatter,
 ordering, and safe URLs, not the truth or tone of the prose. Use the affected
 package's checks for waitlist or landing strings. Report actual results and the
-editorial review separately.
+editorial review separately. Bind factual claims to the exact approved/public
+source and current surface: entry, metadata, generated documents or destination.
+A generated document passing schema tests does not establish that release status
+or public availability is true. Preserve unavailable checks and distinguish an
+approved destination from an observed successful response; do not rewrite private
+status into availability to make a link or artifact check appear complete.

@@ -23,6 +23,11 @@ Resolve the application boundary before editing:
 - The landing is stateless and has an outer Worker host gate. Read
   [its operating guide](../../../apps/landing/README.md) for routing or asset
   changes. Its adapter build configuration is not the production Worker config.
+  Apply [worker-boundary](../worker-boundary/SKILL.md) for host/asset/auth/D1
+  behavior; a component-only test cannot establish that boundary.
+- Plain TypeScript password/PWA/extension work uses
+  [password-browser](../password-browser/SKILL.md). It must not reimplement the
+  canonical generator in a Svelte component.
 
 ## Reactivity and component contracts
 
@@ -75,4 +80,16 @@ Resolve the application boundary before editing:
   use `asChild` when the story must render wrapper markup around a component.
 - Run the affected browser or story suite and package checks from `AGENTS.md`.
   Coverage floors live in the existing Vitest configs. Apply the visual
-  verification requirements in `AGENTS.md` when changing layout.
+  verification requirements in `AGENTS.md` when changing layout. Select an
+  independently observable acceptance/refusal or transition for each changed
+  interaction; a rendered component or coverage hit is insufficient.
+- For layout, record current artifact/source identity and compare the 1440px
+  screenshot with the reference using cap-height offsets, starts, heights and
+  line breaks. Also cover the affected container widths and reduced motion.
+  A dev-server screenshot is not a production artifact/performance result.
+- When build output, generated documents, icons or caching changes, inspect
+  [artifact verification](../../../scripts/verify-artifact.ts) and the actual
+  built files. Keep showcase, Storybook and imported password artifacts distinct;
+  verify current service-worker network/cache behavior rather than a stale tab.
+  Inspect package scripts before browser suites/builds, and report unavailable
+  engines or build output without installing tools for a guidance-only change.

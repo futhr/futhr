@@ -25,6 +25,12 @@ The canonical repository contract for AI coding agents working on futhr.io.
 - Proprietary projects may be described conceptually only. Do not copy their
   source or internal documents into this repository.
 
+Use [worker-boundary](.agents/skills/worker-boundary/SKILL.md) for waitlist/
+landing host, asset, authority and D1 behavior, and
+[password-browser](.agents/skills/password-browser/SKILL.md) for the ExkPasswd
+runtime/import/PWA/extension consumer. The frontend and editorial skills retain
+their Svelte and public-copy ownership.
+
 ## What this repo is
 
 The production source for https://futhr.io/, a single-page editorial showcase of
@@ -94,8 +100,13 @@ pnpm build:landing       # build the stateless Worker and verify its artifact
 pnpm landing:icons       # regenerate landing icons after mark/copy changes
 ```
 
-`pnpm quality` and `pnpm check` are fast; run them after every change. Run the
-suites that touch what you changed before saying a task is done.
+For application and content changes, run `pnpm quality` and `pnpm check`, then
+the suites that touch the changed behavior before saying the task is done.
+Guidance-only edits use existing YAML, reference, tracking/ignore/discovery and
+semantic routing checks; they do not require builds, browser/dependency installs,
+Workers startup or production operations. Before an authorized heavy build/browser
+lane inspect disk and output paths; clean only disposable outputs created by that
+run, preserving imported core bytes, shared caches and retained artifacts.
 
 ## Structure
 
@@ -237,6 +248,6 @@ only copy of the approved text; `docs/README.md` indexes the remaining documents
 
 ## Definition of done
 
-`pnpm quality` and `pnpm check` are clean, the affected suites pass, and for
-visual work a screenshot at 1440px has been compared against the reference. Say
-plainly what was verified and what was not.
+For application/content work, `pnpm quality` and `pnpm check` are clean, the
+affected suites pass, and for visual work a screenshot at 1440px has been
+compared against the reference. Say plainly what was verified and what was not.
