@@ -1,8 +1,8 @@
 # Cloudflare deployment
 
-Checked against the repository and Cloudflare account on 23 September 2026.
-The 23 September release moved Reloved and Recetas from the landing Worker to
-the waitlist Worker.
+Checked against the repository and Cloudflare account on 28 October 2026.
+The latest release check is below; the September account record is retained
+as history.
 Configuration in Git records deployment intent; registrar settings, mail DNS,
 Access identities, secret values, billing plans, and deployed versions still
 need an account-side check before later releases.
@@ -27,14 +27,84 @@ brand icons. The admin Worker lists records and resolves withdrawal requests. Ne
 
 The production waitlist configs bind the EU-jurisdiction `waitlist` D1 database.
 The local development environment retains a non-production placeholder ID because
-Wrangler uses a local database there. The fourteen declared public Custom Domains
+Wrangler uses a local database there. The sixteen declared public Custom Domains
 and the Access-protected `lists.futhr.io` admin hostname are attached to the
 live Workers. The Storybook config declares `ui.futhr.io` as a Custom Domain.
-The landing Worker declares two Custom Domains: `wotex.io` and `www.wotex.io`.
+The landing Worker declares four Custom Domains: the apex and `www` hostnames
+for `wotex.io` and `ghostshift.se`.
 It collects nothing, binds only static assets, and serves no client JavaScript.
 Reloved and Recetas are waitlist brands. See [project-landings.md](project-landings.md).
 
-## Live account status
+## Release verification — 28 October 2026
+
+GitHub Actions run `40471723639`, for commit
+`37003b28dd098ddfb4eeddac36699d448d424703`, passed all four check jobs. Its
+deployment job published all five Workers, then failed at the Pages project
+lookup with Cloudflare authentication error `10000`. The existing CI token
+lacked Cloudflare Pages permission. The workflow now checks Pages access before
+any migrations or Worker deployments.
+After the maintainer saved the missing Pages Edit permission on the existing
+token, attempt 2 of that run succeeded, including the complete deployment job.
+No GitHub secret value was replaced.
+
+The tested showcase artifact from that run was downloaded, checked with
+`scripts/verify-artifact.ts`, and published using the workstation's existing
+Pages-authorized Wrangler login. Production Pages deployment
+`47aa73f3-23bb-433f-93e1-d920d67b603c` first restored that commit. The successful
+CI retry then published all six surfaces, with current production Pages
+deployment `99618de5-77e7-4f6d-9ed0-6e37407205f3` serving the same commit.
+
+All 13 repository domain zones are active and delegated to Cloudflare. Live
+checks passed for 58 HTTP/HTTPS, canonical, alias, infrastructure, and Pages
+hostname requests. The ten canonical public pages and their referenced CSS/JS
+assets returned 200; `lists.futhr.io` redirected unauthenticated requests to
+Cloudflare Access. No production subscription or withdrawal was created.
+
+Account-side corrections made during this release:
+
+- Enabled Always Use HTTPS and a TLS 1.2 minimum across all 13 zones. Six
+  waitlist apexes had previously served their forms over plain HTTP.
+- Replaced the Bohwalli and Entvue apex Netlify CNAMEs with proxied originless
+  `A 192.0.2.1` records. Their Worker redirects retain path and query.
+- Corrected Ghostshift's backup MX target from `mx2.hostinger.com,` to
+  `mx2.hostinger.com`, retaining priority 10 and TTL 18000.
+- Added `_dmarc.orvane.ai` with `v=DMARC1; p=none` and TTL 3600.
+- Enabled the account Bulk Redirect list `futhr_canonical_domain`
+  (`bad38b18d4724e788ef6c76c29bc702a`) through ruleset
+  `04d7f3c1a19241d1bbd1c890edb4194e`. It returns 301 from `futhr.pages.dev`
+  and its deployment subdomains to `https://futhr.io/`, preserving path and query.
+
+Both authoritative nameservers agreed on MX, SPF, DMARC, and DKIM records.
+All ten Hostinger mail domains have both MX records, one SPF policy, all three
+DNS-only Hostinger DKIM CNAMEs, and monitoring-only DMARC. The connected
+Hostinger Mail account exposes only `hello@wotex.io`; this check establishes DNS
+configuration, not delivery or signing for every mailbox. No test mail was sent.
+After the maintainer completed Google Admin reauthentication, Bohwalli was
+confirmed as a verified secondary domain without a DKIM key. A new 2048-bit
+Google key was generated, its public value published at
+`google._domainkey.bohwalli.se` (TXT, TTL 3600), and signing enabled. Both
+authoritative nameservers returned the exact Google key. Google Admin reports
+"Authenticating email with DKIM" and marks the DKIM record Complete. No test
+email was sent, so a received-message `dkim=pass` result was not verified.
+
+Entvue has Google Workspace MX/SPF/DMARC but no DKIM record. It is absent from
+both the DKIM selector and the signed-in account's domain list, which contains
+Futhr and Bohwalli. Its intended mail account must be identified before adding a
+signing record or changing its mail routing. Do not copy either domain's key.
+This is an email follow-up only. Entvue's DKIM status does not gate website
+deployment; all six surfaces are deployed and the CI retry is green.
+The existing Google MX records were retained: Google's documentation still
+supports the legacy `aspmx` values, even though the new Admin setup checker
+compares them with its recommended single `smtp.google.com` record. Registrar
+DNSSEC changes remain separate.
+
+[Always Use HTTPS](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/always-use-https/),
+[minimum TLS version](https://developers.cloudflare.com/ssl/edge-certificates/additional-options/minimum-tls/),
+[Bulk Redirect API](https://developers.cloudflare.com/rules/url-forwarding/bulk-redirects/create-api/),
+[Google DKIM setup](https://knowledge.workspace.google.com/admin/security/set-up-dkim),
+[Google MX records](https://knowledge.workspace.google.com/admin/domains/set-up-mx-records-for-google-workspace)
+
+## Account status recorded on 23 September 2026
 
 | Resource | Latest verified status |
 | --- | --- |
@@ -216,7 +286,10 @@ The public DNS baseline checked on 7 September 2026 is:
   records are unchanged; the apex SPF and monitoring-only DMARC records above
   were added without changing web routing or mail destinations.
 
-### Remaining external cutover
+### External cutover recorded in September
+
+Items 1 and 2 below were completed on 28 October. The dated release check above
+supersedes this historical status.
 
 1. The redirect Worker already handles `www.futhr.io`, `bohwalli.se`,
    `www.bohwalli.se`, `entvue.com`, and `www.entvue.com`.
@@ -418,7 +491,10 @@ for unused services, and add Pages and D1. See
 and [Pages CI authentication](https://developers.cloudflare.com/pages/how-to/use-direct-upload-with-continuous-integration/).
 
 The deployment job fails with an explicit setup error if either secret is
-missing. The workstation's interactive Wrangler OAuth login is not a CI
+missing. A Pages project-list check also runs before production writes to catch
+missing Pages access early. A successful read check does not prove write access;
+the CI token must have Pages Edit.
+The workstation's interactive Wrangler OAuth login is not a CI
 credential. If a Chrome Web Store listing is configured, set the repository
 variable `VITE_EXK_PASSWD_CHROMIUM_STORE_URL`; both the readiness check and the
 tested showcase build use that value.
