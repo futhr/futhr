@@ -1,41 +1,32 @@
 # futhr
 
-Generating code is getting cheaper. Deciding what should exist, defining its
-boundaries, and checking whether it works still take judgement. The work here
-starts with those questions. Agents help with implementation; architecture,
-review, and release decisions remain human responsibilities.
+Generating code keeps getting cheaper. Deciding what should exist, where its
+boundaries lie, and whether it works still takes judgement, and the work here
+starts with those decisions. Agents help with implementation. Architecture,
+review, and release decisions stay with people.
 
-*Fast is now table stakes. Fast and correct is the edge.*
+*Fast is the baseline now. Fast and correct is the advantage.*
 
 ## Thesis
 
 Trust, interoperability, and unit economics shape the architecture. A model
-can propose an action; explicit contracts, durable state, and policy determine
-whether the system can carry it out and recover when it fails.
+can propose an action. Explicit contracts, durable state, and policy decide
+whether the system carries it out and how it recovers when the action fails.
 
-The libraries isolate recurring problems: booking rules, notification
-templates, API descriptions, credential generation, tool authority, payment
-and shipping state, and interface interchange. Each has a defined boundary
-with the application that uses it. Tests and formal checks establish specific
-properties within that boundary; a consuming product still needs its own
-validation.
-
-## Projects
-
-- **Elixir and OTP:** application libraries, agent security, and Web of Things
-  infrastructure. Each package documents its runtime and supervision needs.
-- **Ruby and Solidus:** payment and shipping extensions for existing shops.
-- **Rust:** NUIF research into interface interchange and measurable conversion
-  loss.
+Each library takes on one recurring problem and has a defined boundary with
+the application that uses it. Tests and formal checks establish specific
+properties inside that boundary. A product that uses a library still needs its
+own validation.
 
 ## Method
 
-Write the intent and constraints before implementation. Keep decisions
-replayable where possible, with time and external effects passed through
-explicit boundaries. Record uncertain outcomes so recovery has a starting
-point. Review generated code against the same requirements as any other code.
+Write down intent and constraints before the implementation. Keep decisions
+replayable where possible by passing time and external effects in through
+explicit boundaries. When an outcome is uncertain, record it, so recovery has
+somewhere to start. Hold generated code to the same requirements as any other
+code.
 
-Documentation, contracts, and tests belong beside the implementation. Claims
-should name what was checked and where the evidence stops.
+Documentation, contracts, and tests live beside the implementation. A claim
+names what was checked and where the evidence stops.
 
 *Bootstrapped by default, built for durable ownership.*
