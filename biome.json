@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/2.5.15/schema.json",
+  "$schema": "https://biomejs.dev/schemas/2.6.8/schema.json",
   "vcs": {
     "enabled": true,
     "clientKind": "git",
@@ -33,26 +33,20 @@
         "noDefaultExport": "error",
         "noHexColors": "off",
         "noMagicNumbers": "off",
-        "noTernary": "off"
+        "noTernary": "off",
+        "noPlaywrightWaitForSelector": "error",
+        "useTestHooksInOrder": "error",
+        "useTestHooksOnTop": "error"
       },
       "suspicious": "error",
       "nursery": {
         "preset": "none",
         "noFloatingPromises": "error",
         "noMisusedPromises": "error",
-        "noPlaywrightForceOption": "error",
-        "noPlaywrightMissingAwait": "error",
-        "noPlaywrightNetworkidle": "error",
-        "noPlaywrightPagePause": "error",
-        "noPlaywrightWaitForNavigation": "error",
-        "noPlaywrightWaitForSelector": "error",
-        "noPlaywrightWaitForTimeout": "error",
         "noSvelteLegacyConst": "error",
         "noSvelteUnnecessaryStateWrap": "error",
         "useSvelteRequireEachKey": "error",
         "useTailwindShorthandClasses": "error",
-        "useTestHooksInOrder": "error",
-        "useTestHooksOnTop": "error",
         "noSvelteExportLet": "error",
         "useSvelteKitRuneImports": "error"
       }
@@ -68,6 +62,19 @@
   "css": {
     "parser": {
       "tailwindDirectives": true
+    }
+  },
+  "markdown": {
+    "formatter": {
+      "enabled": false
+    },
+    "linter": {
+      "enabled": false
+    }
+  },
+  "yaml": {
+    "formatter": {
+      "quoteStyle": "single"
     }
   },
   "html": {
@@ -108,6 +115,30 @@
         "rules": {
           "security": {
             "noSecrets": "off"
+          }
+        }
+      }
+    },
+    {
+      "includes": [
+        "tests/e2e/**/*.ts",
+        "tests/storybook-e2e/**/*.ts",
+        "apps/*/tests/e2e/**/*.ts",
+        "scripts/**/*.ts",
+        "apps/*/scripts/**/*.ts"
+      ],
+      "linter": {
+        "domains": {
+          "playwright": "all"
+        }
+      }
+    },
+    {
+      "includes": ["**/*.css", "**/*.html", "**/*.svelte"],
+      "linter": {
+        "rules": {
+          "suspicious": {
+            "useBaseline": "off"
           }
         }
       }
@@ -218,6 +249,7 @@
             "useNamingConvention": "off"
           },
           "suspicious": {
+            "noConditionalExpect": "off",
             "noMisplacedAssertion": "off"
           }
         }
@@ -258,6 +290,9 @@
       "includes": ["apps/*/tests/workers/**/*.ts"],
       "linter": {
         "rules": {
+          "complexity": {
+            "noPlaywrightUselessAwait": "off"
+          },
           "correctness": {
             "noUnresolvedImports": "off"
           }

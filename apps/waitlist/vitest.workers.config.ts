@@ -6,8 +6,6 @@ const migrations = await readD1Migrations(new URL('./migrations', import.meta.ur
 
 export default defineConfig({
   test: {
-    // Workerd loads transformed modules through the runner, not Node's disk cache.
-    fsModuleCache: false,
     projects: [
       {
         extends: true,

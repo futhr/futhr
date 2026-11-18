@@ -1,6 +1,5 @@
 import { readFile, writeFile } from 'node:fs/promises'
 import { join, resolve } from 'node:path'
-// biome-ignore lint/correctness/noUnresolvedImports: re-exported from playwright by @playwright/test
 import { chromium, type Page } from '@playwright/test'
 
 const root = resolve(import.meta.dirname, '..')

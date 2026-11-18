@@ -1,7 +1,6 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
-// biome-ignore lint/correctness/noUnresolvedImports: re-exported from playwright by @playwright/test
 import { type Browser, chromium } from '@playwright/test'
 import { brands } from '../src/lib/brands/brands.ts'
 import { composeIcon } from '../src/lib/brands/icons.ts'

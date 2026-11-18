@@ -4,7 +4,6 @@ import { join } from 'node:path'
 import process from 'node:process'
 import { fileURLToPath } from 'node:url'
 import AxeBuilder from '@axe-core/playwright'
-// biome-ignore lint/correctness/noUnresolvedImports: re-exported by @playwright/test
 import { chromium } from '@playwright/test'
 import { projects } from '../src/lib/projects.ts'
 

@@ -72,7 +72,7 @@ pnpm exec playwright install --with-deps chromium   # first time only
 ```
 
 Node 24 is selected by `.nvmrc`; `devEngines.runtime` locks the script runtime
-to 24.21.0. pnpm 12.11.2 is pinned in `package.json`.
+to 24.22.3. pnpm 12.21.0 is pinned in `package.json`.
 
 ## Commands
 

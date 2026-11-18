@@ -512,16 +512,13 @@ footer {
   background: var(--brand);
 }
 
-.settings {
-  width: 100%;
-  min-width: 0;
-}
-
 .section-heading {
   margin-bottom: 0.625rem;
 }
 
 .settings {
+  width: 100%;
+  min-width: 0;
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem 1.25rem;
